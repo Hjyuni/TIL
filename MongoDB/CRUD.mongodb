@@ -1,0 +1,206 @@
+// CRUD
+// C(Create)
+// collection입력 : insertOne({}), insertMany([{},{},{},{}])
+db.users.insertOne({user_id:"bcd001",age:26,status:"A"})
+db.users.insertMany([
+    {user_id:"bcd002",age:45,status:"B"},
+    {user_id:"bcd003",age:30,status:"A"},
+    {user_id:"bcd004",age:58,status:"A"},
+    {user_id:"abc001",age:37,status:"B"},
+    {user_id:"abc002",age:20,status:"B"}
+])
+
+var lee = {name:'lee-ss', midterm:{kor:70,eng:100},final:{kor:100,eng:90,math:20,sci:50},class:'de'}
+db.multi.insertOne(lee)
+
+db.multi.insertMany(	
+	[
+		{name:'kim-sd', class:'ds', kor:100, eng:40, math:100},
+		{name:'kang-hd', class:'ds', kor:88, eng:50, math:70}	
+	]
+)
+
+db.multi.insertMany([
+		{'name':'hong-gd',kor:100, eng:30, math:60},
+		{'name':'kim-sd',kor:40, eng:70, math:1000},
+		{'name':'park-jy',kor:100, eng:100, math:100},
+		{'name':'hur-jy',kor:100, eng:100, math:100},
+		{'name':'lee-ss',kor:60, eng:100, math:70}
+		])
+
+db.myfriends.insertOne({name:'아이언맨', buddy: ['토르', '헐크', '호크아이']})
+db.myfriends.insertOne({name:'슈퍼맨', buddy: ['배트맨','원더우먼','아쿠아맨','조커']})
+
+db.score.insertMany([
+   {name:"홍길동",kor:90,eng:80,math:98,test:"midterm"},
+   {name:"이순신",kor:100,eng:100,math:76,test:"final"},
+   {name:"김선달",kor:80,eng:55,math:67,test :"midterm"},
+   {name:"강호동",kor:70,eng:69,math:89,test:"midterm"},   
+   {name:"유재석",kor:60,eng:80,math:78,test:"final"},
+   {name:"신동엽",kor:100,eng:69,math:89,test:"midterm"},
+   {name:"조세호",kor:75,eng:100,math:100,test:"final"}
+])
+
+// R(Read)
+// collection 읽기 : findOne(),find()
+// SELECT * FROM users
+db.users.find()
+db.users.find({})
+
+// SELECT _id, user_id, status FROM users
+db.users.find({},{_id:1, user_id:1, status:1})
+
+// SELECT user_id,status FROM users
+db.users.find({},{user_id:1,status:1,_id:0})
+db.users.find({},{_id:0})
+
+// SELECT * FROM users WHERE status="A"
+db.users.find({status:"A"})
+
+// SELECT * FROM users WHERE status="B" AND age=20
+db.users.find({status:"B",age:20})
+
+// SELECT * FROM users WHERE age=30 AND status="A"
+db.users.find({$and:[{age:30},{status:"A"}]})
+
+// SELECT * FROM users WHERE status="A" OR age=58
+db.users.find({$or:[{status:"A"},{age:58}]})
+
+// SELECT * FROM users WHERE user_id="bcd002"
+db.users.find({user_id:"bcd002"})
+
+// SELECT user_id, age, status FROM users WHERE user_id="bcd003"
+db.users.find({user_id:"bcd003"},{_id:0})
+db.users.find({user_id:"bcd003"},{user_id:1,age:1,status:1,_id:0})
+
+// SELECT * FROM users WHERE user_id="bcd004" OR age=28
+db.users.find({$or:[{user_id:"bcd004"},{age:28}]})
+
+// SELECT user_id, age, status FROM users WHERE user_id="bcd004" OR age=28
+db.users.find({$or:[{user_id:"bcd004"},{age:28}]},{_id:0})
+
+// SELECT * FROM multi
+db.multi.find()
+db.multi.find({})
+
+// SELECT _id, name FROM multi
+db.multi.find({},{name:1})
+
+// SELECT name FROM multi
+db.multi.find({},{_id:0, name:1})
+
+// SELECT * FROM multi WHERE class="de"
+db.multi.find({class:"de"})
+
+// SELECT * FROM multi WHERE class="ds"
+db.multi.find({class:"ds"})
+
+// SELECT * FROM multi WHERE kor > 50 and kor < 100
+db.multi.find({$and:[{kor:{$gt:50}}, {kor:{$lt:100}}]})
+db.multi.find({kor:{$gt:50,$lt:100}})
+
+// SELECT * FROM multi WHERE kor >= 60 and kor <= 80
+db.multi.find({$and:[{kor:{$gte:60}}, {kor:{$lte:80}}]})
+db.multi.find({kor:{$gte:60, $lte:80}})
+
+// exists:true 
+db.users.find({status:{$exists:true}})
+db.multi.find({kor:{$exists:true}})
+db.multi.find({'midterm.kor':{$exists:true}})
+
+// 비교 문법
+// SELECT * FROM users WHERE age > 30
+db.users.find({age:{$gt:30}})
+
+// SELECT user_id FROM users WHERE age > 20 
+db.users.find({age:{$gt:20}},{user_id:1,_id:0})
+
+// SELECT * FROM users WHERE age < 30
+db.users.find({age:{$lt:30}})
+
+// SELECT * FROM users WHERE age = 30
+db.users.find({age:{$eq:30}})
+
+// SELECT user_id FROM users WHERE age=30 AND status="A"
+db.users.find({$and:[{age:30},{status:"A"}]},{user_id:1,user_id:0})
+
+// SELECT * FROM users WHERE age >=35 and age <= 50
+db.users.find({age:{$gte:35,$lte:50}})
+
+// SELECT * FROM users WHERE age not in [20,30]
+db.users.find({age:{$nin:[20,30]}})
+
+// LIKE
+// SELECT * FROM users WHERE user_id LIKE '%cd%'
+db.users.find({user_id:/cd/})
+db.users.find({user_id:{$regex:/cd/}})
+
+// SELECT * FROM users WHERE user_id LIKE 'bc%'
+db.users.find({user_id:/^bc/})
+db.users.find({user_id:{$regex:/^bc/}})
+
+// SELECT * FROM users WHERE user_id LIKE '%01'
+db.users.find({user_id:/01$/})
+db.users.find({user_id:{$regex:/01$/}})
+
+
+// sort -> 1:asc, -1:desc
+// SELECT * FROM users ORDER BY user_id
+db.users.find().sort({user_id:1})
+db.users.find({}).sort({user_id:1})
+
+// SELECT * FROM users ORDER BY user_id DESC
+db.users.find().sort({user_id:-1})
+db.users.find({}).sort({user_id:-1})
+
+// SELECT * FROM user WHERE age > 30 and age < 60 ORDER BY user_id
+db.users.find({age:{$gt:30,$lt:60}}).sort({user_id:1})
+
+// SELECT * FROM multi ORDER BY name asc
+db.multi.find().sort({name:1})
+// SELECT * FROM multi ORDER BY name desc
+db.multi.find().sort({name:-1})
+
+// count
+// SELECT count(*) FROM users
+db.users.count()
+db.users.find().count()
+
+// SELECT count(user_id) FROM users
+db.users.count({user_id:{$exists:true}})
+db.users.find({user_id:{$exists:true}}).count()
+
+// SELECT count(user_id) FROM users WHERE status="A"
+db.users.count({status:"A"})
+db.users.find({status:"A"}).count()
+
+// distinct
+// SELECT distinct(user_id) FROM users
+db.users.distinct("user_id")
+// SELECT distinct(status) FROM users
+db.users.distinct("status")
+
+// limit
+// SELECT * FROM users LIMIT 1
+db.users.findOne()
+db.users.find().limit(1)
+
+// SELECT * FROM multi LIMIT 3
+db.multi.find().limit(3)
+
+// SELECT * FROM multi ORDER BY kor LIMIT 3
+db.multi.find().sort({kor:1}).limit(1)
+
+// SELECT * FROM multi ORDER BY kor desc LIMIT 3
+db.multi.find().sort({kor:-1}).limit(1)
+
+// SKIP
+// db.collection이름.find().skip(n) : 맨 처음 n개 스킵하기
+db.users.find().skip(1)
+db.multi.find().skip(3)
+db.score.find().skip(5)
+
+// PRETTY
+// db.collection이름.pretty() : collection 예쁘게 보기
+db.users.find().pretty()
+db.multi.find().pretty()
