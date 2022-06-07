@@ -1,5 +1,7 @@
 # MongoDB
 
+> MongoDB Document : https://www.mongodb.com/docs/
+>
 > MongoDB download : https://www.mongodb.com/try/download/community
 >
 > for Window : https://khj93.tistory.com/entry/MongoDB-Window%EC%97%90-MongoDB-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0
@@ -143,13 +145,39 @@ db.users.find().sort({user_id:-1})
 * count
   * `db.collection이름.count()` or `db.collection이름.find().count()`
   * `db.collection이름.count(조건)` or `db.collection이름.find(조건).count()`
-
 * distinct
   * `db.collection이름.distinct("field이름")`
-
 * limit
   * `db.collection이름.find().limit(n)`
 * skip
   * `db.collection이름.find().skip(n) `: 맨 처음 n개 스킵하기
 * pretty
   * `db.collection이름.pretty()`: collection 예쁘게 보기
+
+
+
+### 3) collection 수정(update)
+
+* collection 수정
+
+  > https://stackoverflow.com/questions/35848688/whats-the-difference-between-replaceone-and-updateone-in-mongodb
+
+  * `db.collection이름.updateOne()`: 매칭되는 한 개의 document field수정
+  * `db.collection이름.updateMany()`: 매칭되는 모든 document field수정
+  * `db.collection이름.replaceOne()`: 매칭되는 document **전체**를 수정
+
+* document에 배열 추가
+
+  > https://www.mongodb.com/docs/manual/reference/operator/update/each/
+
+  * `db.collection이름.updateOne({<field>:<value>},{$push:{<field>:{$each: [ <value1>, <value2> ... ]}}})`: field에 배열 추가 (중복 **제거하지 않고** 추가)
+  * `db.collection이름.replaceOne({<field>:<value>},{$addToSet:{<field>:{$each: [ <value1>, <value2> ... ]}}})`: field에 배열 추기 (중복 **제거하고** 추가)
+
+
+
+### 4) collection 삭제 (delete)
+
+* collection 삭제
+  * `db.collection이름.deleteOne()` : 매칭되는 한 개의 document 삭제
+  * `db.collection이름.deleteMany()` : 매칭되는 모든 document 삭제
+  * `db.collection이름.drop()` : collection 삭제
