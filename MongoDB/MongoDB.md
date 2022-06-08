@@ -85,8 +85,8 @@
 
 * collection 입력
 
-  * `db.collection이름.insertOne({})` : 하나의 document생성
-  * `db.collection이름.insertMany([{},{},{}])` : 여러 개의 document생성 (리스트 안에 넣어줘야 함)
+  * `db.collection이름.insertOne({<field>:<value>})` : 하나의 document생성
+  * `db.collection이름.insertMany([{<field1>:<value1>},{<field2>:<value2>},{<field3>:<value3>}])` : 여러 개의 document생성 (리스트 안에 넣어줘야 함)
 
   ```shell
   db.users.insertMany(
@@ -171,7 +171,7 @@ db.users.find().sort({user_id:-1})
   > https://www.mongodb.com/docs/manual/reference/operator/update/each/
 
   * `db.collection이름.updateOne({<field>:<value>},{$push:{<field>:{$each: [ <value1>, <value2> ... ]}}})`: field에 배열 추가 (중복 **제거하지 않고** 추가)
-  * `db.collection이름.replaceOne({<field>:<value>},{$addToSet:{<field>:{$each: [ <value1>, <value2> ... ]}}})`: field에 배열 추기 (중복 **제거하고** 추가)
+  * `db.collection이름.replaceOne({<field>:<value>},{$addToSet:{<field>:{$each: [ <value1>, <value2> ... ]}}})`: field에 배열 추가 (중복 **제거하고** 추가)
 
 
 
@@ -181,3 +181,63 @@ db.users.find().sort({user_id:-1})
   * `db.collection이름.deleteOne()` : 매칭되는 한 개의 document 삭제
   * `db.collection이름.deleteMany()` : 매칭되는 모든 document 삭제
   * `db.collection이름.drop()` : collection 삭제
+
+---
+
+## 5. pymongo
+
+### 1) pymongo 사용하기
+
+⭐⭐mongoshell과 달리 <field>에 ""해줘야 하는거 잊지 않기 (ex: {"name":"홍길동"})
+
+* python에서 mongodb사용하기
+
+  1. 설치하기
+
+     * `pip install pymongo`
+
+  2. pymongo 라이브러리 import하기
+
+     * `from pymongo import MongoClient`
+
+  3. mongodb 접속(localhost)
+
+     * `변수 = MongoClient() `
+
+     * `변수 = MongoClient('localhost', 27017) `
+     * `변수 = MongoClient('mongodb://localhost:27017')`
+
+  4. 사용할 db, collection 생성 또는 선택 (**없으면 자동으로 생성됨**)
+
+     * `db = MongoClient연결된변수['db이름']`
+     * `db = MongoClient연결된변수.db이름`
+     * `collection = db.['collection이름']`
+     * `collection = db.collection이름`
+
+### 2) collection 입력
+
+* `collection이름.insert_one({<field>:<value>})`
+* `collection이름.insert_many([{<field1>:<value1>}, {<field2>:<value2>}, {<field3>:<value3>},,,])`
+
+### 3) collection 검색
+
+* `collection이름.find_one(조건)`
+* `collection이름.find(조건)` : 결과가 **list로 반환**돼서 안에 객체를 보려면 for문 써야함.
+
+* count
+  * `collection이름.estimated_document_count()` 
+  * `collection이름.count_documents(조건)` : **조건에 맞는** document의 개수, **조건 안넣으면 오류나니 주의**
+
+* sort
+  * `collection이름.find().sort(정렬기준)`
+
+### 4) collection 수정
+
+* `collection이름.update_one({<field>:<value>},{"$set":{<field1>:<value1>}})`: **가장 먼저 검색되는** 조건에 맞는 한 document만 수정
+* `collection이름.update_many({<field>:<value>},{"$set":{<field1>:<value1>}})`: 조건에 맞는 **모든** document **field** 수정
+* `collection이름.replace_one({<field>:<value>},{<field1>:<value1>})`: 조건에 맞는 모든 document **전체** 수정
+
+### 5) collection 삭제
+
+* `collection이름.delete_one({<field>:<value>},{"$set":{<field1>:<value1>}})`: **가장 먼저 검색되는** 조건에 맞는 한 document만 삭제
+* `collection이름.delete_many({<field>:<value>},{"$set":{<field1>:<value1>}})`: 조건에 맞는 **모든** document 삭제

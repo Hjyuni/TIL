@@ -22,7 +22,7 @@ db.multi.insertMany(
 
 db.multi.insertMany([
 		{'name':'hong-gd',kor:100, eng:30, math:60},
-		{'name':'kim-sd',kor:40, eng:70, math:1000},
+		{'name':'kim-sd',kor:40, eng:70, math:100},
 		{'name':'park-jy',kor:100, eng:100, math:100},
 		{'name':'hur-jy',kor:100, eng:100, math:100},
 		{'name':'lee-ss',kor:60, eng:100, math:70}
