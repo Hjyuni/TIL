@@ -4,3 +4,7 @@
   * mongoDB 데이터 create, read 하는 법
 * 2022/6/7
   * mongoDB 데이터 update, delete 하는 법
+
+* 2022/6/8
+  * pymongo 사용법
+  * pymongo CRUD
