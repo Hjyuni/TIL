@@ -171,9 +171,10 @@ db.users.find().sort({user_id:-1})
   > https://www.mongodb.com/docs/manual/reference/operator/update/each/
 
   * `db.collection이름.updateOne({<field>:<value>},{$push:{<field>:{$each: [ <value1>, <value2> ... ]}}})`: field에 배열 추가 (중복 **제거하지 않고** 추가)
+  
   * `db.collection이름.replaceOne({<field>:<value>},{$addToSet:{<field>:{$each: [ <value1>, <value2> ... ]}}})`: field에 배열 추가 (중복 **제거하고** 추가)
-
-
+  
+    
 
 ### 4) collection 삭제 (delete)
 
@@ -181,6 +182,40 @@ db.users.find().sort({user_id:-1})
   * `db.collection이름.deleteOne()` : 매칭되는 한 개의 document 삭제
   * `db.collection이름.deleteMany()` : 매칭되는 모든 document 삭제
   * `db.collection이름.drop()` : collection 삭제
+
+
+
+### 5) aggregation
+
+> documentation: https://www.mongodb.com/docs/manual/aggregation/
+>
+> 참고사이트1: https://www.fun-coding.org/mongodb_advanced1.html
+>
+> 참고사이트2: https://jaehun2841.github.io/2019/02/24/2019-02-24-mongodb-2/#%EC%98%88%EC%A0%9C-1
+
+* 데이터 처리 파이프라인의 개념을 모델로 함
+* 여러 단계의 파이프라인을 거쳐 변화하고 하나의 문서의 형태로 집계 가능
+* collection aggregate
+
+```shell
+db.collection.aggregate(
+	{$match: ...},    # = WHERE, HAVING
+	{$project: ...},  # = SELECT
+	{$group: ...}     # = GROUP BY
+)
+```
+
+
+
+* 참고
+
+  * mapreduce : map이라는 방식으로 원하는 데이터 추출 후 reduce라는 방법으로 추출한 데이터 정제 
+
+    * mongodb 5.0부터 사용하지 말라고 권장, 대신 aggregate를 쓰라고 권고
+
+    > documentation : https://www.mongodb.com/docs/manual/core/map-reduce/
+    >
+    > 참고사이트 1: https://datamod.tistory.com/122
 
 ---
 
@@ -213,29 +248,35 @@ db.users.find().sort({user_id:-1})
      * `db = MongoClient연결된변수.db이름`
      * `collection = db.['collection이름']`
      * `collection = db.collection이름`
+     
+     
 
 ### 2) collection 입력
 
 * `collection이름.insert_one({<field>:<value>})`
 * `collection이름.insert_many([{<field1>:<value1>}, {<field2>:<value2>}, {<field3>:<value3>},,,])`
 
+
+
 ### 3) collection 검색
 
 * `collection이름.find_one(조건)`
 * `collection이름.find(조건)` : 결과가 **list로 반환**돼서 안에 객체를 보려면 for문 써야함.
-
 * count
   * `collection이름.estimated_document_count()` 
   * `collection이름.count_documents(조건)` : **조건에 맞는** document의 개수, **조건 안넣으면 오류나니 주의**
-
 * sort
   * `collection이름.find().sort(정렬기준)`
+
+
 
 ### 4) collection 수정
 
 * `collection이름.update_one({<field>:<value>},{"$set":{<field1>:<value1>}})`: **가장 먼저 검색되는** 조건에 맞는 한 document만 수정
 * `collection이름.update_many({<field>:<value>},{"$set":{<field1>:<value1>}})`: 조건에 맞는 **모든** document **field** 수정
 * `collection이름.replace_one({<field>:<value>},{<field1>:<value1>})`: 조건에 맞는 모든 document **전체** 수정
+
+
 
 ### 5) collection 삭제
 

@@ -1,0 +1,54 @@
+// aggregate
+
+// $project : SELECT
+db.score.aggregate(
+	{$project: {_id: 0, name: 1, kor: 1, eng: 1, math: 1}}
+)
+
+// $match : WHERE, HAVING
+db.score.aggregate(
+	{$match: {kor: {$gt: 80}}}
+)
+
+// $field: 해당 field값을 사용할 때 (==$$current.field)
+//_id: '$test' : test field사용하겠다
+db.score.aggregate(
+	{$group: {_id: '$test', 'average': {$avg: '$kor'}}}
+)
+
+// $match : WHERE, HAVING
+// $group : GROUP BY
+db.multi.aggregate(
+	{$match: {name:/s/}},
+	{$group: {_id: 'test','sum':{$sum:'$kor'}}}
+)
+
+		// $match -> multi collection에서 kor field의 값이 70보다 큰 doc
+db.multi.aggregate({$match: {kor:{$gt:70}}},
+		// $projection -> 가지고 온 doc에서 kor field만 가져오자
+		{$project: {kor:1}},
+		// $group : 전체 다 하나로 (test라는 이름으로) -> 평균 구하자 ($avg) // kor field의 평균
+		{$group:{_id:'test', 'average': {$avg:'$kor'}}})
+
+
+// mapreduce
+// test가 final인 doc들의 이름, 국어, 영어 출력하고 '국어와 영어의 합'도 같이 출력
+function myMap(){
+	emit(this.score, {name: this.name, kor: this.kor, eng:this.eng, test:this.test})
+}
+
+function myReduce(key,values){
+	var result = {name:new Array(), kor: new Array(), eng: new Array(), total: new Array()}
+	values.forEach(function(val){
+		if(val.test == 'final'){
+			result.name += val.name + " ";
+			result.kor += val.kor + " ";
+			result.eng += val.eng + " ";
+			result.total += val.kor + val.eng + " ";
+			}
+		});
+		return result;
+}
+
+db.score.mapReduce(myMap, myReduce, {out: {replace: 'myRes'}})
+db.myRes.find()
