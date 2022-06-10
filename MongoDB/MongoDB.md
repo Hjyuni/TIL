@@ -282,3 +282,49 @@ db.collection.aggregate(
 
 * `collection이름.delete_one({<field>:<value>},{"$set":{<field1>:<value1>}})`: **가장 먼저 검색되는** 조건에 맞는 한 document만 삭제
 * `collection이름.delete_many({<field>:<value>},{"$set":{<field1>:<value1>}})`: 조건에 맞는 **모든** document 삭제
+
+---
+
+## 6. mongoDB geospatial
+
+> documentation : https://www.mongodb.com/docs/manual/geospatial-queries/
+>
+> 참고사이트1 : https://grepper.tistory.com/7
+>
+> 참고사이트2 : https://blog.ull.im/engineering/2019/03/06/mongodb-geospatial-queries.html
+
+### 1) GeoJson
+
+* geometry 계산을 위해 위치 데이터를 GeoJson 객체로 저장해야 함
+* `<field>: { type: <GeoJSON type> , coordinates: <coordinates> }`
+  * type에는 Point, Polygon, MultiPoint 등을 명시
+  * coordinates에는 객체의 좌표 명시 : `<field>: [<longitude>, <latitude> ]` (**경도(-180~180), 위도(-90~90)** 순인거 잊지 않기)
+
+### 2) Geospatial Indexes
+
+* 2dsphere : 지구와 같은 구에서 geometry를 계산하는 쿼리들을 지원
+  * `db.collection이름.createIndex({ <location field> : "2dsphere" })`
+* 2d : 2차원 평면상에서의 geometry를 계산하는 쿼리지원
+  * `db.collection이름.createIndex({ <location field> : "2d" })`
+
+### 3) Geospatial Query Operators
+
+* `$near` : **점**과 가까운 순서의 geospatial object반환
+
+  * documentation : https://www.mongodb.com/docs/manual/reference/operator/query/near/#op._S_near
+
+  * `$minDistance`와 `$maxDistance` 설정을 통해 범위 지정 가능
+
+* `$geoNear` : aggregate와 함께 사용해야함
+
+  * documentation : https://www.mongodb.com/docs/manual/reference/operator/aggregation/geoNear/#pipe._S_geoNear
+
+* `$geoIntersects` : GeoJson geometry와 교차하는 geometries를 선택, 2dsphere에서만 사용하길 권장
+
+  * documentation : https://www.mongodb.com/docs/manual/reference/operator/query/geoIntersects/
+
+* `$geoWithin` : GeoJson geometry 안에 속하는 geometries 선택
+  * documentation : https://www.mongodb.com/docs/manual/reference/operator/query/geoWithin/#op._S_geoWithin
+* `$geoSphere` : 구체에서 점과 가까운 순서의 geospatial 객체 반환
+  * documentation : https://www.mongodb.com/docs/manual/reference/operator/query/nearSphere/#op._S_nearSphere
+

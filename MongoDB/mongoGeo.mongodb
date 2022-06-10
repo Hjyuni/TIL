@@ -1,0 +1,74 @@
+// mongoGeo
+// python_mongo_geo01, python_mongo_geo02 실행 후
+
+db.starbucks02.createIndex({location:'2dsphere'})
+
+// 선릉역 위워크:37.503452595907625, 127.04985375579137 -> 경도 위도 위치 바꿔서 넣어야함
+db.starbucks02.find({
+	location: {
+		$near:{
+			$geometry:{
+				type:'Point',
+				coordinates:[127.04985375579137, 37.503452595907625]
+			}
+		}
+	}
+})
+
+db.starbucks02.find({
+	location: {
+		$near:{
+			$geometry:{
+				type:'Point',
+				coordinates:[127.04985375579137, 37.503452595907625]
+			},
+			$maxDistance: 500
+		}
+	}
+})
+
+// 현재 위치부터 ~"서울" 단어가 포함된 좌표들의 거리
+db.starbucks02.aggregate([
+	{
+		$geoNear:{
+			near:{type:'Point', coordinates:[127.04985375579137, 37.503452595907625]},
+			spherical: true,
+			query: {s_name:/서울/},
+			distanceField:'distance'
+		}
+	}
+])
+
+// 강남역:37.49853366737394, 127.0276513018029
+// 선정릉역: 37.510305589991816, 127.04370419285543
+// 도곡역:37.49193672745484, 127.05556937333424
+
+db.starbucks02.find(
+   {
+      location: {
+            $geoIntersects:{
+               $geometry:{
+                  type:'Polygon',
+                  coordinates:[
+                     [
+                     [127.02758131642055 , 37.498076994375445],
+                     [127.04370940976666 , 37.510334253790276],
+                     [127.07056572695807 , 37.49678561313641],
+                     [127.02758131642055 , 37.498076994375445]
+                     ]
+                  ]
+               }
+            }
+      }
+   }
+)
+
+db.starbucks02.find(
+		{
+			location: {
+				$geoWithin: {
+					$centerSphere:[[127.04985375579137, 37.503452595907625],0.5/3963.2]
+			}
+		}
+	}
+)
