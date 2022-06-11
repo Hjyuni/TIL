@@ -283,6 +283,17 @@ db.collection.aggregate(
 * `collection이름.delete_one({<field>:<value>},{"$set":{<field1>:<value1>}})`: **가장 먼저 검색되는** 조건에 맞는 한 document만 삭제
 * `collection이름.delete_many({<field>:<value>},{"$set":{<field1>:<value1>}})`: 조건에 맞는 **모든** document 삭제
 
+### 6) 검색 문법
+
+* `$rename` : 필드명 변경
+  * `collection이름.update_many({},{"$rename":{"필드명":"바꿀이름"}})`
+* `sort` : 정렬해서 출력
+  * `collection이름.find().sort('정렬기준')` : 오름차순
+  * `collection이름.find().sort('정렬기준',pymongo.DESCENDING)` : 내림차순
+* `$exists` : 존재하는 또는 존재하지 않는 doc만 추출
+  * `collection이름.find({"필드명":{"$exists":True}})` : 지정한 필드명이 있는 document 출력
+  * `collection이름.find({"필드명":{"$exists":False}})` : 지정한 필드명이 없는 document 출력
+
 ---
 
 ## 6. mongoDB geospatial
