@@ -293,6 +293,27 @@ db.collection.aggregate(
 * `$exists` : 존재하는 또는 존재하지 않는 doc만 추출
   * `collection이름.find({"필드명":{"$exists":True}})` : 지정한 필드명이 있는 document 출력
   * `collection이름.find({"필드명":{"$exists":False}})` : 지정한 필드명이 없는 document 출력
+* `$or` : 두 조건 중 하나만 만족하거나 둘 다 만족하는 doc 출력
+  * `collection이름.find({"$or":[{<field1>:<value1>},{<field2>:<value2>}]})`
+* `$nor` : not or , 두 조건의 반대 조건 doc 출력, and의 역할과 비슷
+  * `collection이름.find({"$nor":[{<field1>:<value1>},{<field2>:<value2>}]})`
+* `$in`
+  * `collection이름.find({"<field>":{"$in":[조건1,조건2]}})`
+* `$nin`
+  * `collection이름.find({"<field>":{"$nin":[조건1,조건2]}})`
+* `limit`,`skip` : mongodb shell과 같음
+* value가 list일 때
+  * or은 똑같이 사용하면 됨
+  * and는 `$all`사용해야 함
+    * documentation : https://www.mongodb.com/docs/manual/reference/operator/query/all/
+    * `collection이름.find({"<field>":{"$all":["조건1","조건2"]}})`
+  * 리스트의 인덱스로도 찾을 수 있음
+    * `collection이름.find({"<field>.index":"조건"})`
+  * `$size`로 리스트의 크기로 찾을 수 있음
+    * `collection이름.find({"<field>":{"$size":인덱스크기}})`
+* `$elemMatch`
+  * 적어도 한 개 이상의 리스트 요소가 복수 개의 조건을 동시에 만족하는 경우
+  * documentation : https://www.mongodb.com/docs/manual/reference/operator/query/elemMatch/
 
 ---
 
