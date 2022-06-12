@@ -14,4 +14,10 @@
   * 스타벅스 매장 정보 통한 mongoDB geospatial queries
 * 2022/6/11
   * 잔재미 코딩 사이트 보면서 cine21 크롤링 & 몽고db에 넣기
-  * mongodb 검색문법 : `$rename`,`sort`,`$exists` 
+  * mongoDB 검색문법 : `$rename`,`sort`,`$exists` 
+
+* 2022/6/12
+  * mongoDB 검색문법 : `$or`,`$nor`,`$in`,`$nin`
+  * mongoDB value 값이 list일 때 검색하는 법 
+  * mongoDB `$elemMatch`
+
