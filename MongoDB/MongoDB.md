@@ -360,3 +360,54 @@ db.collection.aggregate(
 * `$geoSphere` : 구체에서 점과 가까운 순서의 geospatial 객체 반환
   * documentation : https://www.mongodb.com/docs/manual/reference/operator/query/nearSphere/#op._S_nearSphere
 
+---
+
+## 7. MongoDB INDEX
+
+* 검색을 더 빠르게 수행하고자 만든 추가적인 데이터 구조
+  * index 데이터 구조가 없다면 컬렉션에 있는 데이터를 하나씩 조회하는 방식으로 검색이 됨
+
+
+
+### 1) 기본 인덱스 (_id)
+
+* 모든 mongodb 컬렉션에 기본적으로  _id 생성됨
+
+
+
+### 2) Single(단일) field index
+
+* documentation : https://www.mongodb.com/docs/manual/reference/method/db.collection.createIndex/
+* mongoDB_shell: `db.collection이름.createIndex(필드이름)`
+* pymongo: `collection이름.create_index(필드이름)`
+  * index 정보 : `collection이름.index_information()`
+  * `key: ('필드이름', direction)`
+    * direction
+      * `pymongo.ASCENDING` = 1
+      * `pymongo.DESCENDING` = -1
+      * `pymongo.TEXT` = 'text'
+  * 텍스트 index는 컬렉션 당 **하나만 존재해야 함**
+* `collection이름.drop_indexes()`: **기본 인덱스 이외의** 인덱스 제거
+* `collection이름.drop_index([('필드이름',direction)])`: **특정 인덱스** 삭제
+
+
+
+### 3) Compund field index
+
+* 최대 31개의 필드로 만들 수 있음
+* `collection이름.create_index([('필드이름',direction),('필드이름',direction)])`
+
+
+
+### 4) 부분 문자열 검색
+
+* `$text`
+
+  * 항상 `$search`와 함께 사용
+
+  * **텍스트 index**가 있어야 함
+  * `collection이름.find({"$text":{"$search":"검색어"}})`
+  * `collection이름.find({"$text":{"$search":"검색어","$caseSensitive:True"}})` : 대소문자 구별해서 찾아줌
+
+* `$regex` : 정규표현식
+  * 텍스트 index가 없어도 됨
