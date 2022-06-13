@@ -21,3 +21,5 @@
   * mongoDB value 값이 list일 때 검색하는 법 
   * mongoDB `$elemMatch`
 
+* 2022/6/13
+  * mongoDB index 사용해서 검색하기
