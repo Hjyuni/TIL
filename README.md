@@ -23,3 +23,5 @@
   * mongoDB index 사용해서 검색하기
 * 2022/6/14
   * postgreSQL db&테이블 생성, 삭제, 데이터 입력 기초
+* 2022/6/15
+  * postgreSQL 데이터 조회, 정렬, 수정, 삭제
