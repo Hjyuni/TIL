@@ -1,5 +1,7 @@
 # TIL
 
+> 좋은 git commit 메세지: https://blog.ull.im/engineering/2019/03/10/logs-on-git.html
+
 * 2022/6/6
   * mongoDB 데이터 create, read 하는 법
 * 2022/6/7
@@ -25,3 +27,5 @@
   * postgreSQL db&테이블 생성, 삭제, 데이터 입력 기초
 * 2022/6/15
   * postgreSQL 데이터 조회, 정렬, 수정, 삭제
+* 2022/6/16
+  * postgreSQL 데이터 타입
