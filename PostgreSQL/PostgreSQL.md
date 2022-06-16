@@ -62,6 +62,8 @@ postgres=#
 * `SELECT 컬럼 FROM 테이블명`
   * `LIMIT` : 반환하는 ROW의 개수 지정
   * `OFFSET` : 반환하는 ROW의 시작시점 지정(postgreSQL : ROW 시작점을 0으로 봄)
+    * `LIMIT` & `OFFSET` 사용할 때 주의점 : postgreSQL은 ORDER BY 를 하지 않으면 실행 결과의 순서를 보장하지 않음. 따라서 ORDER BY를 꼭 해줘야 함
+    * 참고사이트: https://blog.billo.io/devposts/psql_offset_wo_order_by/
   * `ORDER BY` : 반환하는 ROW 정렬할 때 사용
   * `WHERE` : 지정한 ROW만 반환되도록
   * `ORDER BY` : 조회할 데이터 정렬(ASC: 오름차순(default), DESC: 내림차순)
@@ -97,3 +99,87 @@ postgres=#
 * `DELETE FROM 테이블명` : 모든 데이터 삭제
 
  
+
+## 6) 데이터 유형
+
+1. 숫자형
+   * `INTEGER` or `INT` : 정수, -2147483648 ~ +2147483648 범위 내의 숫자 정보
+   * `NUMERIC(p,q)` : 소수점도 정확히 입력받아야 할 때(=`DECIMAL`)
+     * p : 전체 자리수
+     * q : 소수점 자리 수
+     * ex > NUMERIC(5,3) = 전체 길이 5, 소수점 3자리 수 (10.001, 23.999 ,,,,)
+   * `FLOAT` : 부동소수점, `REAL` 또는 `DOUBLE PRECISION`으로 인식
+   * `SERIAL` : `INTEGER` 기본 값으로 1씩 추가되고 값이 자동 생성, **pk데이터 타입으로 주로 사용**
+
+
+
+2. 화폐형
+
+* 금액을 저장하는 데이터 타입, 분수의 형태로 금액 저장
+* 분수의 정밀도는 `lc_monetary` 설정에 따르며 테이블에선 소수점 두 자리수까지 표현
+* 다양한 형식의 입력 가능, 출력은 `Locale` 설정에 따름
+  * `Locale`이란 : 각 나라별로 국가, 지역, 언어코드 등 표시하는 방법이 다른데 이에 따른 식별자를 이용하면 각 나라에 맞는 사용자 인터페이스로 변경 가능
+
+
+
+3. 문자형
+
+* `VARCHAR(n)` : 가변적인 문자열 길이, n을 지정하지 않으면 임의의 길이의 **모든 문자열 허용**
+* `CHAR(n)`: 문자길이+공백 으로 n의 크기에 맞게 저장되는 문자열
+* `TEXT` : 길이에 상관없이 문자열 저장
+
+
+
+4. 날짜 및 시간
+
+* `TIMESTAMP` : 날짜와 시간 정보 모두 나타냄
+  * `TIMESTAMP WITHOUT TIME ZONE`=`TIMESTAMP`: 현재 세계 표준시(UTC), 시간대 정보 반영 **없음**
+  * `TIMESTAMP WITH TIME ZONE`=`TIMESTAMPTZ`: 현재 세계 표준시(UTC)+**시간대 정보 반영**
+  * 참고사이트: https://blog.billo.io/devposts/psql_at_time_zone/
+    * `TIMESTAMP(p)`: '초' 단위의 소수점 값 정확하게 표현 가능, 허용 범위 0~6
+    * ex> `TIMESTAMP(6)`: HH:MM:SS.pppppp
+* `DATE` : 날짜 정보만
+* `TIME` : 시간 정보만
+  * `TIME WITHOUT TIME ZONE`=`TIME`: 시간대 정보 반영하지 않음
+    * `TIME WITH TIME ZONE`: 시간대 정보 반영
+
+
+
+5. 불리언(boolean)
+
+* 논리 데이터 타입이라고도 함
+* `True`/`False`/`Null`를 나타냄
+  * `True` : True, yes, on, 1
+  * `False` : False, no, off, 0
+  * `Null` : 알 수 없는 정보, 일부 불확실
+
+
+
+6. 배열(Array)
+
+* 여러 데이터를 하나의 집합으로 관리하기 위한 데이터 타입
+
+* 배열 타입 입력할 때
+
+  * 테이블 생성시에는 데이터타입[] 형태로 입력 (`INTEGER[]`,`VARCHAR[]`,,,)
+
+  * 데이터 입력 시에는`Array[data1,data2,,]`형태 또는 `{data1,data2,,}`타입으로 입력할 수 있음
+
+
+
+7. JSON(JavaScript Object Notation)형
+
+* 서버와 웹 어플리케이션 간에 테이터를 주고 받을 때 사용
+* 키(key)-값(value) 의 쌍으로 구성된 **JSON 오브젝트**와 배열과 비슷한 구조를 갖는 **JSON배열**로 나뉨
+* JSON 데이터 타입 : `JSON` , `JSONB`
+  * 두 데이터 타입 모두 동일한 값의 집합을 받아들이는 공통점 있음
+  * `JSON`은 입력 텍스트를 정확한 사본을 만들어서 저장, 이것을 불러와 처리할 때는 데이터를 재분석한 다음 실행
+  * `JSONB`은 텍스트를 이진 형태로 분해 후 저장해서 입력이 느리지만 출력 시에는 재분석 하지 않아서 **JSON보다 처리속도 빠름**
+
+
+
+8. `CAST` : 데이터 타입 형변환
+
+* CAST 연산자: `CAST (표현식 AS 바꿀 데이터 타입)`
+* CAST형 연산자: `값::바꿀 데이터 타입`
+
