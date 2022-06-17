@@ -183,3 +183,44 @@ postgres=#
 * CAST 연산자: `CAST (표현식 AS 바꿀 데이터 타입)`
 * CAST형 연산자: `값::바꿀 데이터 타입`
 
+
+
+## 7) 데이터 값 제한하기
+
+* 무결성
+  * 개체 무결성(Entity integrity) : 모든 테이블이 pk를 가져야 하고, pk는 중복값이 없어야 하며 null값을 허용하면 안된다는 속성
+  * 참초 무결성(Referential integrity) : fk값이 null이 거나 참조된 테이블의 pk값과 동일해야하는 속성
+  * 범위 무결성(Domain integrity) : 사용자가 정의한 도메인 내에서 관계형 db의 모든 열을 정의하도록 규정하는 속성
+    * 도메인이란? 
+    * 기본 데이터 타입을 기반으로 선택적으로 제약조건을 걸 수 있는 **사용자 정의 데이터 타입**
+
+
+
+* 컬럼 값 제한하기
+
+  1. NOT NULL : 빈 값(NULL)을 허용하지 않음
+  2. UNIQUE : 유일한 값을 가져야 한다(NULL 허용)
+  3. PRIMARY KEY (=주 식별자, 주 키, PK) : UNIQUE + NOT NULL, 데이터 타입으론 SERIAL 씀
+  4. FOREIGN KEY
+  
+     * 부모 테이블이 자식 테이블보다 먼저 생성되어야 함
+  
+     * 부모 테이블은 자식 테이블과 같은 데이터 타입을 가져야 함
+  
+     * 부모 테이블에서 참조된 컬럼의 값만 자식 테이블에서 입력 가능
+  
+     * 참조되는 컬럼은 pk이거나 UNIQUE 제약조건 형식이어야 함
+  
+       * 컬럼 명이 참조하는 컬럼과 같은 경우 -> `REFERENCES 참조하는 테이블명`
+  
+       * 컬럼 명이 참조하는 컬럼과 다른 경우 -> `REFERENCES 참조하는 테이블명(참초하는 컬럼명)`
+  
+     * 기본적으로 부모 테이블은 자식 테이블보다 먼저 삭제 또는 수정 될 수 없지만 추가 조건을 부여하면 가능
+  
+       1) `ON DELETE/UPDATE NO ACTION` : DEFAULT
+       2) `ON DELETE/UPDATE RESTRICT` : 지울 수 없음
+       3) `ON DELETE/UPDATE SET NULL` : 부모 테이블이 지워지면 자식테이블의 참조하는 데이터는 NULL처리
+       4) `ON DELETE/UPDATE CASCADE ` : 부모 테이블이 지워지면 자식테이블의 참조하는 행도 같이 지워버림
+       5) `ON DELETE/UPDATE SET DEFAULT` : 부모 테이블 삭제시 자식테이블 생성했을 때에 정해놓은 DEFAULT값으로 대체, 이 때 **DEFAULT 값도 외래키 제약조건을 만족해야 함**
+  5. CHECK
+     * CHECK 뒤에 나오는 식이 불리언 타입의 True를 만족해야 함
