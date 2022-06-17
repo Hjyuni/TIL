@@ -201,22 +201,23 @@ postgres=#
   1. NOT NULL : 빈 값(NULL)을 허용하지 않음
   2. UNIQUE : 유일한 값을 가져야 한다(NULL 허용)
   3. PRIMARY KEY (=주 식별자, 주 키, PK) : UNIQUE + NOT NULL, 데이터 타입으론 SERIAL 씀
+     * documentation : https://www.techonthenet.com/postgresql/primary_keys.php
   4. FOREIGN KEY
-  
+
      * 부모 테이블이 자식 테이블보다 먼저 생성되어야 함
-  
+
      * 부모 테이블은 자식 테이블과 같은 데이터 타입을 가져야 함
-  
+
      * 부모 테이블에서 참조된 컬럼의 값만 자식 테이블에서 입력 가능
-  
+
      * 참조되는 컬럼은 pk이거나 UNIQUE 제약조건 형식이어야 함
-  
+
        * 컬럼 명이 참조하는 컬럼과 같은 경우 -> `REFERENCES 참조하는 테이블명`
-  
+
        * 컬럼 명이 참조하는 컬럼과 다른 경우 -> `REFERENCES 참조하는 테이블명(참초하는 컬럼명)`
-  
+
      * 기본적으로 부모 테이블은 자식 테이블보다 먼저 삭제 또는 수정 될 수 없지만 추가 조건을 부여하면 가능
-  
+
        1) `ON DELETE/UPDATE NO ACTION` : DEFAULT
        2) `ON DELETE/UPDATE RESTRICT` : 지울 수 없음
        3) `ON DELETE/UPDATE SET NULL` : 부모 테이블이 지워지면 자식테이블의 참조하는 데이터는 NULL처리
@@ -224,3 +225,36 @@ postgres=#
        5) `ON DELETE/UPDATE SET DEFAULT` : 부모 테이블 삭제시 자식테이블 생성했을 때에 정해놓은 DEFAULT값으로 대체, 이 때 **DEFAULT 값도 외래키 제약조건을 만족해야 함**
   5. CHECK
      * CHECK 뒤에 나오는 식이 불리언 타입의 True를 만족해야 함
+
+
+
+## 8) 테이블 변경하기 (ALTER TABLE)
+
+* 컬럼 추가하기
+  * `ALTER TABLE 테이블명 ADD COLUMN 컬럼명 데이터타입 제약조건`
+  * 새로운 컬럼을 추가할 때 기존에 있던 열들은 모두 NULL값을 가짐 따라서 만약 ADD COLUMN 뒤 **제약조건에 NOT NULL을 추가하면 오류 발생**
+  * 컬럼 생성 후 컬럼에 값을 넣은 후에 다시 NOT NULL 제약조건 추가하면 됨
+* 컬럼 수정하기
+  * `ALTER TABLE 테이블명 ALTER COLUMN 컬럼명 SET 제약 조건`
+
+* 컬럼 삭제하기
+
+  * `ALTER TABLE 테이블명 DROP COLUMN 컬럼명` 
+
+  * `ALTER TABLE 테이블명 DROP COLUMN 컬럼명 CASCADE` : 다른 컬럼이 지우려고 하는 컬럼을 참조할 때 
+
+* 컬럼 이름 변경하기
+
+  * `ALTER TABLE 테이블명 RENAME 기존컬럼명 TO 새컬럼명;`
+  * `ALTER TABLE 테이블명 RENAME COLUMN 기존컬럼명 TO 새컬럼명;`
+
+* 제약조건 제거/추가하기
+  * `ALTER TABLE 테이블명 ALTER COLUMN 컬럼명 DROP 제약조건`
+  * `ALTER TABLE 테이블명 ALTER COLUMN 컬럼명 ADD 제약조건`
+
+* 데이터 타입 변경하기
+  * `ALTER TABLE 테이블명 ALTER COLUMN 컬럼명 TYPE 새로운 데이터 타입`
+  * `ALTER TABLE 테이블명 ALTER COLUMN 컬럼명 SET DATA TYPE 새로운데이터타입;`
+
+* 데이터 값 형변환 동시에 컬럼의 데이터 타입을 바꾸기
+  * `USING 컬럼명::새로운데이터타입`
