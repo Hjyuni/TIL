@@ -1,6 +1,8 @@
 # TIL
 
 > 좋은 git commit 메세지: https://blog.ull.im/engineering/2019/03/10/logs-on-git.html
+>
+> git add, commit, push 취소하기 : https://gmlwjd9405.github.io/2018/05/25/git-add-cancle.html
 
 * 2022/06/06
   * mongoDB 데이터 create, read 하는 법
@@ -31,3 +33,6 @@
   * postgreSQL 데이터 타입
 * 2022/06/17
   * postgreSQL 무결성 유지 위해 데이터 값 제한하기
+
+* 2022/06/18
+  * postgreSQL ALTER TABLE
