@@ -236,25 +236,203 @@ postgres=#
   * 컬럼 생성 후 컬럼에 값을 넣은 후에 다시 NOT NULL 제약조건 추가하면 됨
 * 컬럼 수정하기
   * `ALTER TABLE 테이블명 ALTER COLUMN 컬럼명 SET 제약 조건`
-
 * 컬럼 삭제하기
 
   * `ALTER TABLE 테이블명 DROP COLUMN 컬럼명` 
 
   * `ALTER TABLE 테이블명 DROP COLUMN 컬럼명 CASCADE` : 다른 컬럼이 지우려고 하는 컬럼을 참조할 때 
-
 * 컬럼 이름 변경하기
 
   * `ALTER TABLE 테이블명 RENAME 기존컬럼명 TO 새컬럼명;`
   * `ALTER TABLE 테이블명 RENAME COLUMN 기존컬럼명 TO 새컬럼명;`
-
 * 제약조건 제거/추가하기
   * `ALTER TABLE 테이블명 ALTER COLUMN 컬럼명 DROP 제약조건`
   * `ALTER TABLE 테이블명 ALTER COLUMN 컬럼명 ADD 제약조건`
-
 * 데이터 타입 변경하기
   * `ALTER TABLE 테이블명 ALTER COLUMN 컬럼명 TYPE 새로운 데이터 타입`
   * `ALTER TABLE 테이블명 ALTER COLUMN 컬럼명 SET DATA TYPE 새로운데이터타입;`
-
 * 데이터 값 형변환 동시에 컬럼의 데이터 타입을 바꾸기
   * `USING 컬럼명::새로운데이터타입`
+
+
+
+## 9) 연산자와 함수
+
+* 논리 연산자와 비교 연산자 : 조건이 참 또는 거짓인지 판별하는 연산자
+
+  * 논리 연산자 : `AND`, `OR`, `NOT`
+
+  | A    | B    | A `AND` B | A `OR` B | `NOT` A |
+  | ---- | ---- | --------- | -------- | ------- |
+  | T    | T    | T         | T        | F       |
+  | T    | F    | F         | T        | F       |
+  | T    | NULL | NULL      | T        | F       |
+  | F    | F    | F         | F        | F       |
+  | F    | NULL | F         | NULL     | T       |
+  | NULL | NULL | NULL      | NULL     | NULL    |
+
+  * 비교 연산자
+    * IS TRUE / IS NOT TRUE
+    * IS FALSE / IS NOT FALSE
+    * ⭐IS NULL / IS NOT NULL
+
+
+
+* 범위 연산자 
+  * `BETWEEN A AND B` : A 이상 B 이하
+  * `NOT BETWEEN A AND B` : A 미만 B 초과
+
+
+
+* CASE 함수
+
+  * ```SQL
+    CASE
+    	WHEN <조건1> THEN <결과1>
+    	WHEN <조건2> THEN <결과2>
+    	ELSE <결과3>
+    END
+    ```
+
+
+
+* COALESCE 함수
+  * 보통 NULL 값을 다른 기본 값으로 대체할 때 자주 사용
+  * NULL값이 아닌 첫 매개변수 반환
+  * 컬럼을 매개변수로 넣은 경우 해당 컬럼의 데이터 타입과 이후 평가하는 데이터 타입이 일치해야 함
+  * `COALESCE(<매개변수1>,<매개변수2>,,,)`
+
+
+
+* NULLIF 함수
+  * 특정 값을 NULL로 바꾸고 싶을 때 사용
+  * `NULLIF(<매개변수1>,<매개변수2>)` 
+    * `매개변수1=매개변수2` : NULL 반환
+    * `매개변수1<>매개변수2` : 매개변수1 반환
+
+
+
+* 배열 연산자
+  * `<@` or `@>` : 포함관계 확인
+  * `&&` : 원소 단위로 겹침유무 확인, 두 배열을 비교하여 하나라도 겹치는 원소가 있다면 결과는 `TRUE`
+  * `||` 배열끼리 병합하거나 원소를 추가하고 싶을 때 
+
+
+
+* 배열 함수
+  * `array_append(배열, 원소)` : 배열 **맨 뒤**에 원소 추가
+  * `array_prepend(원소, 배열)` : 배열 **맨 앞**에 원소 추가
+  * `array_remove(배열, 원소)` : 배열의 특정 원소를 **삭제**
+  * `array_replace(배열, 원소1, 원소2)` : 배열의 특정 원소(원소1)를 다른 원소(원소2)와 **대체**
+  * `array_cat(배열1,배열2)` : 두 배열 **병합**
+
+
+
+* JSON 연산자
+  * `->` : JSON객체에서 키 값으로 밸류 값을 불러오거나 JSON 배열에서 인덱스로 JSON 오브젝트 불러오기
+    * `'{"키1":"값1","키2":"값2"}' -> '키1'`
+    * `[{"키1":"값1"},{"키2":"값2"}] -> 인덱스번호` 
+  * `->>` : JSON 오브젝트, JSON 배열 속 데이터 텍스트로 불러오기
+    * ` '{"키1":"값1","키2":"값2"}' ->> '키1' `
+  * `#>` : 특정한 경로의 값 가져오기
+    * `'{"키1":"값1","키2":"값2"}' #> '{경로}'`
+  * `#>>` : 특정한 경로의 값 텍스트 타입으로 가져오기
+    * `'{"키1":"값1","키2":"값2"}' #>> '{경로}'`
+  * JSON타입에서는 `<,>,<=,>=,=,<>` 사용 불가능, JSONB에서는 가능
+
+
+
+* JSONB 연산자
+  * `@>` & `<@` : 포함관계
+  * `?` : 가장 바깥 단의 JSONB에 해당하는 문자열의 키가 존재하는지
+  * `?|` : 배열 속 원소가 키 값으로 하나 이상 존재하는지
+  * `?&` : 배열속 원소가 키 값으로 모두 존재하는지
+  * `||` : 2개의 JSONB 병합
+  * `-` : JSONB 오브젝트의 하나 이상의 원소 삭제하거나 JSONB 배열의 해당 인덱스 번호의 원소를 삭제
+
+
+
+* JSON & JSONB함수
+  * JSON & JSONB 오브젝트 생성
+    * `json_build_object('키1','값1','키2','값2',,)` : JSON 오브젝트 생성, 키와 값 쌍이 맞아야 함
+    * `jsonb_build_object('키1','값1','키2','값2',,)` : JSONB 오브젝트 생성, 키와 값 쌍이 맞아야 함
+  * JSON & JSONB 배열 생성
+    * `json_build_array('값1','값2','값3','값4',,)` : JSON 배열 생성, 키와 값 쌍이 맞지 않아도 됨
+    * `jsonb_build_array('값1','값2','값3','값4',,)` : JSON 배열 생성, 키와 값 쌍이 맞지 않아도 됨
+  * JSON & JSONB 배열 길이
+    * `json_array_length('['값1','값2','값3','값4',,]')` : 배열의 길이
+    * `jsonb_array_length('['값1','값2','값3','값4',,]')` : 배열의 길이
+  * JSON & JSONB 키와 값 분리해서 보기
+    * `json_each('{"키1":"값1","키2":"값2"}')`
+    * `jsonb_each('{"키1":"값1","키2":"값2"}')`
+  * JSON & JSONB 값들 분리해서 보기
+    * `json_array_elements('["값1","값2","값3"]')`
+    * `jsonb_array_elements('["값1","값2","값3"]')`
+
+
+
+* 시간 및 날짜 연산자
+  * `DATE ('YYYY-MM-DD')+ 정수` = 정수만큼 일자가 더해져서 나옴
+  * `DATE ('YYYY-MM-DD') + TIME('HH:MM:SS')` = 'YYYY-MM-DD HH:MM:SS'
+  * `INTERVAL '시간' * 시간` = 곱해진 시간
+  * `TIME(HH:MM) * 정수` = H에 곱해짐
+  * `DATE ('YYYY-MM-DD') * 정수` = ERROR
+  * `INTERVAL '시간' / 정수,실수` -> 분모가 0이 되지 않게 조심 
+
+
+
+* 시간 및 날짜 함수
+  * `CURRENT_DATE` : 현재 날짜 정보
+  * `CURRENT_TIME` : 현재 시간 + 시간대 정보
+    * `CURRENT_TIME(n)` : 밀리초 n자리 수까지
+  * `CURRENT_TIMESTAMP` : 현재 날짜 및 시간 + 시간대 정보
+    * `CURRENT_TIMESTAMP(n)` : 밀리초 n자리 수까지
+  * `LOCALTIME` : 시간대 정보 없이 현재 시간 정보 반환
+    * `LOCALTIME(n)` : 밀리초 n자리 수까지
+  * `LOCALTIMESTAMP` : 시간대 정보 없이 현재 날짜 및 시간 정보 반환
+    * `LOCALTIMESTAMP(n)` : 밀리초 n자리 수까지
+  * `now()` : 현재 트랜잭션이 시작할 때의 시간 반환
+  * `timeofday()` : 현재 작업이 시작할 때의 시간 반환
+  * `age(<timestamp>)` : 남은 기간을 표시할 때
+  * `extract(<특정 정보> FROM <날짜 및 시간 정보>)` : 날짜 및 시간 데이터 타입에서 특정 정보만 빼오기
+    * 특정 정보에 들어갈 수 있는 값
+      * `CENTURY`: 세기
+      * `QUARTER`: 분기 (1년을 4로 나눔)
+      * `YEAR`,`MONTH`,`DAY`: 년, 월, 일
+      * `HOUR`,`MINUTE`,`SECOND`: 시, 분, 초
+      * `ISODOW` : 월(1) ~ 일(7)로 요일 표시
+      * `DOW` : 일(0) ~ 토(6)로 요일 표시
+      * `TIMEZONE` : 시간대
+  * `date_part('<특정정보>',<날짜 및 시간정도>)` : extract와 같은데 특정 정보를 문자열로 받아와야 함
+  * `date_trunc('<특정정보>',시간 데이터 타입의 컬럼명)` : 특정 정보만 남기고 삭제, ISODOW, DOW, TIMEZONE 빼고 extract함수의 특정정보 사용 가능
+
+
+
+* 자주 쓰이는 연산자
+  * 연산자
+    * `EXISTS` : 행이 **하나라도** 존재하면 참
+      * 참고사이트1: https://gent.tistory.com/278
+      * 참고사이트2: https://woogie-db.tistory.com/33
+    * `IN` : 행 값 중 **하나라도** 표현식과 **같으면** 참, EXISTS와 작용법은 같으나 EXISTS가 성능 면에서는 더 우수
+    * `NOT IN` : 행 값 중 **하나라도** 표현식과 **다르면** 참
+    * `ANY` : 행 값 중 **하나라도** 표현식과 **같다면** 참
+    * `ALL` : 행 값 중 **모두** 표현식과 **같다면** 참
+  * LIKE 연산자
+    * `LIKE` (=`~~`) : 패턴 매칭
+    * `NOT LIKE` (=`!~~`) : 패턴 매칭 안되는 것
+    * `ILIKE` (=`~~*`) : 패턴 매칭(대소문자 구분 안 함)
+    * `NOT LIKE` (=`!~~*`) : 패턴 매칭 (대소문자 구분 안 함)
+      * `_`: 한 글자를 의미
+      * `%`: 글자 앞 뒤에 붙는 아무 문자 의미
+  * `SIMILAR TO` : 정규표현 정의를 사용하여 패턴 해석
+    * documentation : https://www.postgresql.org/docs/current/functions-matching.html
+  * `||` : 병합연산자
+  * `LENGTH` : 문자열 길이
+  * `substring('문자열',시작점,끝점)`: 시작점부터 끝점 까지문자열 자르기
+  * `LEFT(문자열,n)`: 왼쪽부터 n번째 까지 잘라줘
+  * `RIGHT(문자열,n)`: 오른쪽부터 n번째 까지 잘라줘
+
+
+
+
+
