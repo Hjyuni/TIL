@@ -33,6 +33,7 @@
   * postgreSQL 데이터 타입
 * 2022/06/17
   * postgreSQL 무결성 유지 위해 데이터 값 제한하기
-
 * 2022/06/18
   * postgreSQL ALTER TABLE
+* 2022/06/19
+  * postgreSQL 연산자 및 함수
