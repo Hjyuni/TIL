@@ -4,6 +4,8 @@
 >
 > git add, commit, push 취소하기 : https://gmlwjd9405.github.io/2018/05/25/git-add-cancle.html
 
+## ❤️2022❤️
+
 * 2022/06/06
   * mongoDB 데이터 create, read 하는 법
 * 2022/06/07
@@ -37,3 +39,19 @@
   * postgreSQL ALTER TABLE
 * 2022/06/19
   * postgreSQL 연산자 및 함수
+    * 논리 연산자, 비교연산자, 범위연산자
+    * COALESCE, CASE, NULLIF 함수
+    * 배열 연산자/함수
+    * JSON,JSONB연산자/함수
+    * 시간 및 날짜 연산자/함수
+    * 자주 쓰이는 연산자/함수
+
+* 2022/06/20
+
+  * postgreSQL 집계 및 결합 기본
+
+    * 데이터 그룹화
+    * 기본적인 집계함수
+    * BOOLEAN 연산 집계 함수
+
+    
