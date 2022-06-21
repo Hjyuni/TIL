@@ -170,8 +170,15 @@ postgres=#
 7. JSON(JavaScript Object Notation)형
 
 * 서버와 웹 어플리케이션 간에 테이터를 주고 받을 때 사용
+
 * 키(key)-값(value) 의 쌍으로 구성된 **JSON 오브젝트**와 배열과 비슷한 구조를 갖는 **JSON배열**로 나뉨
+
 * JSON 데이터 타입 : `JSON` , `JSONB`
+
+  > `JSON` vs `JSONB`
+  >
+  > https://brownbears.tistory.com/504
+
   * 두 데이터 타입 모두 동일한 값의 집합을 받아들이는 공통점 있음
   * `JSON`은 입력 텍스트를 정확한 사본을 만들어서 저장, 이것을 불러와 처리할 때는 데이터를 재분석한 다음 실행
   * `JSONB`은 텍스트를 이진 형태로 분해 후 저장해서 입력이 느리지만 출력 시에는 재분석 하지 않아서 **JSON보다 처리속도 빠름**
@@ -490,3 +497,32 @@ postgres=#
 
      
 
+4. 배열을 담는 집계함수
+   * `ARRAY_AGG(컬럼명)` : 컬럼명에 있는 값들을 배열형태로 출력(null 포함), GROUP BY와 함께 쓸 수 있음
+
+
+
+5. JSON 집계 함수
+   * `json_agg` : null을 포함해 json배열로 집계한 값
+   * `jsonb_agg` : null을 포함해 jsonb배열로 집계한 값
+   * `json_object_agg(name,value)` : 키-값 쌍을 json개체로 집계한 값, value는null 포함 key는 null 포함하지 않음
+   * `jsonb_object_agg(name,value)` : 키-값 쌍을 jsonb개체로 집계한 값, value는null 포함 key는 null 포함하지 않음
+
+
+
+6. 여러 테이블 연결하기
+
+* 두 테이블은 서로 컬럼의 수가 동일해야함
+
+* 컬럼은 같은 위치에 동일 형식과 의미가 담겨있어야 함
+  * `UNION ALL` : 중복값 제거하지 않고 전부 합침 (성능 면에서 더 우수)
+  * `UNION` : 중복값 제거하고 합침
+  * `INTERSECT ALL` : 중복값 제거하지 않고 교집합
+  * `INTERSECT` : 중복값 제거하고 교집합
+  * `EXCEPT ALL` : A테이블에서 B테이블에 있는 값을 뺀 후 결과값(A테이블) 보여줌(중복허용)
+  * `EXCEPT` : A테이블에서 B테이블에 있는 값을 뺀 후 중복값 제거하고 보여줌
+
+
+
+7. FROM절을 활용한 데이터 결합
+   * FROM에 여러 테이블을 넣으면 CROSS JOIN과 같은 결과값이 나옴
