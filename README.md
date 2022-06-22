@@ -52,9 +52,14 @@
     * 데이터 그룹화
     * 기본적인 집계함수
     * BOOLEAN 연산 집계 함수
-
 * 2022/06/21
   * postgreSQL 집계 및 결합
     * 배열을 담는 집계함수
     * JSON집계함수
     * 여러 테이블 연결하기 : `UNION`,`INTERSECT`,`EXCEPT`
+* 2022/06/22
+  * postgreSQL JOIN
+    * `INNER JOIN`
+    * `LEFT JOIN`
+    * `RIGHT JOIN`
+    * `FULL OUTER JOIN`
