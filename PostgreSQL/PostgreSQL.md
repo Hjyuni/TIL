@@ -526,3 +526,18 @@ postgres=#
 
 7. FROM절을 활용한 데이터 결합
    * FROM에 여러 테이블을 넣으면 CROSS JOIN과 같은 결과값이 나옴
+
+
+
+## 11) JOIN
+
+* `A (INNER) JOIN B` : 두 테이블 사이의 연관된 데이터만 하나의 테이블로 출력
+* `A LEFT JOIN B ` : A테이블을 기준으로 B테이블과 연결
+* `A RIGHT JOIN B ` : B테이블을 기준으로 A테이블과 연결
+* `A FULL OUTER JOIN B` : 연결된 행은 서로 연결하여 출력, 서로 연결되지 않은 행은 NULL로 출력
+
+
+
+* 연결 컬럼 선언하기
+  * `A JOIN B ON 조건` 
+  * `A JOIN B USING 조건` : 두 테이블을 연결하는 컬럼의 이름이 서로 다르면 사용 불가
