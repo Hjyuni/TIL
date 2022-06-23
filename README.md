@@ -63,3 +63,5 @@
     * `LEFT JOIN`
     * `RIGHT JOIN`
     * `FULL OUTER JOIN`
+* 2022/06/23
+  * postgreSQL 데이터 모델링&인덱싱
