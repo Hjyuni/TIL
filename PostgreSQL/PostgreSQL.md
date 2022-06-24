@@ -30,6 +30,7 @@ postgres=#
 | \c     | 입력한 db로 이동 (ex. \c postgres) |
 | \e     | 외부편집기로 SQL쿼리 입력 가능     |
 | \dt    | 현재 db의 테이블 확인              |
+| \df    | 현재 db에 만들어진 모든 함수       |
 
 ---
 
@@ -695,3 +696,135 @@ postgres=#
   * `SELECT * FROM pg_stat_reset();`
     * 통계 정보가 오래되었을 때 기존 통계정보 초기화 시키고 최신 통계정보 다시 축적
     * 현재 DB의 통계정보가 전부 지워지기 때문에 미리 통계 정보 저장하고 실행하기⭐⭐
+
+
+
+## 9. 함수와 뷰
+
+### 1-함수
+
+* 함수
+
+  * 원하는 목적 달성을 위해 여러 작업들을 하나의 단위로 묶은 것
+  * CREATE FUNCTION documentation : https://www.postgresql.org/docs/current/sql-createfunction.html
+
+  ```SQL
+  CREATE [ OR REPLACE ] FUNCTION
+      name ( [ [ argmode ] [ argname ] argtype [ { DEFAULT | = } default_expr ] [, ...] ] )
+      [ RETURNS rettype
+        | RETURNS TABLE ( column_name column_type [, ...] ) ]
+    { LANGUAGE lang_name
+      | TRANSFORM { FOR TYPE type_name } [, ... ]
+      | WINDOW
+      | { IMMUTABLE | STABLE | VOLATILE }
+      | [ NOT ] LEAKPROOF
+      | { CALLED ON NULL INPUT | RETURNS NULL ON NULL INPUT | STRICT }
+      | { [ EXTERNAL ] SECURITY INVOKER | [ EXTERNAL ] SECURITY DEFINER }
+      | PARALLEL { UNSAFE | RESTRICTED | SAFE }
+      | COST execution_cost
+      | ROWS result_rows
+      | SUPPORT support_function
+      | SET configuration_parameter { TO value | = value | FROM CURRENT }
+      | AS 'definition'
+      | AS 'obj_file', 'link_symbol'
+      | sql_body
+    } ...
+  ```
+
+  * DROP FUNCTION documentation : https://www.postgresql.org/docs/current/sql-dropfunction.html
+
+  ```SQL
+  DROP FUNCTION [ IF EXISTS ] name [ ( [ [ argmode ] [ argname ] argtype [, ...] ] ) ] [, ...]
+      [ CASCADE | RESTRICT ]
+  ```
+
+  
+
+
+
+* 프로시저 언어 : 함수와 트리거를 만드는데 사용, 복잡한 연산 처리가 용이
+  * PL/pgSQL, PL/TCL, PL/Perl, PL/Python 등이 있음
+  * `CREATE LANGUAGE 언어이름` : 프로시저 언어 설치하기
+
+
+
+* 트리거
+
+  * 어떠한 행동이나 작업을 했을 때 미리 저장해놓은 작업이 자동으로 실행되도록 하는 것
+  * `FOR EACH ROW EXECUTE PROCEDURE funtion_name();` : 트리거 실행시 실행할 **함수**를 실행하는 코드
+  * CREATE TRIGGRT documentation : https://www.tutorialspoint.com/postgresql/postgresql_triggers.htm
+
+  ```SQL
+  CREATE TRIGGER trigger_name [BEFORE|AFTER|INSTEAD OF] event_name ON table_name
+  FOR EACH ROW EXECUTE PROCEDURE funtion_name();
+  ```
+
+  * DROP TRIGGER documentation : https://www.postgresql.org/docs/current/sql-droptrigger.html
+
+  ```SQL
+  DROP TRIGGER [ IF EXISTS ] name ON table_name [ CASCADE | RESTRICT ]
+  ```
+
+  
+
+
+
+### 2-뷰
+
+* 뷰
+
+  * 일종의 라이브러리
+  * 기존에 만든 쿼리문을 하나의 가상 테이블로 만들어뒀다가 필요한 곳에 적절히 사용하는 기능
+  * 정의된 쿼리문을 다시 실행시키지만 저장하지 않음
+
+    ⭐실제하는 테이블이 아니라 가상의 테이블임
+
+  * 뷰가 생성되면 참조한 테이블과 연결되기 때문에 뷰를 제거하지 않고 삭제할 수 없고 수정할 때에도 제한적
+
+  * CREATE VIEW documentation : https://www.postgresql.org/docs/9.2/sql-createview.html
+
+    ```sql
+    CREATE [ OR REPLACE ] [ TEMP | TEMPORARY ] VIEW name [ ( column_name [, ...] ) ]
+        [ WITH ( view_option_name [= view_option_value] [, ... ] ) ]
+        AS query
+        
+    -- DROP
+    DROP view_name
+    ```
+
+  * DROP VIEW documentation : https://www.postgresql.org/docs/current/sql-dropview.html
+
+    ```SQL
+    DROP VIEW [ IF EXISTS ] name [, ...] [ CASCADE | RESTRICT ]
+    ```
+
+
+
+* 구체화된 뷰(Materialized View)
+
+  * 가상의 테이블이 아닌 실제로 존재하는 테이블의 형태로 뷰를 만듬
+  * 저장된 쿼리문을 실행한 후 실행 결과를 별도로 저장해 둠
+  * 일반적인 뷰보다 읽기 성능은 더 빠르지만 자주 업데이트 되는 상황에서는 오히려 성능이 더 안좋음
+  * 데이터가 변하지 않으면서 읽기 연산이 자주 사용되는 경우 사용하는 것이 좋음
+  * documentation : https://www.postgresql.org/docs/current/rules-materializedviews.html
+  * CREATE MATERIALIZED VIEW documentation : https://www.postgresql.org/docs/current/sql-creatematerializedview.html
+
+  ```sql
+  CREATE MATERIALIZED VIEW [ IF NOT EXISTS ] table_name
+      [ (column_name [, ...] ) ]
+      [ USING method ]
+      [ WITH ( storage_parameter [= value] [, ... ] ) ]
+      [ TABLESPACE tablespace_name ]
+      AS query
+      [ WITH [ NO ] DATA ]
+  ```
+
+  * DROP MATERIALIZED VIEW documentation : https://www.postgresql.org/docs/current/sql-dropmaterializedview.html
+
+  ```SQL
+  DROP MATERIALIZED VIEW [ IF EXISTS ] name [, ...] [ CASCADE | RESTRICT ]
+  ```
+
+  
+
+  
