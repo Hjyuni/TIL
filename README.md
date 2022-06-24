@@ -65,3 +65,6 @@
     * `FULL OUTER JOIN`
 * 2022/06/23
   * postgreSQL 데이터 모델링&인덱싱
+
+* 2022/06/24
+  * postgreSQL  함수&뷰
