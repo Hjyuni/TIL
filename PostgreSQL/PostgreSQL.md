@@ -1,5 +1,7 @@
 # PostgreSQL
 
+> BOOK : 모두를 위한 PostgreSQL
+>
 > download : https://www.postgresql.org/download/ (window installer 클릭!)
 
 * download할 때 stack builder 안쓸거면 체크 해제하기
@@ -896,3 +898,150 @@ postgres=#
   * 고립화 수준을 높이면 데이터의 불일치가 일어날 확률을 줄이고, 일관성이 높아지고, 동시성이 낮아짐
 
     동시성이 낮아지면 시간이 더 걸리고 성능을 저하시킴
+
+
+
+## 11. 보안과 백업
+
+### 1-보안
+
+* 롤(Role)
+  * 개인이 될수도 있고 그룹이 될수도 있음
+  *  db를 이루는 테이블, 함수, 뷰, 시퀀스 등의 데이터베이스 객체들에 대한 소유권과 권한을 부여할 수 있는 특성
+  *  ROLE 생성 / 삭제
+  
+  ```SQL
+  CREATE ROLE role_name;
+  DROP ROLE role_name;
+  ```
+  
+  
+
+
+
+* 속성
+  * 로그인 권한 : 로그인을 할 수 있는 권한
+  * 슈퍼유저 권한 : 모든 권한을 다 가진 사용자를 의미, 슈퍼유저 롤로 작업을 하는 경우 보안상의 문제가 발생할 수 있기 때문에 접근권한이 적절하게 제한된 롤로 작업하는 것이 좋음
+  * DB생성 권한 : DB를 생성할 권한, 슈퍼유저가 아닌 롤로 작업할 경우 이 권한이 있어야 함
+  * 롤 생성 권한 : 롤을 생성할 권한
+
+
+
+* 권한 부여 명령어
+
+  * CREATE ROLE documentation : https://www.postgresql.org/docs/current/sql-createrole.html
+  * ALTER ROLE documentation : https://www.postgresql.org/docs/current/sql-alterrole.html
+  * 참고사이트 : https://myinfrabox.tistory.com/234
+
+  * `SUPERUSER` : 슈퍼유저
+  * `CREATEDB` : DB생성권한
+  * `CREATEROLE` : 롤 생성 권한
+  * `REPLICATION` : 권한 복제
+  * `BYPASSRLS` : RLS 통과 권한
+
+
+
+* 클라이언트 접근보안
+
+  * `PostgreSQL설치폴더경로/data/pg_hba.conf` : 클라이언트 접근을 제어하기 위해 사용하는 파일
+
+  * 필드 특성
+
+    * `TYPE` : 연결 타입을 결정하는 필드
+    * `DATABASE` :  데이터베이스를 지정하는 필드
+    * `USER` : 데이터베이스 사용자를 지정하는 필드
+    * `ADDRESS` : 클라이언트 머신의 주소를 지정하는 필드
+
+  * 인증방법
+
+    * `TRUST` : 모든 사용자 접근 가능, 집에서 혼자 사용하는 환경에서만 사용
+    * `PASSWORD` 
+      * `PASSWORD` : 암호화 되어있지 않은 암호를 입력받아 인증되는 구조
+      * `MD5` : 128비트 길이의 해시값으로 암호화하여 인증하는 방법
+      * `SCRAM-SHA256` : MD5와 비슷하게 암호화, 현재 가장 안전하게 암호 보호할 수 있는 방법
+      * `PAM` : PAM을 사용하여 인증, PAM은 인증만을 위한 프레임워크를 사용하여 기존의 애플리케이션으로부터 인증 과정을 떼어내는 방법
+      * `ident` : TCP/IP 연결이 되어있을 때 사용자의 이름을 활용하여 인증, 서버의 사용자 이름과 연결하려고 하는 사용자의 이름이 일치할 경우에 접속 허용
+      * `peer` : TCP/IP 연결이 되어있지 않을 때 사용자의 이름을 활용하여 인증
+      * `reject` : 특정 클라이언트 무조건적으로 인증 거부
+      * 그 외 `GSS`, `SSPI`, `LDAP`, `RADIUS`, `BSD`, 인증서 등등,,,
+
+  * 참고사이트 : https://brownbears.tistory.com/154
+
+
+
+* 테이블 보안
+  * `GRANT` : 권한 부여
+    * `GRANT 권한 ON 테이블명 TO 사용자명`
+  * GRANT 참고사이트 : https://www.devkuma.com/docs/postgresql/%EC%97%AD%ED%95%A0-%ED%85%8C%EC%9D%B4%EB%B8%94-%EB%B7%B0-%EB%93%B1%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B6%8C%ED%95%9C%EC%9D%84-%EC%B6%94%EA%B0%80-grant/
+  * `REVOKE` : 권한 회수
+    * `REVOKE 권한 ON 테이블명 FROM 사용자명`
+  * 권한
+    * CREATE
+    * SELECT
+    * INSERT
+    * UPDATE
+    * DELETE
+    * REFERENCES
+    * TRUNCATE
+    * TRIGGER
+    * CONNECT : 특정 DB에 사용자가 접속할 수 있는 권한을 줌
+    * EXECUTE : 특정 함수나 연산자를 사용할 수 있는 권한
+    * TEMPORARY : DB에 임시 테이블을 만들 수 있는 권한
+    * USAGE : 특정 스키마 내부의 개체에 접근할 수 있는 권한을 주고, 주어진 절차적 언어로 함수를 만들 수 있는 권한을 줌
+
+
+
+* 함수 보안
+
+  * SECURITY INVOKER :  함수를 **호출**하는 롤의 권한에 따라 함수도 권한을 갖는 것
+
+  * SECURITY DEFINER : 함수를 **만든** 롤의 권한에 따라 함수가 권한을 갖는 것
+
+    * SECURITY DEFINER 문제 해결방안
+
+      ```sql
+      BEGIN;
+      CREATE FUNCTION '함수 설정'
+      SECURITY DEFINER;
+      REVOKE ALL ON FUNCTION '함수명' FROM PUBLIC;
+      GRANT '권한' ON FUNCTION '함수명' TO 'role명';
+      COMMIT;
+      ```
+
+      
+
+### 2-백업
+
+* 파일기반 백업
+
+  * 백업할 필요가 없는 파일들도 하게 되어 파일의 용량이 커서 잘 사용 안하는 방식
+
+  ``` SQL
+  tar -cf backup.tar 'data_path'
+  ```
+
+
+
+* dump
+
+  ```sql
+  -- db TO dumpfile
+  pg_dump 'db_name' > 'dumpfile_name'
+  -- dumpfile TO db
+  psql 'db_name' < 'dumpfile_name'
+  ```
+
+
+
+* dump_all
+
+  * 다수의 db와 db객체 이외의 정보들까지 백업하기 위해 사용
+
+  ```sql
+  pg_dumpall > 'dumpfile_name'
+  ```
+
+
+
+* 아카이브백업
+  * 참고사이트 : https://mozi.tistory.com/560
