@@ -1,6 +1,8 @@
 # PostgreSQL
 
-> BOOK : 모두를 위한 PostgreSQL
+> book : 모두를 위한 PostgreSQL
+>
+> sample_data_source : https://github.com/bjpublic/postgresql
 >
 > download : https://www.postgresql.org/download/ (window installer 클릭!)
 
