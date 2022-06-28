@@ -10,7 +10,7 @@
 
 ## 0. install
 
-### 1) install Docker on Ubuntu
+### 0-1. install Docker on Ubuntu
 
 > install on ubuntu : https://docs.docker.com/desktop/linux/install/ubuntu/
 >
@@ -78,7 +78,7 @@ docker --version
 
 
 
-### 2) use Docker on Vscode
+### 0-2. use Docker on Vscode
 
 > https://docs.microsoft.com/ko-kr/learn/modules/use-docker-container-dev-env-vs-code/
 >
@@ -772,3 +772,199 @@ docker network rm wordpress000net4
 # check
 docker network ls
 ```
+
+---
+
+### 2-8. 컨테이너에서 mySQL/postgreSQL 실행해보기
+
+* mySQL
+
+> 참고사이트 : https://poiemaweb.com/docker-mysql
+
+```shell
+# mysql container
+docker run --name mysql-con -e MYSQL_ROOT_PASSWORD=1234 -d -p 3306:3306 mysql
+# check
+docker ps -a
+# connect mysql docker container
+docker exec -it mysql-con bash
+> mysql -u root -p
+# exit
+exit
+# stop
+docker stop mysql-con
+# rm container
+docker rm mysql-con
+# check
+docker ps -a
+# rm image
+docker image rm mysql
+# check
+docker image ls
+```
+
+* postgreSQL
+
+> 참고사이트 : https://judo0179.tistory.com/96
+
+```shell
+# postgre container
+docker run --name postgre -p 5432:5432 -e POSTGRES_PASSWORD=1234 -d postgres
+# check
+docker ps -a
+# exec postgre
+docker exec -it postgres /bin/bash
+> psql -U postgres
+# exit
+exit
+# stop all container
+docker stop $(docker ps -a -q)
+# rm all container
+docker rm $(docker ps -a -q)
+# check
+docker ps -a
+# rm image
+docker image ls
+docker image rm postgres
+# check
+docker image ls
+```
+
+---
+
+## 3. Docker 응용
+
+### 3-1. 파일 복사 command
+
+* host -> container
+  * `docker cp container_name:container_path` (=`docker container cp container_name:container_path`)
+* container -> host
+  * `docker cp container_name:container_path host_path` (=`docker container cp container_name:container_path host_path`)
+* 파일 복사 
+  * `docker cp 원본경로 복사할경로`
+
+
+
+* 호스트 파일을 컨테이너 속으로 복사하기
+
+```shell
+# apache container
+docker run --name apa000ex19 -d -p 8089:80 httpd
+# http://localhost:8089/
+# host -> container
+docker cp /home/jyoon/TIL/Docker&Kubernetes/index.html apa000ex19:/usr/local/apache2/htdocs/
+# http://localhost:8089/
+```
+
+
+
+* 컨테이너 파일을 호스트로 복사하기
+
+  * 파일명 바꾸고 지우기
+
+  ```shell
+  mv /home/jyoon/TIL/index.html /home/jyoon/TIL/Docker&Kubernetes/index2.html
+  rm /home/jyoon/TIL/Docker&Kubernetes/index.html
+  ```
+
+  * 컨테이너 파일 호스트로 복사하기
+
+  ```shell
+  # 호스트 파일을 컨테이너 속으로 복사하기에서 사용했던 컨테이너
+  docker cp apa000ex19:/usr/local/apache2/htdocs/index.html /home/jyoon/TIL/Docker&Kubernetes/
+  # 뒷정리
+  # rm container
+  docker stop $(docker ps -a -q)
+  docker rm $(docker ps -a -q)
+  # rm image
+  docker image ls
+  docker image rm httpd
+  # check
+  docker ps -a
+  docker image ls
+  ```
+
+---
+
+### 3-2. Volume Mount
+
+* 볼륨(volume)이란?
+  * 스토리지의 한 영역을 분할한 것
+* 마운트(mount)란?
+  * '연결하다'라는 뜻
+  * 대상을 연결해 운영체제 또는 소프트웨어의 관리하에 두는 일
+* 데이터 퍼시스턴시(data persistency)
+  * 매번 데이터를 옮기는 것이 아닌 처음부터 컨테이너 외부에 둔 데이터에 접근해 사용하는 것
+
+
+
+* 마운트 종류
+
+  * 볼륨 마운트(volume mount)
+
+    * 도커 엔진이 관리하는 영역 내에 만들어진 볼륨을 컨테이너에 디스크 형태로 마운트
+
+    * 이름만으로 관리가 가능해서 다루기 쉬움
+    * 볼룸에 비해 직접 조작하기는 어려워 **임시 목적의 파일**이나 **자주 쓰지 않지만 지우면 안되는 파일** 두는 목적으로 많이 사용
+
+    ```shell
+    # create volume mount
+    docker volume create volume_name
+    # rm volume mount
+    docker volume rm volume_name
+    ```
+
+    
+
+  * 바인드 마운트(bind mount)
+
+    * 도커 엔진에서 관리하지 않는 영역의 기존 directory를 컨테이너에 마운트
+    * 파일 단위로도 마운트 가능
+    * **자주 사용하는 파일** 두는 목적으로 많이 사용
+
+  * 파일을 직접 편집해야 할 일이 많다면 바인드 마운트, 그렇지 않다면 볼륨 마운트 사용
+
+
+
+* 바인드 마운트 해보기
+
+```shell
+# mkdir
+cd TIL/Docker&Kubernetes
+mkdir apa_folder
+# bind mount
+docker run --name apa000ex20 -d -p 8089:80 -v /home/jyoon/TIL/Docker&Kubernetes/apa_folder:/usr/local/apache2/htdocs httpd
+# http://localhost:8089/
+cp /home/jyoon/TIL/Docker&Kubernetes/index.html /home/jyoon/TIL/Docker&Kubernetes/apa_folder/
+# http://localhost:8089/
+# rm container
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+```
+
+
+
+* 볼륨 마운트 해보기
+
+```shell
+# create volume mount
+docker volume create apa000vol1
+# httpd container
+docker run --name apa000ex21 -d -p 8091:80 -v apa000vol1:/usr/local/apache2/htdocs httpd
+# 상세정보확인
+docker volume inspect apa000vol1
+docker container inspect apa000ex21
+# stop & rm
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+# rm image
+docker image ls
+docker image rm httpd
+# rm volume
+docker volume rm apa000vol1
+# check
+docker ps -a
+docker image ls
+docker volume ls
+```
+
