@@ -78,3 +78,8 @@
     * 컨테이너 통신
     * 이미지 삭제
     * 여러 컨테이너 연동
+* 2022/06/28
+  * Docker
+    * 컨테이너에서 mySQL/postgreSQL 실행해보기
+    * 파일 복사 command
+    * volume mount
