@@ -787,7 +787,7 @@ docker run --name mysql-con -e MYSQL_ROOT_PASSWORD=1234 -d -p 3306:3306 mysql
 # check
 docker ps -a
 # connect mysql docker container
-docker exec -it mysql-con bash
+docker exec -it mysql-con /bin/bash
 > mysql -u root -p
 # exit
 exit
@@ -967,4 +967,106 @@ docker ps -a
 docker image ls
 docker volume ls
 ```
+
+
+
+* 볼륨 백업
+  * 참고사이트 : https://royleej9.tistory.com/entry/Docker-volume-BackupRestore
+
+```shell
+# 볼륨 압축
+docker run --rm -v apa000vol1:/source -v /home/jyoon/Documents/target busybox tar czvf /target/backup_apa.tar.g -C /source .
+# 복원
+docker run --rm -v apa000vol2:/source -v /home/jyoon/Documents/target busybox tar xzvf /target/backup_apa.tar.g -C /source
+```
+
+---
+
+### 3-3. 컨테이너로 이미지 만들기
+
+:star:컨테이너를 이동 할 때에는 이미지로 먼저 변환해야함
+
+1. commit 명령어로 컨테이너를 이미지로 변환
+
+   * `docker commit 'container_name' 'new_image_name'`
+
+   ```shell
+   # container
+   docker run --name apa000ex22 -d -p 8092:80 httpd
+   # commit으로 이미지 만들기
+   docker commit apa000ex22 ex22_original1
+   # check
+   docker image ls
+   ```
+
+   
+
+2. dockerfile 스크립트로 이미지 만들기
+
+   * dockerfile : 도커 이미지를 만드는 파일
+   * `docker build -t '생성할 이미지 이름' '재료 폴더 경로'`
+
+   ``` shell
+   # TIL/Docker&Kubernetes/apa_folder
+   nano Dockerfile
+   # nano
+   FROM httpd
+   COPY index.html /usr/local/apache2/htdocs
+   # cmd
+   docker build -t ex22_original2 /home/jyoon/TIL/Docker&Kubernetes/apa_folder
+   # check
+   docker image ls
+   # stop & rm container
+   docker stop $(docker ps -a -q)
+   docker rm $(docker ps -a -q)
+   # rm image
+   docker image rm httpd ex22_original1 ex22_original2
+   # check
+   docker ps -a
+   docker image ls
+   ```
+
+---
+
+### 3-4. 컨테이너 개조
+
+* shell 필요
+  * 보통 bash사용, bash가 실행되면 shell에 입력된 명령은 도커 엔진이 아닌 **해당 컨테이너로 전달**, **컨테이너 내부를 다루게 됨**
+    * `docker exec (옵션) 'container_name /bin/bash'`
+  * bash를 통해 컨테이너 내부를 조작하는 동안에는 도커 명령을 사용할 수 없음
+  * 작업이 끝나면 다시 나와야함
+    * `exit`
+
+---
+
+### 3-5. 도커 허브
+
+* docker registry : 이미지를 배포하는 장소, 도커 제작사 외의 다른 기업이나 개인도 운영할 수 있음
+* docker hurb : 도커 제작사에서 운영하는 공식 도커 레지스트리
+
+* 태그와 이미지 업로드
+
+  * 이미지에 태그를 부여해 복제
+
+    ```shell
+    # docker tag 원래_이미지_이름 레지스트리_주소/리포지토리_이름:버전
+    docker tag apa000ex22 abc.comm/bpache:13
+    ```
+
+  * 이미지 업로드
+
+    ```shell
+    # docker push 레지스트리_주소/리포지토리_이름:버전
+    docker push abc.comm/bpache:13
+    ```
+
+* 비공개 레지스트리 만들기
+
+```shell
+docker run -d -p 5000:5000 registry
+```
+
+
+
+
 
