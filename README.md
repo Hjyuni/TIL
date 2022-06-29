@@ -83,3 +83,8 @@
     * 컨테이너에서 mySQL/postgreSQL 실행해보기
     * 파일 복사 command
     * volume mount
+* 2022/06/29
+  * Docker 
+    * 컨테이너로 이미지 만들기
+    * 컨테이너 개조
+    * 도커 허브
