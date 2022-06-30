@@ -1066,7 +1066,53 @@ docker run --rm -v apa000vol2:/source -v /home/jyoon/Documents/target busybox ta
 docker run -d -p 5000:5000 registry
 ```
 
+---
 
+## 4. Docker Compose
+
+* 시스템 구축과 관련된 명령어를 하나의 텍스트 파일에 기재해 명령어 **한번에** 시스템 전체를 실행하고 종료와 폐기까지 할 수 있도록 도와주는 도구
+* YAML 포맷으로 기재한 정의 파일 이용
+
+* `up` : docker run과 비슷한 커맨드. 파일에 기재된 대로 이미지를 내려받고 컨테이너를 생성 및 실행, 네트워크나 볼륨에 대한 정의도 기재 가능
+* `down` : 컨테이너와 네트워크 정지 및 삭제, 이미지와 볼륨은 삭제하지 않음
+* `docker compose` vs `dockerfile`
+  * docker compose : docker run의 집합, 컨테이너와 주변 환경을 생성하고 볼륨과 네트워크까지 생성 가능
+  * dockerfile : 이미지를 만들기 위한 것, 네트워크나 볼륨은 만들 수 없음
+
+---
+
+### 4-0. Install Docker Compose
+
+* install docker compose
+  * 설치하면 바로 사용 가능해짐
+
+```shell
+sudo install -y python3 python3-pip
+sudo pip3 install docker-compose
+```
+
+---
+
+### 4-1. How to Use Docker Compose
+
+* 호스트 컴퓨터에 폴더 만들고 정의한 YAML파일 배치
+* 정의 파일 이름은 docker-compose.yml 이용
+* 정의 파일은 **한 폴더에 하나만** 있을 수 있음
+* 여러 개의 정의 파일을 사영하려면 그 개수만큼 폴더를 만들어야 함
+* 도커 컴포즈에서 컨테이너가 모인 것을 **서비스**라고 함
+
+
+
+* 정의 파일 (YAML)파일 작성법
+  * 맨 앞에 컴포즈 버전 기재
+  * 그 뒤로 services,  networks, volumes를 차례로 기재
+    * services : 컨테이너 관련 정보(컨테이너 이름, 네트워크 이름, 볼륨 이름)
+    * networks : 네트워크 관련 정보
+    * volumes : 볼륨 관련 정보
+  * 공백에 따라 의미가 달라짐
+  * 이름 뒤에는 반드시 콜론`(:)`을 붙여야 하며 콜론 뒤로 공백이 하나 있어야 함
+  * `depends_on` : 다른 서비스에 대한 의존관계
+  * `restart` : 컨테이너 종료 시 재시작 여부
 
 
 
