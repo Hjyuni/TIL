@@ -852,7 +852,7 @@ docker image ls
 docker run --name apa000ex19 -d -p 8089:80 httpd
 # http://localhost:8089/
 # host -> container
-docker cp /home/jyoon/TIL/Docker&Kubernetes/index.html apa000ex19:/usr/local/apache2/htdocs/
+docker cp /home/jyoon/TIL/Docker&K8s/index.html apa000ex19:/usr/local/apache2/htdocs/
 # http://localhost:8089/
 ```
 
@@ -863,15 +863,15 @@ docker cp /home/jyoon/TIL/Docker&Kubernetes/index.html apa000ex19:/usr/local/apa
   * 파일명 바꾸고 지우기
 
   ```shell
-  mv /home/jyoon/TIL/index.html /home/jyoon/TIL/Docker&Kubernetes/index2.html
-  rm /home/jyoon/TIL/Docker&Kubernetes/index.html
+  mv /home/jyoon/TIL/index.html /home/jyoon/TIL/Docker&K8s/index2.html
+  rm /home/jyoon/TIL/Docker&K8s/index.html
   ```
 
   * 컨테이너 파일 호스트로 복사하기
 
   ```shell
   # 호스트 파일을 컨테이너 속으로 복사하기에서 사용했던 컨테이너
-  docker cp apa000ex19:/usr/local/apache2/htdocs/index.html /home/jyoon/TIL/Docker&Kubernetes/
+  docker cp apa000ex19:/usr/local/apache2/htdocs/index.html /home/jyoon/TIL/Docker&K8s/
   # 뒷정리
   # rm container
   docker stop $(docker ps -a -q)
@@ -930,12 +930,12 @@ docker cp /home/jyoon/TIL/Docker&Kubernetes/index.html apa000ex19:/usr/local/apa
 
 ```shell
 # mkdir
-cd TIL/Docker&Kubernetes
+cd TIL/Docker&K8s
 mkdir apa_folder
 # bind mount
-docker run --name apa000ex20 -d -p 8089:80 -v /home/jyoon/TIL/Docker&Kubernetes/apa_folder:/usr/local/apache2/htdocs httpd
+docker run --name apa000ex20 -d -p 8089:80 -v /home/jyoon/TIL/Docker&K8s/apa_folder:/usr/local/apache2/htdocs httpd
 # http://localhost:8089/
-cp /home/jyoon/TIL/Docker&Kubernetes/index.html /home/jyoon/TIL/Docker&Kubernetes/apa_folder/
+cp /home/jyoon/TIL/Docker&K8s/index.html /home/jyoon/TIL/Docker&K8s/apa_folder/
 # http://localhost:8089/
 # rm container
 docker stop $(docker ps -a -q)
@@ -1007,13 +1007,13 @@ docker run --rm -v apa000vol2:/source -v /home/jyoon/Documents/target busybox ta
    * `docker build -t '생성할 이미지 이름' '재료 폴더 경로'`
 
    ``` shell
-   # TIL/Docker&Kubernetes/apa_folder
+   # TIL/Docker&K8s/apa_folder
    nano Dockerfile
    # nano
    FROM httpd
    COPY index.html /usr/local/apache2/htdocs
    # cmd
-   docker build -t ex22_original2 /home/jyoon/TIL/Docker&Kubernetes/apa_folder
+   docker build -t ex22_original2 /home/jyoon/TIL/Docker&K8s/apa_folder
    # check
    docker image ls
    # stop & rm container
@@ -1104,6 +1104,9 @@ sudo pip3 install docker-compose
 
 
 * 정의 파일 (YAML)파일 작성법
+
+  * 파일 이름 디폴트는 `docker-compose.yml`, `-f`옵션을 활용해 이름 바꿀 수도 있음
+
   * 맨 앞에 컴포즈 버전 기재
   * 그 뒤로 services,  networks, volumes를 차례로 기재
     * services : 컨테이너 관련 정보(컨테이너 이름, 네트워크 이름, 볼륨 이름)
@@ -1113,6 +1116,143 @@ sudo pip3 install docker-compose
   * 이름 뒤에는 반드시 콜론`(:)`을 붙여야 하며 콜론 뒤로 공백이 하나 있어야 함
   * `depends_on` : 다른 서비스에 대한 의존관계
   * `restart` : 컨테이너 종료 시 재시작 여부
+
+* wordpress로 compose file과 command 비교
+
+```yaml
+# compose file (docker-compose.yml)
+version: "3"
+
+services: 
+  wordpress000ex12:
+    depends_on:
+      - mysql000ex11
+    image: wordpress
+    networks:
+      - wordpress000net1
+    ports:
+      - 8085:80
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST=mysql000ex11
+      WORDPRESS_DB_NAME=wordpress000db
+      WORDPRESS_DB_USER=wordpress000hur
+      WORDPRESS_DB_PASSWORD=1234
+```
+
+```shell
+docker run --name wordpress000ex12 -dit --net=wordpress000net1 -p 8085:80 -e WORDPRESS_DB_HOST=mysql000ex11 -e WORDPRESS_DB_NAME=wordpress000db -e WORDPRESS_DB_USER=wordpress000hur -e WORDPRESS_DB_PASSWORD=1234 wordpress
+```
+
+* wordpress-mysql 
+  * restart옵션 : 컨테이너 종료시 재시작여부
+    * `no` : 재시작 하지 않음
+    * `always` : 항상 재시작
+    * `on-failure` : 프로세스가 0 외의 상태로 종료됐다면 재시작
+    * `unless-stopped` : 종료시 재시작하지 않고 그 외에 재시작
+
+```yaml
+version: "3"
+services:
+  mysql000ex11:
+    image: mysql:5.7
+    networks:
+      - wordpress000net1
+    volumes:
+      - mysql000vol11:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: wordpress000db
+      MYSQL_USER: wordpress000hur
+      MYSQL_PASSWORD: 1234
+  wordpress000ex12:
+    depends_on: 
+      - mysql000ex11
+    image: wordpress
+    networks: 
+      - wordpress000net1
+    volumes:
+      - wordpress000vol12:/var/www/html
+    ports:
+      - 8085:80
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST=mysql000ex11
+      WORDPRESS_DB_NAME=wordpress000db
+      WORDPRESS_DB_USER=wordpress000hur
+      WORDPRESS_DB_PASSWORD=1234
+networks:
+  wordpress000net1:
+volumes:
+  mysql000vol11:
+  wordpress000vol12:
+```
+
+* docker compose 실행 명령어
+
+  * 컨테이너와 주변 환경 생성
+
+    * `docker-compose -f 정의파일경로 up 옵션`
+    * 옵션
+
+    | 옵션                      | 내용                                                 |
+    | ------------------------- | ---------------------------------------------------- |
+    | -d                        | 백그라운드                                           |
+    | --no-color                | 화면 출력 내용을 흑백으로                            |
+    | --no-deps                 | 링크된 서비스 실행하지 않음                          |
+    | --force-recreate          | 설정 또는 이미지가 변경되지 않더라도 컨테이너 재생성 |
+    | --no-create               | 컨테이너가 이미 존재할 경우 다시 생성하지 않음       |
+    | --no-build                | 이미지가 없어도 이미지를 빌드하지 않음               |
+    | --build                   | 컨테이너 실행 전 이미지 빌드                         |
+    | --abort-on-container-exit | 컨테이너가 하나라도 종료되면 모든 컨테이너 종료      |
+    | -t, --timeout             | 컨테이너 종료시 타임아웃 설정                        |
+    | --remove-orphans          | 컴포즈 파일에 정의되지 않은 서비스의 컨테이너 삭제   |
+    | --scale                   | 컨테이너의 수 변경                                   |
+
+     
+
+  ```shell
+  # ex
+  docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml up -d
+  ```
+
+  * 컨테이너와 네트워크 삭제
+
+    * `docker-compose -f 정의파일경로 down 옵션`
+    * 이미지와 볼륨은 삭제되지 않으므로 직접 삭제⭐
+
+    * 옵션
+
+    | 옵션             | 내용                                                         |
+    | ---------------- | ------------------------------------------------------------ |
+    | --rmi 종류       | 삭제시 이미지도 삭제, 종류가 all이면 사용했던 모든 이미지 삭제, 종류가 local이면 커스텀 태그가 없는 이미지만 삭제 |
+    | -v, -volumes     | volumes에 기재한 볼륨 삭제, external로 지정된 볼륨은 삭제하지 않음 |
+    | --remove-orphans | 컴포즈파일에 정의되지 않은 서비스의 컨테이너도 삭제          |
+
+  ```shell
+  # ex
+  docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml down
+  ```
+
+  * 컨테이너 종료
+    * `docker-compose -f 정의파일경로 stop 옵션`
+
+  ```shell
+  # ex
+  docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml stop
+  ```
+
+  
+
+* 실행 및 종료해보기
+
+```shell
+# up
+docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml up -d
+# http://localhost:8085/
+docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml down
+```
 
 
 

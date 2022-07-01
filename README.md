@@ -90,3 +90,5 @@
     * 도커 허브
 * 2022/06/30
   * Docker compose 개념
+* 2022/07/01
+  * Docker compose 실행
