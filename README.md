@@ -92,3 +92,5 @@
   * Docker compose 개념
 * 2022/07/01
   * Docker compose 실행
+* 2022/07/02
+  * Kubernetes 설치 및 기본용어

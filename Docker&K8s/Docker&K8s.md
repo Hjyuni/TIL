@@ -1254,5 +1254,105 @@ docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml up -d
 docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml down
 ```
 
+---
 
+# Kubernetes(k8s)
 
+* 컨테이너 오케스트레이션 도구
+* 시스템 전체를 통괄하고 여러 대의 컨테이너를 관리하는 일
+* 여러 대의 물리적 서버에서 존재하는 것을 전제로 함
+* 전체적인 제어를 담당하는 마스터 노드와 실제 동작을 담당하는 워커노드로 구성되어 있음
+* docker compose + 모니터링 기능
+* 사람이 개입해서 컨테이너를 삭제하면 안됨
+
+## 0. Install 
+
+### 0-1. kubectl
+
+> https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+
+```shell
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl
+
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update
+sudo apt-get install -y kubectl
+
+kubectl version --client
+```
+
+### 0-2. minikube
+
+> https://minikube.sigs.k8s.io/docs/start/
+
+```shell
+sudo apt update
+sudo apt install -y conntrack
+
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+chmod +x minikube
+sudo mv minikube /usr/local/bin
+
+minikube version
+
+# exec
+minikube start
+
+sudo mv /home/jyoon/.kube /home/jyoon/.minikube $HOME
+sudo chown -R $USER $HOME/.kube $HOME/.minikube
+# status
+minikube status
+# stop
+minikube stop
+```
+
+---
+
+## 1. 클러스터
+
+* 클러스터
+  * 마스터 노드와 워커노드로 구성된 쿠버네티스 시스템
+  * 마스터 노드에 설정된 내용에 따라 워커 노드가 관리됨
+
+* 마스터 노드
+  * 전반적인 감독
+  * 컨테이너를 실행하지는 않음 따라서 도커 엔진이 설치되지 않음
+  * 워커 노드에서 실행되는 컨테이너를 관리하는 역할
+  * 컨트롤 플레인을 통해 워커노드 관리
+    * kube-apiserver : 외부와 통신하는 프로세스, kubectl로 명령 전달받아 실행
+    * kube-controller-manager : 컨트롤러 통합 관리, 실행
+    * kube-scheduler : 파드를 워커 노드에 할당
+    * cloud-controller-manager : 클라우드 서비스와 연동해 서비스 생성
+    * etcd : 클러스터 관련 정보 전반을 관리하는 db
+
+* 워커 노드
+  * 서버에 해당하는 부분, 컨테이너가 실제 동작하는 서버, 엔진이 설치되어 있어야 함
+
+---
+
+## 2. 관련 용어
+
+1. `파드(pod)`
+   * 쿠버네티스 컨테이너의 단위
+   * 컨테이너와 볼륨을 함께 묶은 것
+   * 기본적으로 파드 하나가 컨테이너 하나이지만 컨테이너가 여러 개인 파드도 있을 수 있음
+   * 볼륨은 파드에 포함되는 컨테이너가 정보를 공유하기 위해 사용하는 것이어서 파드에 **볼륨이 없는 경우도 많음**
+2. `서비스(service)`
+   * 여러 개의 파드를 모은 것
+   * 한 서비스가 관리하는 파드는 모두 동일한 구성을 가짐
+   * 각 서비스는 자동적으로 고정된 IP주소를 부여받고 이 주소로 들어오는 통신 처리
+   * 내부적으로 여러 개의 파드가 있어서 밖에서는 하나의 IP주소만 볼 수 있고 이 주소로 접근하면 서비스가 통신을 적절히 분배해주는 구조
+   * 서비스가 분배하는 통신은 한 워커 노드 안으로 국한됨, 여러 워커 노드 간의 분배는 `로드 밸런서` 또는 `인그레스`가 담당
+3. `레플리카세트(replicaset)`
+   * 파드의 수를 관리하는 역할
+   * 파드가 종료됐을 때 모자라는 파드 보충하거나, 정의 파일의 파드의 수 감소하면 감소시키는 역할
+   * 레플리카세트가 관리하는 동일한 구성의 파드를 `레플리카(replica)`라고 부름
+4. `디플로이먼트(deployment)`
+   * 레플리카세트와 함께 쓰임
+   * 파드의 배포를 관리하는 요소
+   * 파드에 대한 정보를 갖고 있음
