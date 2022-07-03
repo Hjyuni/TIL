@@ -1098,7 +1098,7 @@ sudo pip3 install docker-compose
 * 호스트 컴퓨터에 폴더 만들고 정의한 YAML파일 배치
 * 정의 파일 이름은 docker-compose.yml 이용
 * 정의 파일은 **한 폴더에 하나만** 있을 수 있음
-* 여러 개의 정의 파일을 사영하려면 그 개수만큼 폴더를 만들어야 함
+* 여러 개의 정의 파일을 사용하려면 그 개수만큼 폴더를 만들어야 함
 * 도커 컴포즈에서 컨테이너가 모인 것을 **서비스**라고 함
 
 
@@ -1144,7 +1144,7 @@ services:
 docker run --name wordpress000ex12 -dit --net=wordpress000net1 -p 8085:80 -e WORDPRESS_DB_HOST=mysql000ex11 -e WORDPRESS_DB_NAME=wordpress000db -e WORDPRESS_DB_USER=wordpress000hur -e WORDPRESS_DB_PASSWORD=1234 wordpress
 ```
 
-* wordpress-mysql 
+* wordpress - mysql 
   * restart옵션 : 컨테이너 종료시 재시작여부
     * `no` : 재시작 하지 않음
     * `always` : 항상 재시작
@@ -1178,16 +1178,21 @@ services:
       - 8085:80
     restart: always
     environment:
-      WORDPRESS_DB_HOST=mysql000ex11
-      WORDPRESS_DB_NAME=wordpress000db
-      WORDPRESS_DB_USER=wordpress000hur
-      WORDPRESS_DB_PASSWORD=1234
+      WORDPRESS_DB_HOST: mysql000ex11
+      WORDPRESS_DB_NAME: wordpress000db
+      WORDPRESS_DB_USER: wordpress000hur
+      WORDPRESS_DB_PASSWORD: 1234
 networks:
   wordpress000net1:
 volumes:
   mysql000vol11:
   wordpress000vol12:
 ```
+
+* redmine - mysql
+* wordpress - mariaDB
+
+
 
 * docker compose 실행 명령어
 
@@ -1215,6 +1220,7 @@ volumes:
   ```shell
   # ex
   docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml up -d
+  # http://localhost:8085/
   ```
 
   * 컨테이너와 네트워크 삭제
@@ -1342,6 +1348,7 @@ minikube stop
    * 컨테이너와 볼륨을 함께 묶은 것
    * 기본적으로 파드 하나가 컨테이너 하나이지만 컨테이너가 여러 개인 파드도 있을 수 있음
    * 볼륨은 파드에 포함되는 컨테이너가 정보를 공유하기 위해 사용하는 것이어서 파드에 **볼륨이 없는 경우도 많음**
+   * 단독으로 정의 파일에 기재되는 경우 드물고 대부분 디플로이먼트에 포함되어 있음
 2. `서비스(service)`
    * 여러 개의 파드를 모은 것
    * 한 서비스가 관리하는 파드는 모두 동일한 구성을 가짐
@@ -1356,3 +1363,215 @@ minikube stop
    * 레플리카세트와 함께 쓰임
    * 파드의 배포를 관리하는 요소
    * 파드에 대한 정보를 갖고 있음
+
+---
+
+## 3. Manifest file
+
+* 매니페스트 파일(manifest file)
+  * 파드나 서비스에 대한 설정이 작성되어 있는 파일, 형식은 **JSON 또는 YAML**
+  * 리소스 단위로 분할 작성해도 되고 한 파일에 합쳐도 됨, 한 파일로 작성할 때에는 각 리소스를 '---'로 구분
+* 매니페스트 파일에 작성할 내용
+  * API 그룹(`apiVersion:`)&리소스 유형(`kind:`) : 버전 변경되므로 `kubectl api-resources`로 확인할 것
+  * 메타데이터(`metadata:`) : 리소스의 이름(name)이나 뒤에 설명(label) 기재
+  * 리소스 내용(`spec:`) : 리소스의 내용 정의, 어떤 리소스를 만들 것인가에 해당하는 부분
+
+### 3-1. 파드/디플로이먼트/서비스 파일 작성
+
+* 파드 작성
+
+```yaml
+#shell에서 kubectl api-resources로 버전 확인 후
+# kube_folder/apa000pod.yml
+aprVersion: v1
+kind: Pod
+metadata:
+  name: apa000pod # 파드의 이름
+  labels:
+    app: apa000kube
+spec:
+  containers:
+    - name: apa000ex91
+      image: httpd
+      ports:
+      - containerPort: 80
+```
+
+* 디플로이먼트
+  * 셀렉터(selector) : 디플로이먼트가 특정한 레이블이 부여된 파드를 관리할 수 있도록 하는 설정(`matchLabels:`필수 항목⭐)
+  * 레플리카(replica) : 파드의 레플리카에 대한 관리
+  * 템플릿(template) : 생성할 파드의 정보 기재
+
+```yaml
+# kube_folder/apa000dep.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apa000dep
+spec:
+  selector:
+    matchLabels:
+      app: apa000kube
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: apa000kube
+    spec:
+      containers:
+      - name: apa000ex91
+        image: httpd
+        ports:
+        - containerPort: 80
+```
+
+* 서비스 설정
+  * 유형(type)
+    * 서비스의 종류
+    * 어떤 유형의 IP주소로 접근할지
+    * `ClusterIP`: 클러스터IP를 통해 서비스에 접근
+    * `NodePort`: 워커 노드의 IP를 통해 서비스에 접근
+    * `LocalBalancer`: 로드밸런서의 IP를 통해 서비스에 접근, 실무에서 많이 사용하지만 minikube에는 없음
+    * `ExternalName`: 내부에서 외부로 접근, 파드에서 서비스를 통해 외부로 나가기 위한 설정
+  * port 설정
+    * `port`: 서비스의 포트
+    * `nodePort`: 워커 노드의 포트
+    * `targetPort`: 컨테이너 포트
+  * selector 설정
+    * 서비스가 특정 레이블이 부여된 파드를 선택적으로 관리하기 위한 설정
+    * `matchLabels:`사용하면 안됨⭐
+
+```yaml
+# kube_folder/apa000ser.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: apa000ser
+spec:
+  type: NodePort
+  ports:
+  - port: 8099
+    targetPort: 80
+    protocol: TCP
+    nodePort: 30080
+  selector:
+    app: apa000kube
+```
+
+### 3-2. 파일 읽기
+
+* `apply` : 리소스의 변경 사항 반영(옵션: `-f`)
+* `get` : 리소스의 상태를 화면에 출력
+
+* 디플로이먼트
+
+```shell
+kubectl apply -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000dep.yml
+kubectl get pods
+```
+
+* 서비스
+
+```shell
+kubectl apply -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000ser.yml
+kubectl get services
+# http://localhost:30080
+```
+
+### 3-3. 연습
+
+* 매니페스트 파일로 파드의 개수 늘리기
+
+```yaml
+# kube_folder/apa000dep.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apa000dep
+spec:
+  selector:
+    matchLabels:
+      app: apa000kube
+  replicas: 5   #⭐이 부분 수정
+  template:
+    metadata:
+      labels:
+        app: apa000kube
+    spec:
+      containers:
+      - name: apa000ex91
+        image: httpd
+        ports:
+        - containerPort: 80
+```
+
+
+
+```shell
+# pods 수 늘어난거 확인하기
+kubectl apply -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000dep.yml
+kubectl get pods
+```
+
+
+
+* 아파치 nginx로 바꾸기
+
+```shell
+# kube_folder/apa000dep.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apa000dep
+spec:
+  selector:
+    matchLabels:
+      app: apa000kube
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: apa000kube
+    spec:
+      containers:
+      - name: apa000ex91
+        image: nginx   #⭐이 부분 수정
+        ports:
+        - containerPort: 80
+```
+
+
+
+```shell
+kubectl apply -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000dep.yml
+kubectl get pods
+# http://localhost:30080
+```
+
+
+
+* 파드 삭제하고 자동복구되나 확인
+
+```shell
+kubectl get pods
+# 파드NAME 터미널에서 복사해오기
+kubectl delete pod 파드NAME
+# 자동복구 확인
+kubectl get pods
+```
+
+
+
+* 디플로이먼트/서비스 삭제
+
+```shell
+# rm deployment
+kubectl delete -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000dep.yml
+# 확인
+kubectl get deployment
+# rm service
+kubectl delete -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000ser.yml
+# 확인
+kubectl get service
+```
+
