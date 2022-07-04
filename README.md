@@ -96,3 +96,7 @@
   * Kubernetes 설치 및 기본용어
 * 2022/07/03
   * Kubernetes manifest file 작성&실행
+
+* 2022/07/04
+  * Docker compose 파일 작성해보기
+    * redmine - mysql

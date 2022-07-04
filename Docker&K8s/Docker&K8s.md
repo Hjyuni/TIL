@@ -1190,7 +1190,52 @@ volumes:
 ```
 
 * redmine - mysql
+
+```yaml
+version: "3"
+services:
+  mysql000:
+    image: mysql:5.7
+    networks:
+      - redmine000net
+    volumes:
+      - mysql000vol:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: redmine000db
+      MYSQL_USER: redmine000hur
+      MYSQL_PASSWORD: 1234
+  redmine000:
+    depends_on: 
+      - mysql000
+    image: redmine
+    networks: 
+      - redmine000net
+    volumes:
+      - redmine000vol:/var/www/html
+    ports:
+      - 8086:80
+    restart: always
+    environment:
+      REDMINE_DB_MYSQL: mysql000
+      REDMINE_DB_DATABASE: redmine000db
+      REDMINE_DB_USERNAME: redmine000hur
+      REDMINE_DB_PASSWORD: userpass
+networks:
+  redmine000net:
+volumes:
+  mysql000vol:
+  redmine000vol:
+```
+
+
+
 * wordpress - mariaDB
+
+```yaml
+
+```
 
 
 
