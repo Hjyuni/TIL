@@ -832,6 +832,55 @@ docker image ls
 
 ---
 
+### 2-9. postgreSQL 실습해보기
+
+> 파일 갖고오기 : https://daechu.tistory.com/22
+
+* local 파일 도커 컨테이너로 갖고 오기
+
+```shell
+# docker cp local_path docker_con_name:path
+docker cp /home/jyoon/TIL/PostgreSQL/PostgreSQL_data/ postgres:/postgres/
+```
+
+* 도커 컨테이너에 있는 파일 local로 갖고오기
+
+```shell
+# docker cp docker_con_name:path local_path
+docker cp postgres:/postgres/ /home/jyoon/TIL/PostgreSQL/PostgreSQL_data/
+```
+
+* postgreSQL 컨테이너 만들고 실행하기
+
+```shell
+# create container
+docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=1234 -d postgres
+# exec
+docker exec -it postgres /bin/bash
+# mkdir
+mkdir postgres
+exit
+# cp from local to container
+docker cp /home/jyoon/TIL/PostgreSQL/PostgreSQL_data/ postgres:/postgres/
+# exec
+docker exec -it postgres /bin/bash
+# createdb
+createdb -U postgres gyeonggi_graduates
+# read dumpfile
+psql -U postgres -d gyeonggi_graduates -f /postgres/PostgreSQL_data/gyeonggi_graduates.dump 
+# postgres
+> psql -U postgres
+# select db
+> \c gyeonggi_graduates
+# check table
+> \dt
+> select * from graduates limit 10;
+```
+
+
+
+---
+
 ## 3. Docker 응용
 
 ### 3-1. 파일 복사 command
@@ -1620,3 +1669,4 @@ kubectl delete -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000ser.yml
 kubectl get service
 ```
 
+U 
