@@ -1477,7 +1477,7 @@ minikube stop
 ```yaml
 #shell에서 kubectl api-resources로 버전 확인 후
 # kube_folder/apa000pod.yml
-aprVersion: v1
+apiVersion: v1
 kind: Pod
 metadata:
   name: apa000pod # 파드의 이름
@@ -1560,14 +1560,14 @@ spec:
 * 디플로이먼트
 
 ```shell
-kubectl apply -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000dep.yml
+kubectl apply -f /home/jyoon/TIL/'Docker&K8s'/kube_folder/apa000dep.yml
 kubectl get pods
 ```
 
 * 서비스
 
 ```shell
-kubectl apply -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000ser.yml
+kubectl apply -f /home/jyoon/TIL/'Docker&K8s'/kube_folder/apa000ser.yml
 kubectl get services
 # http://localhost:30080
 ```
@@ -1603,7 +1603,7 @@ spec:
 
 ```shell
 # pods 수 늘어난거 확인하기
-kubectl apply -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000dep.yml
+kubectl apply -f /home/jyoon/TIL/'Docker&K8s'/kube_folder/apa000dep.yml
 kubectl get pods
 ```
 
@@ -1637,7 +1637,7 @@ spec:
 
 
 ```shell
-kubectl apply -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000dep.yml
+kubectl apply -f /home/jyoon/TIL/'Docker&K8s'/kube_folder/apa000dep.yml
 kubectl get pods
 # http://localhost:30080
 ```
@@ -1660,13 +1660,12 @@ kubectl get pods
 
 ```shell
 # rm deployment
-kubectl delete -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000dep.yml
+kubectl delete -f /home/jyoon/TIL/'Docker&K8s'/kube_folder/apa000dep.yml
 # 확인
 kubectl get deployment
 # rm service
-kubectl delete -f /home/jyoon/TIL/Docker&K8s/kube_folder/apa000ser.yml
+kubectl delete -f /home/jyoon/TIL/'Docker&K8s'/kube_folder/apa000ser.yml
 # 확인
 kubectl get service
 ```
 
-U 
