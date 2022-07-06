@@ -101,3 +101,5 @@
     * redmine - mysql
 * 2022/07/05
   * Docker container에서 PostgreSQL 연습하기
+* 2022/07/06
+  * Algorithm 시간 복잡도의 빅오 표현법 개념
