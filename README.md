@@ -109,7 +109,11 @@
   * Algorithm for문 기본 문제 풀기
   
     * 백준 2438, 2439, 2442번
-  
 * 2022/07/08
-  * Algorithm ArrayList
+  * Algorithm ArrayList 개념
     * 백준 10818, 2953번
+* 2022/07/09
+  * Algorithm Arraylist 단순 데이터 추가
+* 2022/07/10
+  * Algorithm Arraylist 원하는 위치에 데이터 삽입/삭제
+
