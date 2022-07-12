@@ -116,8 +116,11 @@
   * Algorithm Arraylist 단순 데이터 추가
 * 2022/07/10
   * Algorithm Arraylist 원하는 위치에 데이터 삽입/삭제
-
 * 22/07/11
   * Python Program
     * 숫자맞추기
     * 내외부IP출력
+* 22/07/12
+  * Algorithm LinkedList
+    * 기본 구현
+    * 원하는 위치에 데이터 삽입/삭제
