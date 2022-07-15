@@ -27,3 +27,11 @@
 
 ## 3. 텍스트 음성으로 변환
 
+> * 파이썬 경로: https://devbruce.github.io/python/py-39-path+function/
+> * 절대경로와 상대경로: https://velog.io/@ryurbsgks5114/%EC%A0%88%EB%8C%80%EA%B2%BD%EB%A1%9C%EC%99%80-%EC%83%81%EB%8C%80%EA%B2%BD%EB%A1%9C
+
+* os.path.relpath(file) : 상대경로
+* os.path.abspath(`__file__`) : 현재 파일의 절대경로 출력
+  * `__file__`: 현재 수행중인 코드를 담고있는 파일
+* os.path.dirname(path) : path의 디렉토리 반환
+* os.path.chdir(path) : 디렉토리의 위치를 path로 옮기기
