@@ -35,3 +35,7 @@
   * `__file__`: 현재 수행중인 코드를 담고있는 파일
 * os.path.dirname(path) : path의 디렉토리 반환
 * os.path.chdir(path) : 디렉토리의 위치를 path로 옮기기
+
+--- 
+
+## 4. QR코드 생성하는 코드
