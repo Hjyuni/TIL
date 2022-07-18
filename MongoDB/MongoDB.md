@@ -392,7 +392,7 @@ db.collection.aggregate(
 
 
 
-### 3) Compund field index
+### 3) Compound field index
 
 * 최대 31개의 필드로 만들 수 있음
 * `collection이름.create_index([('필드이름',direction),('필드이름',direction)])`
@@ -411,3 +411,25 @@ db.collection.aggregate(
 
 * `$regex` : 정규표현식
   * 텍스트 index가 없어도 됨
+
+---
+
+## 8. 데이터 export / import
+
+> 참고 사이트1: https://webisfree.com/2017-07-30/mongodb-%EC%99%B8%EB%B6%80%ED%8C%8C%EC%9D%BC-import-export-%EB%B0%A9%EB%B2%95
+>
+> 참고 사이트2: https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=theswice&logNo=220946017455
+
+* export
+  * mongoexport -d `dbname` -c `collectionname` --type=`filetype` -o `outputfilename` --port `27017`
+* import
+  * mongoimport -d `dbname` -c `collectionname` --type `filetype`--file `importfilename` --headerline
+  * `--headerline` : `--type csv`를 사용하는 경우 **첫 번째 로우를 필드 이름으로 사용**. 그렇지 않으면 `mongoimport`는 **첫 번째 로우를 별개의 도큐먼트**로 가져옴.
+
+```shell
+# export
+mongoexport -d mydb -c emp --type=csv -o emp.csv --port 27017
+# import
+mongoimport -d mydb -c emp_python --type csv --file emp.csv --headerline
+```
+
