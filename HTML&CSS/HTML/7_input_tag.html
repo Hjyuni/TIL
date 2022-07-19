@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <!-- text type -->
+        <input type="text" name="text" size="20" placeholder="이름">
+        <!-- password type은 입력 값을 *로 보이게 해줌 -->
+        <input type="password" name="password" placeholder="비밀번호" required>
+
+        <!-- button -->
+        <input type="button" value="button">
+
+        <br>
+
+        <!-- radio type은 여러 항목 중 하나만 선택하게 해야 하는 경우 사용 -->
+        <input type="radio" name="gender" value="male">남자
+        <input type="radio" name="gender" value="female">여자
+
+        <!-- checkbox type은 여러개 선택하게 해야할 때 사용 -->
+        <input type="checkbox" name="food" value="pizza">피자<br>
+        <input type="checkbox" name="food" value="hamburger">햄버거<br>
+        <input type="checkbox" name="food" value="pasta">파스타<br>
+
+        <!-- date type 날짜를 입력할 때 사용 -->
+        <input type="date" name="date" min="2022-01-01" max="2022-12-31">
+
+        <!-- month -->
+        <input type="month" id="month" name="month">
+
+        <!-- week -->
+        <input type="week" id="week" name="week">
+        
+        <!-- time -->
+        <input type="time" id="time" name="time">
+
+        <!-- datetime-local type은 날짜/시간 입력할 때 사용 -->
+        <input type="datetime-local" id="datetime" name="datetime"><br>
+
+        <!-- color -->
+        <input type="color" name="color"><br>
+
+        <!-- number -->
+        <input type="number" name="num" min="0" max="1000"><br>
+
+        <!-- range -->
+        <input type="range" name="point" min="0" max="100"><br>
+
+        <!-- email -->
+        <input type="email" name="email"><br>
+
+        <!-- url -->
+        <input type="url" name="myUrl"><br>
+
+        <!-- tel -->
+        <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"><br>
+
+        <!-- file -->
+        <input type="file" id="myfile" name="myfile"><br>
+
+        <!-- submit & reset -->
+        <input type="submit" value="전송">
+        <input type="reset" value="초기화">
+
+        <form name="signUp" action="signUp.jsp" method="post">
+            <fieldset width="500px" height="600px">
+              <legend>회원가입</legend>
+              아이디 : <input type="text" name="id" placeholder="아이디를 입력 해주십시오." required>
+              <button type="button" onclick="alert('사용가능한 아이디 입니다!')">아이디 확인</button><br><br>
+              비밀번호 : <input type="password" placeholder="8글자 이상 입력 해주십시오." required><br><br>
+              생년월일 : <input type="date" name="birthday"><br><br>
+              이메일 : <input type="email" name="email" placeholder="이메일을 기입해주십시오." required><br><br>
+              전화번호 : <input type="tel" name="tel" placeholder="연락처를 기입해주십시오." required><br><br>
+              사이트를 알게된 경로:<br>
+              <input type="checkbox" name="a" value="serch">검색
+              <input type="checkbox" name="a" value="friend">친구
+              <input type="checkbox" name="a" value="recommend">추천
+              <input type="checkbox" name="a" value="adv">광고
+              <input type="checkbox" name="a" value="ect">기타
+            </fieldset>
+            <button type="submit">회원가입</button>
+            <button type="reset">다시 입력</button>
+          </form>
+    </form>
+</body>
+</html>

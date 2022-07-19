@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- form tag -->
+    <form name="name" actin="sign.jsp" method="post">
+        <!-- input tag -->
+        <input type="text" name="name1" value="value1">
+    </form>
+
+    <form name="name" actin="sign.jsp" method="post">
+        <!-- label tag -->
+        <label for="name">이름</label>
+        
+        <!-- input tag -->
+        <input type="text" id="name" name="name" value="jy" size="20">
+        <br>
+
+        <!-- select tag(단일 선택) -->
+        <select id="food" name="food">
+            <option value="pizza" selected>피자</option>
+            <option value="maratang">마라탕</option>
+            <option value="salad">샐러드</option>
+        </select>
+
+        <!-- select tag(다중 선택) -->
+        <select id="food" name="food" multiple>
+            <option value="pizza" selected>피자</option>
+            <option value="maratang">마라탕</option>
+            <option value="salad">샐러드</option>
+            <option value="bibimbob">비빔밥</option>
+        </select>
+
+        <!-- select group tag -->
+        <select id="food" name="food" multiple>
+            <optgroup label="음식">
+              <option value="pizza" selected>피자</option>
+              <option value="hamburger">햄버거</option>
+              <option value="pasta">파스타</option>
+            </optgroup>
+            <optgroup label="후식">
+              <option value="cola">콜라</option>
+              <option value="coffee">커피</option>
+              <option value="cake">케이크</option>
+            </optgroup>
+          </select>
+
+          <!-- textarea -->
+          <textarea name="test" id="" cols="30" rows="10">텍스트area</textarea>
+
+          <br><br>
+          <!-- button -->
+          <button type="button" onclick="location.href='https://www.naver.com/'">버어튼</button>
+    </form>
+
+    <form>
+        <!-- fieldset -->
+        <fieldset>
+          <legend>개인정보</legend>
+          <label for="name">이름:</label><br>
+          <input type="text" id="name" name="name" value="hjy"><br>
+          <label for="affiliation">소속:</label><br>
+          <input type="text" id="affiliation" name="affiliation" value="hjyCom"><br><br>
+          <input type="submit" value="전송">
+        </fieldset>
+    </form>
+
+    <form>
+        <input list="browsers">
+        <!-- datalist tag -->
+        <datalist id="browsers">
+          <option value="Chrome"></option>
+          <option value="Firefox"></option>
+          <option value="Internet Explorer"></option>
+          <option value="Opera"></option>
+          <option value="Safari"></option>
+        </datalist>
+    </form>
+
+    <form oninput="r.value=parseInt(x.value)*parseInt(y.value)">
+        <input type="number" id="x" name="x" value="10">
+        *
+        <input type="number" id="y" name="y" value="20">
+        =
+        <output name="r" for="x y"></output>
+        <br><br>
+        <input type="submit">
+    </form>
+</body>
+</html>
