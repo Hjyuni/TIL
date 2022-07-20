@@ -142,3 +142,5 @@
   * mongoDB export / import 하는 법
 * 22/07/19
   * HTML 공부
+* 22/07/20
+  * puppeteer 입문
