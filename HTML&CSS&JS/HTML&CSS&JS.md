@@ -1,15 +1,11 @@
 # HTML / CSS
 
-> * HTML 한번에 끝내기(이수안 컴퓨터) 
->   * 유튜브 강의: https://www.youtube.com/watch?v=VozMYcCYvtg
->   * 노션: https://suanlab.notion.site/HTML-256b041d35654311849f1c348e19219d
-> * CSS 한번에 끝내기(이수안 컴퓨터) 
->   * 유튜브 강의: 
->   * 노션: 
->
-> 
-
 ## 1) HTML
+
+> HTML 한번에 끝내기(이수안 컴퓨터) 
+>
+> * 유튜브 강의: https://www.youtube.com/watch?v=VozMYcCYvtg
+> * 노션: https://suanlab.notion.site/HTML-256b041d35654311849f1c348e19219d
 
 * 웹페이지의 뼈대를 구성하는 언어
 
@@ -213,3 +209,173 @@
   * `<main>` : 지배적인 콘텐츠 영역
   * `<footer>` : 섹션의 작성자에 대한 정보, 저작권 데이터 또는 관련 문서에 대한 링크 포함
 
+
+
+---
+
+
+
+## 2) CSS
+
+> CSS 한번에 끝내기(이수안 컴퓨터) 
+>
+> * 유튜브 강의: https://www.youtube.com/watch?v=J3ef9c-sZ14
+> * 노션: https://suanlab.notion.site/CSS-c4af7d87a8da44b6970e2d826e15d032
+
+* 웹페이지의 디자인을 구성하는 언어
+
+### 2-0. intro
+
+* css 우선 적용 순서
+
+  > 참고사이트1: https://heinafantasy.com/170
+  >
+  > 참고사이트2: https://abcdqbbq.tistory.com/14
+
+  
+
+* css 구성요소
+
+  * 선택자(selector) : 스타일을 적용할 대상 지정
+  * 속성명(property) : 속성의 이름
+  * 속성값(value) : 속성에 적용할 값
+  * 선택자 {속성명:속성값;} 과 같이 사용하여 스타일 적용
+
+  ```css
+  p {
+    color: purple;
+    text-align: center;
+  }
+  ```
+
+
+* css 적용 방법
+
+  * 인라인 스타일 : HTML 요소의 여는 태그에 style 속성으로 지정
+
+  ```css
+  <b style="color: pink">1. 인라인 스타일</b>
+  ```
+
+  * 내부 스타일 : 같은 HTML 문서 내부에 `<style>`태그를 사용하여 지정
+
+  ```css
+  <style>
+  p{
+    background-color: coral;
+  }
+  </style>
+  ```
+
+  * 외부 스타일⭐: HTML 문서와는 별개의 파일르 style지정, **현업에서 가장 많이 선호하는 방법**
+
+  ```css
+  # style.css
+  p {
+    color: red;
+  }
+  # index.html
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>외부 스타일<title>
+      <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+      <p>외부 스타일</p>
+    </body>
+  </html>
+  ```
+
+---
+
+### 2-1. 기본 선택자
+
+  1. 전체 선택자
+
+  * 모든 태그를 선택
+
+  * `*{내용;}`
+
+  
+
+  2. 태그 선택자
+
+  * 지정한 태그 선택
+  * `태그명{내용;}`
+
+  
+
+  3. id 선택자
+
+  * 특정 id태그 선택(중복없이)
+  * `#id{내용;}`
+
+  
+
+  4. class 선택자
+
+  * 특정 class태그 선택
+  * `.class{내용;}`
+
+  
+
+  5. 속성 선택자
+
+  * 특정 속성 또는 속성값 태그 선택
+  * `선택자{속성=값;}`
+
+---
+
+### 2-2. 반응 선택자
+
+1. `태그:link` : 반응하지 않은 링크, 방문하지 않은 링크
+
+2. `태그:visited` : 방문했던 링크
+
+3. `태그:hover` : 마우스를 올려놓는 순간
+
+4. `태그:active` : 마우스를 클릭하는 순간
+
+* LVHA : 링크속성 지정순서
+  * link - visited - hover - active
+  * 참고사이트 : https://codedragon.tistory.com/5405
+
+---
+
+### 2-3. 구조 선택자
+
+> `nth-child(n)` vs `nth-of-type(n)`
+>
+> * 참고사이트 : https://firerope.tistory.com/5
+
+1. `E:root` : 최상위 태그 선택
+2. `E:nth-child(n)` : 순서와 일치하는 E태그 선택
+3. `E:nth-last-child(n)` : 뒤에서부터 순서와 일치하는 E태그 선택
+4. `E:nth-of-type(n)` : 순서가 일치하는 E태그 선택(순서에 E태그만 포함)
+5. `E:nth-last-id-type(n)` : 뒤에서부터 순서와 일치하는 E태그 선택(순서에 E태그만 포함)
+6. `E:first-child(n)` : 맨 첫번째 태그가 E태그인 경우 선택
+7. `E:last-child(n)` : 맨 뒤에 태그가 E태그인 경우 선택
+8. `E:first-of-type(n)` : E태그 중 첫번째 선택
+9. `E:last-of-type(n)` : E태그 중 마지막 선택
+10. `E:only-child` : 유일한 자식인 E태그 선택
+11. `E:only-of-type` : 유일한 타입의 E태그 선택
+12. `E:empty` : 텍스트와 공백을 포함하여 자식요소가 없는 E태그 선택
+
+---
+
+## 3) JS
+
+> 생활코딩 : https://opentutorials.org/course/3085/18869
+
+### 3-0. intro
+
+* html위에서 동작하는 동적인 언어(html은 정적)
+* `<script>`태그 안에서 사용
+
+---
+
+### 3-1. event
+
+* 웹 상에서 발생 가능한 모든 이벤트(마우스 클릭, 키보드 치기,,,)
+* `<input>`의 onclick, onchange, onkeydown 등등..
