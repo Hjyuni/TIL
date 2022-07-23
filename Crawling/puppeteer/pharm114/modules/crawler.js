@@ -2,6 +2,8 @@ import puppeteer from 'puppeteer-core'
 import os from 'os'
 // fs는 js에 있는 파일을 쓰고 읽는 라이브러리
 import fs from 'fs'
+import { addressParser } from './parser.js'
+
 
 const macUrl = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 const whidowsUrl = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
@@ -153,6 +155,11 @@ const getData = async function() {
 
 // JSON파일로 변환하기
 const writeFile = async function() {
+
+  for(let i=0; i<finalData.length; i++) {
+		finalData[i] = await addressParser(finalData[i]) // addressParser 함수 리턴값 : kakao api 이용 lng,lat 값을 추가한 Data
+	} 
+
   const stringData = JSON.stringify(finalData) // 문자열로 변환
 
   const exist = fs.existsSync(`./json/${sido}`) // dir 존재 여부 확인 // exist : boolean

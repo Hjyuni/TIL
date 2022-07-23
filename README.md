@@ -148,3 +148,5 @@
   * css 기본/반응 선택자 & 구조선택자 개념
 * 22/07/22
   * puppeteer pharm114 크롤링
+* 22/07/23
+  * puppeteer pharm114 lat,lng 추가하기
