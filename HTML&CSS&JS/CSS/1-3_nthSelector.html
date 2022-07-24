@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구조선택자</title>
+    <style>
+        th:first-child {border-radius: 10px 0 0 0;}
+        th:last-child {border-radius: 0 10px 0 0;}
+        tr:nth-child(2n) {background-color: pink;}
+        tr:nth-child(2n+1) {background-color: palevioletred;}
+        td:hover {background-color: blanchedalmond;}
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+        </tr>
+        <tr>
+            <td>가</td>
+            <td>나</td>
+            <td>다</td>
+        </tr>
+        <tr>
+            <td>라</td>
+            <td>마</td>
+            <td>바</td>
+        </tr>
+        <tr>
+            <td>사</td>
+            <td>아</td>
+            <td>자</td>
+        </tr>
+    </table>  
+</body>
+</html>

@@ -289,7 +289,9 @@
 
 ---
 
-### 2-1. 기본 선택자
+### 2-1. Selector
+
+#### 2-1-1.기본 선택자
 
   1. 전체 선택자
 
@@ -327,7 +329,7 @@
 
 ---
 
-### 2-2. 반응 선택자
+#### 2-1-2. 반응 선택자
 
 1. `태그:link` : 반응하지 않은 링크, 방문하지 않은 링크
 
@@ -343,7 +345,7 @@
 
 ---
 
-### 2-3. 구조 선택자
+#### 2-1-3. 구조 선택자
 
 > `nth-child(n)` vs `nth-of-type(n)`
 >
@@ -361,6 +363,75 @@
 10. `E:only-child` : 유일한 자식인 E태그 선택
 11. `E:only-of-type` : 유일한 타입의 E태그 선택
 12. `E:empty` : 텍스트와 공백을 포함하여 자식요소가 없는 E태그 선택
+
+---
+
+#### 2-1-4. 상태 선택자
+
+1. `:enabled` : 사용 가능한 form 관련 태그 선택
+2. `:disabled` : 사용 불가능한 form 관련 태그 선택
+3. `:checked` : 현재 선택된 form관련 태그
+4. `:focus` : 현재 초점이 맞춰진 form관련 태그
+
+---
+
+#### 2-1-5. 기타 선택자
+
+1. `E:lang(ko)`: lang 속성 값이 ko 인 태그 선택
+2. `E:not(S)`: S가 아닌 E 태그 선택
+3. `E:target`: E의 url 요청 시 선택
+4. `E::first-line`: E 태그의 첫번째 줄 선택
+5. `E::first-letter`: E 태그의 첫번째 문자 선택
+6. `E::before`: E 태그의 시작 지점 태그 선택
+7. `E::after`: E 태그의 끝 지점 태그 선택
+
+---
+
+#### 2-1-6. 선택자 조합
+
+1. `A  B`: 선택자 B가 포함된 선택자 A 선택
+2. `A > B`: 선택자 A의 직계 자손인 선택자 B 선택
+3. `A + B`: A 선택자 바로 다음의 B 선택자 선택
+4. `A ~ B`: A 선택자 다음에 인접해있는 모든 선택자 B 선택
+5. `A, B`: 선택자 A와 선택자 B 선택
+
+---
+
+### 2-2. CSS style
+
+#### 2-2-1. 박스 스타일
+
+* 웹 페이지의 전체 레이아웃
+* 구성
+  * content: 실제 내용
+  * padding: content와 테두리 사이의 공간
+  * border: 테두리 두께
+  * margin: 테두리와 최종경계 사이 여백
+
+* 방향
+
+  > 참고 사이트: https://ofcourse.kr/css-course/margin-padding-%EC%86%8D%EC%84%B1
+
+  * 기본적으로 `top - right - bottom - left`순임
+
+  * `padding/margin: 0px` : 상하좌우 모두 0px
+  * `padding/margin: 0px 10px`: 상하 0px, 좌우 10px
+  * `padding/margin: 0px 10px 20px 30px` : 위 0px, 오른쪽 10px, 아래 20px, 왼쪽 30px
+  * `padding/margin: 0px 10px 20px`: 위 0px, 좌우 10px, 아래 20px
+
+---
+
+#### 2-2-2. 테두리 스타일
+
+* `solid`: 실선
+* `dotted`: 점선
+* `dashed`: 줄점선
+* `double`: 두 줄
+* 이 외: `ridge`, `groove`, `inset`, `outset`...
+
+---
+
+#### 2-2-3. 배경화면 스타일
 
 ---
 

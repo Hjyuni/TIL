@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>선택자 조합</title>
+    <style>
+        /* A B : 선택자B가 포함된 선택자A 선택 */
+        div h1 {color: aqua;}
+        /* A > B : 선택자 A의 직계 자손인 선택자 B선택 */
+        div > p {color: aquamarine;}
+        div > a:hover {color: brown; background-color: bisque;}
+        /* A + B : A 선택자 바로 다음의 B 선택자 선택 */
+        h1 + h2 {color: yellow;}
+        /* A ~ B : A 선택자 다음에 인접해있는 모든 선택자 B 선택 */
+        h2 ~ h4 { background-color: bisque;}
+
+        h5, h6{font-size: 200%;}
+    </style>
+</head>
+<body>
+    <div>
+        <h1>1임</h1>
+        <h2>2임</h2>
+        <h3>3임</h3>
+        <h4>4임</h4>
+        <h5>5임</h5>
+        <h6>6임</h6>
+    </div>
+    <div>
+        <p>아메리카노</p>
+        <a href="http://www.naver.com">네이버</a>
+    </div>
+</body>
+</html>
