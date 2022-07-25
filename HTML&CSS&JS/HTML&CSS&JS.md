@@ -433,6 +433,104 @@
 
 #### 2-2-3. 배경화면 스타일
 
+* `background-repeat`: 배경화면 이미지 반복법
+* `background-attachment`
+
+> background-attachment 참고사이트: https://developer.mozilla.org/ko/docs/Web/CSS/background-attachment
+
+---
+
+#### 2-2-4. 폰트 스타일
+
+1. `font-size`: 폰트 사이즈
+2. `font-align`: 폰트 정렬
+3. `font-family`: 사용할 폰트 이름
+4. `font-weight`: 폰트 두께
+5. `font-style`: 폰트 스타일
+
+---
+
+#### 2-2-5. 링크 스타일
+
+* `text-decoration `
+
+> 참고 사이트: https://blog.naver.com/pos195/222650902314
+
+---
+
+#### 2-2-6. 테이블 스타일
+
+* `border-collapse` : 테이블 라인 표시 안하기
+
+---
+
+### 2-3. CSS 속성
+
+#### 2-3-1. 가시 속성
+
+> * `inline` vs `block` vs `inline-block`: https://ruden91.github.io/blog/inline-vs-block-vs-inline-block/
+>
+> * visibility, display : https://unabated.tistory.com/entry/displaynone-%EA%B3%BC-visibilityhidden-%EC%9D%98-%EC%B0%A8%EC%9D%B4
+
+1. `display: inline` : **text 크기 만큼만 공간을 점유**하고 **줄바꿈을 하지 않음**
+   * width/height 적용 불가
+   * margin/padding-top/bottom 적용불가
+   * line-height 원하는대로 사용 불가
+
+2. `display: block` : 무조건 한 줄 점유, 다음 태그는 **줄바꿈 적용**
+   * width/height 적용 가능
+   * margin/padding-top/bottom 적용 가능
+   * line-height 원하는대로 사용 가능
+
+3. `display: inline-block` : inline + block 특징 둘 다 갖고 있는 속성, 기본적인 특징은 inline 속성과 비슷하지만 width/height 등 적용 가능
+   * width/height 적용 가능
+   * margin/padding-top/bottom 적용 가능
+   * line-height 원하는대로 사용 가능
+
+4. `display: none` : 아예 존재하지 않음, 보이지도 않고 해당 공간도 존재하지 않음
+5. `visibility: hidden` : 보이지만 않고 해당 공간은 존재
+6. `opacity: 숫자` : 공간의 투명도 조절
+
+---
+
+#### 2-3-2. 위치 속성
+
+> * 위치속성 참고사이트 : https://www.daleseo.com/css-position/
+> * absolute 참고사이트 : https://www.daleseo.com/css-position/
+> * position 참고사이트: https://developer.mozilla.org/ko/docs/Web/CSS/position#%EC%8B%9C%EB%8F%84%ED%95%B4%EB%B3%B4%EA%B8%B0
+> * z-index 참고사이트: https://www.codingfactory.net/10878
+
+1. `position: static` : HTML 작성 순서 그대로 부라우저 화면에 표시가 됨
+2. `position: relative` : 요소를 원래 위치에서 벗어날 수 있게 배치
+3. `position: absolute` : position이 static이 아닌 첫 번째 상위 요소가 해당 요소의 배치 기준으로 설정 
+4. `position: fixed` :  스크롤 하더라도 고정되어 사라지지 않음
+5. `position: sticky`
+6. `z-index: int` : 겹치는 영역 위치 조절
+
+---
+
+#### 2-3-3. overflow
+
+1. `overflow: visible`: 콘텐츠를 자르지 않고 안쪽 여백 상자 밖에 그릴 수 있음
+2. `hidden`: 콘텐츠를 안 쪽 여백상자에 맞추기 위해 잘라냄, 스크롤바 제공x
+3. `overflow: clip`: hidden과 마찬가지로 콘텐츠 안 쪽 여뱅을 상자에 맞춰 자르는데, 코드를 사용한 스크롤링도 방지
+4. `overflow: scroll`: 콘텐츠를 안 쪽 여백상자에 맞추기 위해 잘라냄, 잘라냈는지 여부 상관 없이 항상 스크롤바 노출
+5. `overflow: auto`: 브라우저가 자동으로 생성, 크기에 맞으면 스크롤바 생성 안하고 크기가 잘렸으면 스크롤바 생성됨
+6. `overflow: overlay`: scroll과 동일하게 동작하지만 스크롤바가 동작을 차지하는 대신 콘텐츠 위에 위치
+
+---
+
+#### 2-3-4. float
+
+> 참고사이트1: https://developer.mozilla.org/ko/docs/Web/CSS/float
+>
+> 참고사이트2: https://velog.io/@eunsonny/TIL.-CSS-float
+
+1. `float: left`: 좌측 부동
+2. `float: right`: 우측 부동
+3. `float: inline-first`: 블록의 시작쪽 부동
+4. `float: inline-end`: 블록의 끝쪽 부동
+
 ---
 
 ## 3) JS
