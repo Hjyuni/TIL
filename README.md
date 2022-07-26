@@ -159,3 +159,7 @@
   * css
     * 폰트, 링크, 테이블 스타일
     * 가시, 위치, overflow, float 속성
+
+* 22/07/26
+  * numpy, pandas, 시각화 기초
+  * wordcloud 네이버 기사 제목
