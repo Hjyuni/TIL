@@ -136,7 +136,7 @@ const launch = async function() {
   const browser = await puppeteer.launch(launchConfig);
   // 브라우저에 페이지 넣기
   const page = await browser.newPage();
-  await page.goto('https://www.pharm114.or.kr/main.asp');⭐
+  await page.goto('https://www.naver.com');⭐
 }
 
 export {

@@ -11,7 +11,7 @@ async function addressParser(data) {
 			query: data.address, // crawler.js writeFile 함수 finalData[i]의 address : i번째 약국 주소
 		},
 		headers: {
-			Authorization: 'input_your_key' // 본인 키 입력
+			Authorization: 'KakaoAK apikey' // 본인 키 입력 'KakaoAK (RESTapi key)'
 		}
 	})
 
