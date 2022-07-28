@@ -163,3 +163,6 @@
 * 22/07/26
   * numpy, pandas, 시각화 기초
   * wordcloud 네이버 기사 제목
+
+* 22/07/27
+  * puppeteer pharm114 에러해결
