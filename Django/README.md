@@ -68,7 +68,7 @@ start .
   * 기본 템플릿 : django/conf/project_template
 
   * `manage.py` : 명령행을 통해 각종 명령을 수행
-  * `studydjango` : 프로젝트명으로 생성된 디렉토리. 이 이름을 참도하고 있는 코두가 몇 개 있어 함부로 수정하지 말 것
+  * `studydjango` : 프로젝트명으로 생성된 디렉토리. 이 이름을 참고하고 있는 코드가 몇 개 있어 함부로 수정하지 말 것
     * `__init__.py` : 모든 파이썬 패키지에는 `__init__.py`를 두며 패키지를 임포트할 때 임포트 대상
     * `settings.py` : 현재 프로젝트에서 장고 기본설정(`django/conf/global_settings.py`)을 덮어쓰고 새롭게 지정할 설정들
     * `urls.py` : 최상위 URL설정
@@ -138,3 +138,116 @@ python manage.py runserver
     * `python manage.py startapp <앱이름>`
 
 ---
+
+### 4) 간단하게 프로젝트 해보기
+
+1. 앱 생성
+
+```shell
+# vscode
+# django 프로젝트 생성 후
+# C:\TIL\Django\studydjango
+# blog1앱 만들기
+python manage.py startapp blog1
+# studydjango/blog1/urls.py 생성하기
+# urls.py 파일 아래에
+urlpatterns = []
+```
+
+2. studydjango/studydjango/settings.py
+
+```python
+# 앱을 settings.INSTALLED_APPS에 등록
+INSTALLED_APPS = [
+    ...,
+    'blog1',
+]
+# shell
+python manage.py runserver
+```
+
+3. studydjango/studydjango/blog1/models.py
+
+```python
+from django.db import models
+
+# 포스팅 저장하기
+class Post(models.Model):
+    # CharField : 최대 길이 정의가 필요한 문자열(단일 라인 입력)
+    # TextField : 길이 정의가 필요하지 않은 문자열(다중 행 크기 조정 가능한 입력)
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+```
+
+* `auto_now_add` VS `auto_now` : https://codermun-log.tistory.com/175
+
+4. makemigrations / migrate (테이블생성)
+
+```shell
+# python manage.py makemigrations <앱이름>
+python manage.py makemigrations blog1
+# python manage.py migrate <앱이름>
+python manage.py migrate blog1
+```
+
+5. studydjango/studydjango/blog1/admin.py
+
+```python
+# admin page에서 포스팅 가능
+from .models import Post
+
+admin.site.register(Post)
+```
+
+6. studydjango/studydjango/urls.py
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('blog1/', include('blog1.urls')),
+]
+```
+
+7. studydjango/blog1/views.py
+
+```python
+from .models import Post
+
+def post_list(request):
+    # DB에서 모든 포스팅을 가져와
+    qs = Post.objects.all() # QuerySet
+    return render(request, 'blog1/post_list.html',{
+        'post_list' : qs,
+    })
+```
+
+8. blog1에서 새로운 파일 생성
+   * templates/**blog1**/post_list.html
+   * blog1이라는 파일 하나 더 만들어야 됨
+
+```python
+<h1>Post List</h1>
+
+{% for post in post_list %}
+    <h2>{{ post.title }}</h2>
+    {{ post.content }}
+{% endfor %}
+```
+
+9. studydjango/blog1/urls.py
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.post_list, name='post_list'),
+]
+```
+
+10. http://127.0.0.1:8000/blog1/
