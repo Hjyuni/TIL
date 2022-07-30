@@ -165,3 +165,5 @@
   * puppeteer pharm114 에러해결
 * 22/07/28
   * Vue basic
+* 22/07/29
+  * Vue components basic
