@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript">
+        // 주석
+        // 전역변수
+        var variable = 10;
+
+        function val01(){
+            variable = variable + 5 // 전역변수 global 없이 사용 가능
+            document.getElementById("value01").innerHTML = "<b style='color:red; background:yellow;'>"+variable+"</b>" // 고유값이라 Element에 s가 없음
+        }
+
+        function val02(){
+            // 지역변수
+            var innerVal = variable + 10;
+            document.getElementById("value02").innerHTML = "<b style='color:red; background:yellow;'>"+innerVal+"</b>" // 지역변수는 함수가 호출될 때마다 초기화 돼서 값이 변하지 않음
+        }
+
+        function jsType(){
+            var inferVal = "문자";
+            alert(inferVal + "의 타입은 : " + typeof(inferVal));
+
+            inferVal = 33;
+            alert(inferVal + "의 타입은 : " + typeof(inferVal));
+
+            inferVal = true; // js에서는 모두 소문자!ㄴ
+            alert(inferVal + "의 타입은 : " + typeof(inferVal));
+
+            inferVal = null;
+            alert(inferVal + "의 타입은 : " + typeof(inferVal));
+
+            inferVal = new val01;
+            alert(inferVal + "의 타입은 : " + typeof(inferVal));
+
+            inferVal = function(){
+                alert("타입 추론!");
+            }
+            alert(inferVal + "의 타입은 : "+ typeof(inferVal))
+            //inferVal(); //함수 호출
+        }
+    </script>
+
+    <script>
+
+        // alert(variable); // 전역변수는 전체 script내에서 사용 가능!
+        //alert(innerVal); // 지역변수는 지역변수가 호출된 script내에서만 사용 가능!
+
+    </script>
+</head>
+<body>
+    
+    <h1>var 변수 = 값;</h1>
+
+    <dl>
+        <dt>변수 선언 규칙</dt>
+        <dd>대소문자 구분</dd>
+        <dd>영문, $, _, 숫자 사용 가능</dd>
+        <dd>키워드(예약어) 사용 불가</dd>
+        <br>
+
+        <dt>변수의 범위</dt>
+        <dd>전역 변수: window 객체에 포함됨
+            <button onclick="val01();">확인</button>
+            <p id = "value01"></p>
+        </dd>
+
+        <dd>지역 변수 : 함수나 객체 내부에 선언
+            <button onclick="val02();">확인</button>
+            <p id = "value02"></p>
+        </dd>
+
+        <dt>타입의 종류
+            <button onclick="jsType();">확인</button>
+        </dt>
+        <dd>string</dd>
+        <dd>number</dd>
+        <dd>boolean</dd>
+        <dd>null</dd>
+        <dd>object</dd>
+        <dd>function</dd>
+
+    </dl>
+
+</body>
+</html>

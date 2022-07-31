@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script type="text/javascript">
+        var ids=["multi","java","script"];
+        
+        function confirmChk(){
+            var id=document.getElementsByName("id")[0].value;
+            var div=document.getElementsByTagName("div")[0];
+            if(ids.indexOf(id)!=-1){ // 배열 객체에서도 indexOf가 사용 가능하구나~!
+                div.innerHTML="<b>아이디가 존재합니다.</b>";
+            }else{
+                var userId="사용할 수 있는 아이디입니다."
+                        +"<input type='button' value='확인'"
+                        +"onclick='insertId(\""+id+"\")'>"; // escape sequence/escape character를 넣어주지 않으면 id라는 변수 이름이 들어가게 되는 것임
+                div.innerHTML=userId; //           
+            }
+        }
+        
+        function insertId(id){
+            opener.document.getElementsByName("id")[0].value=id;
+            opener.document.getElementsByName("pwd")[0].focus(); // 1.텍스트 창의 경우, 커서를 위치시켜 바로 입력이 가능함
+                                                                 // 2.버튼의 경우, 엔터 키를 눌렀을 때 클릭효과를 나타냄
+                                                                 // 여기에서는 id가 입력 되고 바로 pwd로 커서를 이동하라!라는 뜻 (같음)
+            close();
+        }
+    </script>
+
+</head>
+<body>
+    
+	<table>
+		<tr>
+			<td>아이디</td>
+			<td><input type="text" name="id"/></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input type="button" value="중복확인" onclick="confirmChk()"/>
+				<input type="button" value="취소" onclick="self.close()"/>
+			</td>
+		</tr>
+	</table>
+	<div></div>
+
+</body>
+</html>

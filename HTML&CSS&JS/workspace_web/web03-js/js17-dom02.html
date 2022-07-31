@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function searchPar(){
+            var child02 = document.getElementsByTagName("p")[1];
+            var div = child02.parentNode;
+            alert(div);
+            alert(typeof(div));
+            alert(div.nodeName);
+            alert(div.nodeName);
+            div.style.backgroundColor = "violet"
+        }
+        function searchChi(){
+            var div = document.getElementsByTagName("div")[0]; // 노드리스트로 반환,,,,이므로 인덱스 꼭 써줘야함!!1개밖에 없어도!!해줘야댐!!!
+
+            var divChildren = div.childNodes; // 공백도 문자열로 가지고 옴
+            divChildren[3].style.backgroundColor = "blue"
+            alert(divChildren)
+            for(var i=0; i<divChildren.length; i++){
+                // console.log(divChildren[i].tagName);
+                console.log(divChildren[i].nodeName);
+            }
+
+        }
+
+    </script>
+</head>
+<body>
+    
+    <h1>부모탐색, 자식탐색</h1>
+
+    <div>
+        <p>child01</p>
+        <p>child02</p>
+        <p>child03</p>
+    </div>
+
+    <button onclick="searchPar();">부모탐색</button>
+    <br>
+    <button onclick="searchChi();">자식탐색</button>
+
+</body>
+</html>

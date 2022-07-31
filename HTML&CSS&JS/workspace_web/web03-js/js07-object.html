@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+        function object01(){
+            this.name01 = "홍길동";
+            var name02 = "hond-gd";
+            this.getName02 = function(){
+                return name02; // property
+            }
+        }
+
+        // 객체 리터럴 (파이썬의 딕셔너리)
+        var object02 = {
+            name: "kim-sd",
+            prn: function(){
+                alert(object02.name + "의 전화번호 : 010-1234-5678")
+            }
+        }
+
+        
+
+        function objTest(){
+            // 객체생성
+            var obj01 = new object01();
+            // alert(obj01.name01);
+            // alert(obj01.name02); // 지역변수는 외부에서 접근할 수 없음
+            // alert(obj01.getName02());
+            // alert(object02.name);
+            // object02.prn();
+            obj01.prn();
+        }
+        // 함수를 추가하지 않고 기능을 변경(prototype)
+        object01.prototype.prn = function(){
+            alert(this.name01 + "의 전화번호는 010-2222-2222")
+        }
+
+    </script>
+</head>
+<body>
+    
+    <h1>object(객체)</h1>
+
+    <pre>
+        <p>객체의 구성</p>
+        - property : 속성
+        - function (method) : 기능
+        - this : 객체 내부의 메서드나 속성을 정의
+        - prototype : 객체의 확장
+    </pre>
+
+    <button onclick="objTest();">확인</button>
+
+</body>
+</html>

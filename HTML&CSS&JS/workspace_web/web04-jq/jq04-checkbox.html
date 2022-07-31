@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="resources/js/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(function(){
+            $("#signal").submit(function(){
+                if($(".infobox").val() == null || $(".infobox").val()==""){
+                    $(".error").show() // 평소에는 hidden 이었다가 이벤트가 발생하면! 보여줘!
+                    return false
+                }
+            });
+
+            $("#confirm").click(function(){
+                $("#result").empty();
+                var total=0;
+                // checkbox 중 checked 되어있는 요소들을 가지고 와서
+                // .each()를 사용하여 해당 요소들의 가격을 가져오고
+                // 파이썬의 map과 같은 느낌
+                $("input[name=chk]:checked").each(function(i){
+                    // var chk = $(this);
+                    var chk = $("input[name=chk]:checked").eq(i);
+                    // console.log(chk);
+
+                    var book = chk.next().text();
+                    var price = chk.val();
+                    $("#result").append(book + " : " + price + "<br>");
+                    total += parseInt(price);
+                });
+                $("#result").append(total);
+
+            });
+            // 숙제: 모두 선택되어있으면 name이 all인 체크박스도 체크
+            // 하나라도 체크 해제되면 name이 all인 체크박스 체크해제
+            $("input[name=chk]").click(function(){
+                $("input[name=chk]").click(function(){
+                    if($("input[name=chk]").length == $("input[name=chk]:checked").length){
+                        $("input[name=all]").prop("checked", true)
+                    } else { 
+                        $("input[name=all]").prop("checked", false)
+                    }
+                })
+
+            
+            });
+        });
+
+
+        // 숙제
+        function allChk(bool){
+            // $("input[name=chk]").each(function(){
+            //     $(this).prop("checked", bool);
+            // });
+
+            $("input[name=chk]").prop("checked",bool)
+
+        }
+    </script>
+</head>
+<body>
+    
+    <form id = "signal">
+        <div>
+            <span class="label">User Id</span>
+            <input type="text" class="infobox" name="userid">
+            <span class="error" hidden="" style="color:red;">반드시 입력하세요!</span> 
+        </div>
+        <input type="submit" class="submit" value="입력">
+    </form>
+
+    <hr>
+
+    <fieldset style="width: 300px">
+        <legend>체크 여부 확인</legend>
+
+        <input type="checkbox" name = "all" onclick="allChk(this.checked)">전체 선택
+        <br>
+        <input type="checkbox" name = "chk" value="20000"><b>python</b>
+        <br>
+        <input type="checkbox" name = "chk" value="25000"><b>pandas</b>
+        <br>
+        <input type="checkbox" name = "chk" value="30000"><b>django</b>
+        <br>
+
+        <input type="button" id="confirm" value="확인">
+        <br>
+
+        <span>선택한 책 가격</span>
+        <div id="result"></div>
+    </fieldset>
+
+</body>
+</html>

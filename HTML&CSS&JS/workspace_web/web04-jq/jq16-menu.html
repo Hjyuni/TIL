@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{border: 2px solid hotpink;}
+        #menu{background-color: lightpink; font-size: 20px;}
+        a{text-decoration: none; font-size: 20px;}
+        #menu div{display: inline-block; margin-right: 10px;}
+    </style>
+    <script src="resources/js/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function(){
+            var $box = $("<div>").addClass("box");
+            $(".sub_menu:first").wrap($box); // $(".sub_menu:first")요소를 $box로 감아주세요
+                                             // 부모 클래스가 box가 됨
+            $(".sub_menu").click(function(){
+                $(".sub_menu").each(function(){ //  sub_menu를 하나씩 분리해서 가져와서 하나씩 함수를 적용할 것임
+                    if($(this).parent().is(".box")){ // this는 sub_menu 전부
+                        $(this).unwrap(".box")
+                    }
+                })
+                $(this).wrap($box) // this는 클릭한 sub_menu
+            })
+            $("a").wrapInner("<span></span>") // a태그 안에 자식요소들을 span태그로 감싸줘
+
+            // $("a").wrapAll("<b>"); 
+            $("pre").wrapAll("<b>"); // pre를 찾아서 b로 전부 감싸주세요
+        })
+
+    </script>
+</head>
+<body>
+
+    <div id = "menu">
+        <div class="sub_menu">
+            <a href="#"><span>국비지원</span></a>
+        </div>
+        <div class="sub_menu">
+            <a href="#">훈련 검색</a>
+        </div>
+        <div class="sub_menu">
+            <a href="#">기관 검색</a>
+        </div>
+        <div class="sub_menu">
+            <a href="#">질문답변</a>
+        </div>
+        <div class="sub_menu">
+            <a href="#">과정후기</a>
+        </div>
+    </div>
+
+    <pre>1</pre>
+    <pre>2</pre>
+    <pre>3</pre>
+
+
+    
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        img{
+            vertical-align: middle;
+            width: 300px;
+            height: 300px;
+        }
+        a{
+            font-size: 30px;
+            text-decoration: none;
+        }
+    </style>
+    <script>
+        window.onload=function(){
+            var anchs = document.querySelectorAll("a"); // css선택자로 가져오겠다!
+            var img = document.querySelector("img");
+            
+            var count = 1;
+            
+            //왼쪽 화살표
+            anchs[0].onclick = function(){
+                var imgAlt = img.getAttribute("alt"); // getAttribute("속성"): 해당 속성값을 가져와라
+                if (imgAlt=="img01") {
+                    count=6;
+                    img.setAttribute("alt","img06");
+                    img.setAttribute("src", "resources/imgs/img06.jpg")
+                } else{
+                    img.setAttribute("alt", "img0"+(--count));
+                    img.setAttribute("src","resources/imgs/img0"+count+".jpg")
+            }
+        }
+            //오른쪽 화살표
+            anchs[1].onclick = function(){
+                var imgAlt = img.getAttribute("alt"); // getAttribute("속성"): 해당 속성값을 가져와라
+                if (imgAlt=="img06") {
+                    count=0;
+                    img.setAttribute("alt","img01");
+                    img.setAttribute("src", "resources/imgs/img01.jpg")
+                } else{
+                    img.setAttribute("alt", "img0"+(++count));
+                    img.setAttribute("src","resources/imgs/img0"+count+".jpg")
+                }
+            }
+
+        }
+    </script>
+</head>
+<body>
+    
+    <div>
+        <a href="#" id="lt">◀</a> 
+        <!-- href=""이면 새로고침 되고, gref="#"하면 -->
+        <img src="resources/imgs/img01.jpg" alt="img01"> 
+        <!-- alt는 이미지가 제대로 로딩되지 않았을 때 대신 띄우는 문자
+        src는 해당 이미지 경로 -->
+        <a href="#" id="gt">▶</a>
+    </div>
+
+</body>
+</html>

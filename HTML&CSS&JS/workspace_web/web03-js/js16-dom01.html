@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        a>img{width: 50px; height: 50px;}
+        #gallery{width: 200px; height: 200px;}
+        p{width: 350px; height: 250px;}
+        img{vertical-align: middle;}
+        a{text-decoration: none;}
+    </style>
+    <script>
+
+        var num = 1;
+
+        function prevGallery(){
+            num--;
+            if (num < 1){
+                num = 6;
+            }
+
+            document.getElementById("gallery").src = "resources/imgs/img0"+num+".jpg";
+
+            // return을 사용한 이벤트 전파 막기 false되면 동작 막음
+            return false;
+
+        }
+
+        function nextGallery(){
+            num++;
+            if (num > 6){
+                num = 1;
+            }
+
+            document.getElementById("gallery").src = "resources/imgs/img0"+num+".jpg";
+
+            // return을 사용한 이벤트 전파 막기
+            return false;
+
+        }
+    </script>
+</head>
+<body>
+    
+
+    <div id='gallerywrap'></div>
+    <p>
+        <a href="http;//www.naver.com" onclick="return prevGallery();">
+        <img src="resources/imgs/arrowleft.png" alt="왼쪽 화살표">
+        </a>
+
+        <img id='gallery' src="resources/imgs/img01.jpg" alt="gallery">
+        <a href="#next" onclick="nextGallery();">
+        <img src="resources/imgs/arrowright.png" alt="오른쪽 화살표">
+        </a>
+    </p>
+</body>
+</html>

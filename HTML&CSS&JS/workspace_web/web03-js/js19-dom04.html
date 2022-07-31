@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img, #imgview{
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+    <script>
+        function createImg(){
+            // 1. 이름이 rdobtn인 요소들을 가지고 온다
+            var rdobtns = document.getElementsByName("rdobtn")
+
+            // 2. 갖고 온 요소들의 length만큼 반복하여 라디오 버튼이 체크되어있는지 확인
+            //    만일 체크되었다면 자신의 이미지를 가지고 온다
+            var radioVal = "";
+
+            for (var i=0; i<rdobtns.length; i++) {
+                if (rdobtns[i].checked) {
+                    radioVal = "resources/imgs/" + rdobtns[i].value;
+                }
+            }
+
+            // 3. img태그를 생성하고 src속성에 위의 값을 저장하여 화면에 그림이 나오도록 하자.
+            var img = document.createElement("img");
+            img.setAttribute("src", radioVal); // 태그에 값 지정하기
+            
+            var div = document.getElementById("imgview");
+            var chd = document.querySelector("#imgview > img"); // 요소를 하나만 추출할 때 사용하는 메소드
+            div.replaceChild(img, chd); // replaceChild(newChild,oldChild): 기존 노드 치환하기
+        
+    }
+
+    function deleteImg(){
+        document.getElementById("imgview").innerHTML="<img src=''/>"
+        // document.querySelector("#imgview > img").src=""
+            }
+
+    
+    </script>
+</head>
+<body>
+    
+    <input type="radio" name="rdobtn" value="img01.jpg">img01<br>
+    <input type="radio" name="rdobtn" value="img02.jpg">img02<br>
+    <input type="radio" name="rdobtn" value="img03.jpg">img03<br>
+
+    <button onclick="createImg()">이미지 생성</button>
+    <button onclick="deleteImg()">이미지 삭제</button>
+
+    <div id="imgview"><img src=""></div>
+
+
+</body>
+</html>

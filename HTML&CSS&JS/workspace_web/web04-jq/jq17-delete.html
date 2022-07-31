@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            border: 2px solid hotpink;
+            width: 200px;
+            padding: 10px 10px;
+        }
+        p{
+            background-color: khaki;
+        }
+        h1{
+            border: 1px solid red;
+        }
+    </style>
+    <script src="resources/js/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // 지우기
+            $("p:eq(0)").click(function(){
+                $(this).remove();
+            })
+
+            // 잘라내기
+            $("p:eq(1)").click(function(){
+                var ele = $(this).detach();
+                $("h1").append(ele);
+            })
+            // 부모태그에 모든 것들이 삭제
+            $("p:eq(2)").click(function(){
+                $(this).parent().empty();
+            })
+        })
+    </script>
+</head>
+<body>
+    
+    <h1>엘리먼트 제거하기</h1>
+
+    <div>
+        <p>remove()</p>
+        <p>detach()</p>
+        <p>empty()</p>
+    </div>
+
+</body>
+</html>

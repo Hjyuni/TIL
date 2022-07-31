@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img{width: 200px; height: 200px;}
+        .addsize{width: 300px; height: 300px;}
+        .onoff{display: none;}
+    </style>
+    <script src="resources/js/jquery-3.6.0.min.js"></script>
+    <script>
+
+        $(document).ready(function(){
+            $("#btn").click(function(){
+                $("img").toggleClass("onoff"); // 특정 애들을 찾아서 클래스를 넣었다 뺐다 할 수 있음
+            });
+
+            $("img").click(function(){
+                if($(this).hasClass("addsize")){
+                    $(this).removeClass("addsize").attr("title", "이미지 축소됨");
+                } else{
+                    $(this).addClass("addsize").attr("title", "이미지 확대됨")
+                }
+            })
+        }); // prop&attr은 속성을 가져옴
+            // prop('속성'):속성을 가져옴
+            // prop('속성','값'):속성의 값을 가져옴
+            // prop은 자바스크립트 attr은 제쿼리꺼
+
+
+    </script>
+</head>
+<body>
+    
+    <button id="btn">class on/off</button>
+    <br>
+    <img src="resources/imgs/img01.jpg" alt="img01" title="이미지 1번">
+    <img src="resources/imgs/img02.jpg" alt="img02" title="이미지 2번">
+    <img src="resources/imgs/img03.jpg" alt="img03" title="이미지 3번">
+
+</body>
+</html>

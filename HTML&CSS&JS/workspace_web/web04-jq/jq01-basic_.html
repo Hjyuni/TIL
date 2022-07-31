@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        img {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+
+    <!--
+        src 불러와서 script 사이에 코드 절대로 넣으면 안됨 !!! (주의 *)
+        그리고 JQuery 사이트의 API Documentation 항목에서 필요한 요소들만 사용하면 됨
+    -->
+    <script src="resources/js/jquery-3.6.0.min.js"></script>
+
+    <script>
+        /*
+            jquery 기본 작성법 !
+            -> selector 표현식 (Css 선택자 방식과 비슷함)
+            jQuery("selector").method();
+            $("selector").method();
+            -> $("p").css("color", "red") : p 태그를 찾아와서 해당 태그에 css를 적용할 건데 color 속성에 red를 넣어주세요
+
+            기능구현 !!!
+            onload=function() {
+
+            }
+            ->
+            $(function() {
+
+            });
+
+            $(document).ready(function()){
+
+            });
+        */
+       $(function() {
+           $("#test-btn").click(function(){
+               alert("클릭했음!!");
+           });
+
+           // $("img") : img 태그 찾아와서 clikc 실행하면 function 실행시켜 주세요
+           $("img").click(function(){
+               $(this).hide();  // click 이벤트가 발생된 요소를 숨겨라
+           });
+       });
+
+       // 명령어 사용할 때는 $(function(){}안에 써야하고, 그냥 함수는 script에 만들어도 됨
+       function showImg() {
+            // 감춰진 그림을 보이게 하자.
+            $("img").show();
+       }
+       
+       function resizeImg() {
+            // 100 100으로 변경하자
+            // $("img").css("width", "100px").css("height", "100px");
+            $("img").css({"width" : "100px", "height" : "100px"}); // 이렇게 한번에 쓸수도 있음
+            // .resize()는 사이즈가 변경되었을 때 이벤트가 발생하도록 하는 메소드
+       }
+
+       function addImg() {
+            $("img").last().after("<img src='resources/imgs/img01.jpg'/>");
+       }
+
+       function toggleImg() {
+            // .toggle() : 보였다 안보였다 하기
+            $("img").toggle();
+       }
+
+    </script>
+
+</head>
+<body>
+
+    <h1>JQuery : javascript library</h1>
+    <!-- 
+        자바 스크립트로 어떤 기능을 만들어서 배포해놓음 -> 우린 그걸 가지고 사용하면 됨
+        JQuery가 무엇인지는 구글에 검색해보기 (이런 설명은 영어로 보도록 노력하기)
+
+        라이브러리(자바 스크립트) - 모듈 (데이터)
+        어떤 기능을 수행하기 위해 모아둔 메소드, 클래스, 함수의 모음
+    -->
+
+    <button id = "test-btn">click me</button>
+    <br>
+    <button onclick="showImg();">이미지 보이기</button>
+    <button onclick="resizeImg();">이미지 축소</button>
+    <button onclick="addImg();">이미지 추가</button>
+    <button onclick="toggleImg();">이미지 숨기기/보이기</button>
+    <br>
+    <br>
+    <div>
+        <img src="resources/imgs/img01.jpg" alt="img01">
+    </div>
+    
+</body>
+</html>

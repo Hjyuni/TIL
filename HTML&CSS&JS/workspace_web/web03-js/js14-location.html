@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function localTest(){
+            location.href = "http://naver.com" // url반환 assign과 사실상 비슷함
+            // location.assign("http://google.com") // 새로운 주소로 이동하면서 히스토리를 남김
+            // location.replace("http://lc.multicampus.com/k-digital") // 새로운 주소로 이동하면서 히스토리를 남기지 않음
+            // location.reload(); // 새로고침
+        }
+
+    </script>
+</head>
+<body>
+    
+    <button onclick="localTest()">경로 연습</button>
+
+</body>
+</html>

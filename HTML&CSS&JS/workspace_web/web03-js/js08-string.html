@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function strTest01(){
+            var str01 = "String";
+            var str02 = "Test";
+
+            var str03 = str01 + str02;
+            // alert(str03);
+
+            var newString = str01.concat("Test", "Java", "Script");
+            // alert(newString);
+
+            // 배열.join('문자') : 배열 사이사이에 문자가 삽입됨(문자열로 반환)
+            var joinTest = ["5", "10", "15", "20"].join("+")
+            alert(joinTest);
+        }
+
+        function strTest02(){
+                var numVal = 12.5;
+                var bool = true;
+                var result = "String" + numVal + bool;
+                alert(result);
+                alert(typeof(result)); // 합치면 string이 된다
+            }
+
+        function strTest03(){
+            var str = prompt("이름을 입력하세요");
+            var span = document.getElementById("res");
+
+            if (str == "멀캠") {
+                span.textContent = str + "님 환영합니다";
+            } else if (str.toLowerCase() == "multicampus") {
+                span.textContent = str + ", Hello!"; //
+            } else {
+                span.textContent = "이름을 다시 한번 확인해 주세요!!"
+            }
+
+            // 자동 형변환
+            var numVal = 10;
+            if (numVal == "10") {
+                alert("== 연산자 사용 : 숫자 10 입니다.");
+            } else {
+                alert("== 연산자 사용 : 숫자 10 아닙니다.");
+            }
+
+            // === 형변환 시켜주지 않음
+            if (numVal === "10") {
+                alert("=== 연산자 사용: 숫자 10 입니다.");
+            } else {
+                alert("=== 연산자 사용: 숫자 10 아닙니다.")
+            }
+
+            var strObj = new String("멀캠");
+            var strLiteral = "멀캠";
+
+            if (strObj == strLiteral){
+                alert('문자가 같습니다.');
+            } else {
+                alert('문자가 다릅니다.');
+            }
+
+            // 객체 != 값
+            if (strObj === strLiteral){
+                alert('문자가 같습니다.===');
+            } else {
+                alert('문자가 다릅니다.===');
+            }
+        }
+
+
+        // indexOf : 왼 -> 오른쪽
+        // lastIndexOf : 오 -> 왼쪽
+        // 검색한 단어의 첫 번째 인덱스 반환
+        // 값이 존재하지 않으면 -1 출력
+        function strTest04(){
+            var strVal = "홍길동 이순신 유재석 강호동 홍길동";
+            var prop = prompt("검색할 이름을 입력해 주세요.");
+            alert("indexOf : " + strVal.indexOf(prop));
+            alert("lastIndexOf : " + strVal.lastIndexOf(prop));
+
+        }
+
+        function strTest05(){
+            var strVal = "문자열 추출하기. 관련 메소드:indexOf,substring";
+            var startIndex = strVal.indexOf(":");
+            var endIndex = strVal.lastIndexOf(",");
+            var res = strVal.substring(startIndex, endIndex); // 파이썬의 slice와 같음
+            alert(res);
+
+            var splitVal = strVal.split(" ")
+            alert(splitVal[3]);
+        }
+
+        function strTest06(){
+            var prop = prompt("쉼표로 구분하여 키워드를 입력해주세요", "사과,바나나,키위,수박")
+            var propArr = prop.split(",")
+            // alert(propArr.length)
+
+            var propResult = "";
+            for (var i=0; i<propArr.length; i++) {
+                propResult += propArr[i] + "<br>";
+
+            }
+            document.getElementById("key").innerHTML = propResult;
+        }
+
+        
+    </script>
+</head>
+<body>
+    
+    <p>문자열 합치기
+        <button onclick="strTest01();">클릭</button>
+    </p>
+
+    <p>다른 자료형 합치기
+        <button onclick="strTest02();">클릭</button>
+    </p>
+
+    <p>문자열 비교하기
+        <button onclick="strTest03();">클릭</button>
+        <span id="res"></span>
+    </p>
+
+    <p>문자열 검색하기
+        <button onclick="strTest04();">클릭</button>
+    </p>
+
+    <p>문자열 추출하기
+        <button onclick="strTest05();">클릭</button>
+    </p>
+
+    <p>키워드 나누기
+        <button onclick="strTest06();">클릭</button>
+    </p>
+    <div id="key"></div>
+
+</body>
+</html>

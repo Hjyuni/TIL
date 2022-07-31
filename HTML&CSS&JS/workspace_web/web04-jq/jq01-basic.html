@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    <style>
+        img{
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+    <script src="resources/js/jquery-3.6.0.min.js"></script> 
+    <!-- 경로(src) 가지고 온 후에 스크립트 사이에 동작 넣으면 절대!안됨 -->
+    <script>
+        /*
+        jquery 기본 작성법!
+        -> selector 표현식
+        jQuery("selector").method();
+        $("selector").method();
+        -> $("p").css("color","red");
+
+        기능구현!!
+        onload = function(){
+
+        }
+
+        ->
+        $(function(){
+
+        });
+        */
+
+        $(function(){
+            $("#test-btn").click(function(){
+                alert("클릭했음!!");
+            });
+
+            $("img").click(function(){
+                $(this).hide(); // 클릭 이벤트가 발생된 요소를 숨겨라!
+            })
+        });
+
+        function showImg(){
+            // 감춰진 그림을 보이게 하자
+            $("img").show()
+
+        }
+
+        function resizeImg(){
+            // 100 100으로 변경하자
+            // $("img").css("width", "100px").css("height", "100px")
+            $("img").css({"width": "100px","height": "100px"})
+        }
+
+        function addImg(){
+            $("img").last().after("<img src='resources/imgs/img01.jpg'>")
+            // 여러개 중 마지막꺼 찾아주세요!
+        }
+
+        function toggleImg(){
+            // 보였다 안보였다 하자
+            $("img").toggle();
+        }
+
+    </script>
+
+
+
+<body>
+    
+    <h1>JQuery : Javascript library</h1>
+
+    <!-- 라이브러리&모듈: 기능을 만들어서 묶어서 사용하라고 준 것 -->
+
+    <button id = "test-btn">click me</button>
+    <br>
+    <button onclick="showImg()">이미지 보이기</button>
+    <button onclick="resizeImg()">이미지 축소</button>
+    <button onclick="addImg()">이미지 추가</button>
+    <button onclick="toggleImg()">이미지 숨기기/보이기</button>
+    <br>
+    <br>
+    <div>
+        <img src="resources/imgs/img01.jpg" alt="img01">
+    </div>
+
+</body>
+</html>

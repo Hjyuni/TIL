@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="resources/js/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function(){
+            var cnt=0;
+            $("button:eq(0)").click(function(){
+                $("#base").after("<div>새로운 엘리먼트 after"+(++cnt)+"</div>")
+            });
+            $("button:eq(1)").click(function(){
+                $("<div>새로운 엘리먼트(insert after)</div>").insertAfter("#base")
+            });
+            $("button:eq(2)").click(function(){
+                $("#base").before("<div>새로운 엘리먼트 before</div>")
+            });
+            $("button:eq(3)").click(function(){
+                $("<div>새로운 엘리먼트(insert after)</div>").insertBefore("#base")
+            });
+
+            /*
+            $('삽입할 곳').after('삽입요소')는 선택한 요소 뒤에 새 요소를 추가, 함수 사용 가능
+            $('삽입할 곳').before('삽입요소')는 선택한 요소 앞에 새 요소를 추가, 함수 사용 가능
+            $('삽입요소').insertBefore('삽입할 곳'): 삽입할 곳 앞에 삽입요소 추가, 함수 사용 불가
+            $('삽입요소').insertAfter('삽입할 곳'): 삽입할 곳 뒤에 삽입요소 추가, 함수 사용 불가
+            */
+        });
+    </script>
+</head>
+<body>
+    
+    <button>after()</button>
+    <button>insertAfter()</button>
+    <button>before()</button>
+    <button>insertBefore()</button>
+    <div id="base">
+        <p>외부 삽입</p>
+    </div>
+
+
+</body>
+</html>

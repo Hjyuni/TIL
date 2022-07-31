@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script type="text/javascript">
+        function test(){
+            var val=document.getElementsByName("test")[0].value; // 노드리스트로 가져오므로 [0]써줘야 함
+            opener.document.getElementsByTagName("h1")[1].innerHTML=val; // 2번째(인덱스로는 1)h1 값 바꾸기
+                                                                         // opener객체는 팝업창에서 자신을 오픈한 부모창을 제어할 수 있음
+            close(); // 자기 자신을 닫을 때 사용 근데 왜 작동을 안하니..?
+                     // iframe에서는 아예 다른 html창을 여는 기능이기 때문에 닫히지 않음!
+        }
+    </script>
+    
+
+
+    
+</head>
+<body>
+    
+	<input type="text" name="test"/> <!--입력칸 생성 -->
+	<input type="button" onclick="test()" value="전달"/>
+	<input type="button" onclick="self.close()" value="창닫기"> <!--자기 자신의 창을 닫는다-->
+
+
+</body>
+</html>
