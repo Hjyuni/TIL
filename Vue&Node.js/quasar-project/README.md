@@ -241,3 +241,14 @@ yarn add firebase
 
 * https://kr.vuejs.org/v2/guide/components.html
 
+---
+
+## 3. CRUD
+
+> * 구글독스: https://docs.google.com/document/d/1J5SJljqpMB0YlWaWEUFltDlpTxYIq9NyCoJ18C-WcK4/edit
+> * firebase docs: https://firebase.google.com/docs/database/web/read-and-write
+
+* Create: `push`
+* Read: `onValue`
+* Update: `update`
+* Delete: `remove`

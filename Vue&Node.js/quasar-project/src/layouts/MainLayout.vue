@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header elevated style="background: white; color: black;">
       <q-toolbar>
         <q-btn
           flat
@@ -12,10 +12,9 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Firebase CRUD App
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -31,11 +30,6 @@
           Essential Links
         </q-item-label>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
       </q-list>
     </q-drawer>
 
