@@ -167,3 +167,6 @@
   * Vue basic
 * 22/07/29
   * Vue components basic
+* 22/08/01
+  * 윈도우 체제를 우분투로
+  * firebase CRUD
