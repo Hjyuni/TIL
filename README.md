@@ -170,3 +170,5 @@
 * 22/08/01
   * 윈도우 체제를 우분투로
   * firebase CRUD
+* 22/08/02
+  * crawling python-process&thread
