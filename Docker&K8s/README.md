@@ -244,6 +244,7 @@ docker --version
     * 주요 옵션 : `-a`
   * `cp` : 도커 컨테이너와 도커 호스트 간에 파일 복사
   * `commit` : 도커 컨테이너를 이미지로 변환
+  * `logs` : 컨테이너 로그 보기 
 
   ```shell
   # docker container 하위command 옵션
@@ -274,15 +275,20 @@ docker --version
   
   docker container commit
   docker commit
+  
+  docker logs [contaiter_name]
   ```
 
 * 이미지 조작 관련 하위 커맨드 (상위 커맨드 : `image`)
 
+  * `push`: 도커 허브 등의 repository에 이미지 올리기
+
   * `pull` : 도커 허브 등의 repository에서 이미지 내려받기
   * `rm` : 도커 이미지 삭제
   * `ls` : 내려 받은 이미지의 목록 출력
+  * `search` : 이미지 검색
   * `build` : 도커 이미지 생성
-    * 주요 옵션 : `-t`
+    * 주요 옵션 : `-t`(tag)
 
   ```shell
   # docker image 하위command 옵션
@@ -1053,8 +1059,24 @@ docker run --rm -v apa000vol2:/source -v /home/jyoon/Documents/target busybox ta
 2. dockerfile 스크립트로 이미지 만들기
 
    * dockerfile : 도커 이미지를 만드는 파일
+   
+     * `FROM`: 베이스가 될 이미지 이름
+     * `WORKDIR`: 작업 디렉토리 지정(컨테이너 내부 디렉토리)
+     * `COPY`: 이미지에 포함할 파일 복사
+     * `ADD`: 이미지에 파일이나 디렉토리 복사
+     * `RUN`: 이미지 생성시 실행될 명령
+     * `ENV`: 컨테이너 내부 환경 변수 지정
+     * `CMD` & `ENTRYPOINT`: https://bluese05.tistory.com/77
+       * `ENTRYPOINT`가 있으면 `CMD`는 arg로 들어감
+     * `EXPOSE`: 외부로 지정 포트를 개방하겠다는 뜻
+     
+     > `EXPOSE` vs `docker run -p`: https://imkh.dev/docker-expose-ports/
+   
+   
    * `docker build -t '생성할 이미지 이름' '재료 폴더 경로'`
-
+   
+   실습1
+   
    ``` shell
    # TIL/Docker&K8s/apa_folder
    nano Dockerfile
@@ -1073,6 +1095,85 @@ docker run --rm -v apa000vol2:/source -v /home/jyoon/Documents/target busybox ta
    # check
    docker ps -a
    docker image ls
+   ```
+   실습2
+      ```python
+   # app.py
+   # pip install streamlit
+   import stramlit as st
+   import socket
+   import sys
+   
+   hostname = socket.gethostname()
+   local_ip = socket.gethostbyname(hostname)
+   
+   st.title('hello world by'+local_ip)
+   x = st.slider('x')
+   st.write(x,'squared is', x*x)
+      ```
+   
+   * powershell(관리자)
+   
+   ```shell
+   python -m streamlit run app.py
+   ```
+   
+   * Dockerfile 생성(파일명: Dockerfile)
+   
+   ```dockerfile
+   # syntax=docker/dockerfile:1
+   FROM python:3.9-slim-buster
+   EXPOSE 8501
+   WORKDIR /app
+   RUN pip install streamlit
+   COPY . .
+   CMD ["streamlit", "run", "app.py"]
+   ```
+   
+   * cmd(관리자)
+   
+   ```cmd
+   # dockerfile 들어가 있는 경로
+   docker build -t python-streamlit:001
+   ```
+   
+   ```cmd
+   # image 만들기
+   docker build -t python-streamlit:001 .
+   # check image
+   docker images
+   # run container
+   docker run --name python-streamlit --publish 8501:8501 python-streamlit:001
+   ```
+   
+   * app.py
+   
+   ```py
+   # app.py
+   # pip install streamlit
+   import stramlit as st
+   import socket
+   import sys
+   
+   hostname = socket.gethostname()
+   local_ip = socket.gethostbyname(hostname)
+   
+   st.title('docker_lab1.1 by'+local_ip)⭐
+   x = st.slider('x')
+   st.write(x,'squared is', x*x)
+   ```
+   
+   * cmd
+   
+   ```cmd
+   # stop&rm container
+   docker ps -a
+   docker stop python-streamlit
+   docker rm python-streamlit
+   # rebuild
+   docker build -t python-streamlit:001 .
+   # run container
+   docker run --name python-streamlit -p 8501:8501 python-streamlit:001
    ```
 
 ---
@@ -1093,20 +1194,26 @@ docker run --rm -v apa000vol2:/source -v /home/jyoon/Documents/target busybox ta
 * docker registry : 이미지를 배포하는 장소, 도커 제작사 외의 다른 기업이나 개인도 운영할 수 있음
 * docker hurb : 도커 제작사에서 운영하는 공식 도커 레지스트리
 
+* docker login
+
+  ```shell
+  docker login -u 아이디 -p 비번
+  ```
+
 * 태그와 이미지 업로드
 
   * 이미지에 태그를 부여해 복제
 
     ```shell
     # docker tag 원래_이미지_이름 레지스트리_주소/리포지토리_이름:버전
-    docker tag apa000ex22 abc.comm/bpache:13
+    docker tag apa000ex22 hjyuni/my-repo:streamlitv1
     ```
 
   * 이미지 업로드
 
     ```shell
-    # docker push 레지스트리_주소/리포지토리_이름:버전
-    docker push abc.comm/bpache:13
+    # docker push docker_hub_id/리포지토리_이름:버전
+    docker push hjyuni/my-repo:streamlitv1
     ```
 
 * 비공개 레지스트리 만들기
@@ -1278,16 +1385,6 @@ volumes:
   redmine000vol:
 ```
 
-
-
-* wordpress - mariaDB
-
-```yaml
-
-```
-
-
-
 * docker compose 실행 명령어
 
   * 컨테이너와 주변 환경 생성
@@ -1353,6 +1450,59 @@ docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml up -d
 # http://localhost:8085/
 docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml down
 ```
+
+
+
+실습: jupyterlab
+
+* docker-compose.yml
+
+```yaml
+version: "3"
+
+services:
+  # JupyterLab
+  jupyter:
+    build: . 
+
+    command: >-
+      start.sh jupyter lab
+      --NotebookApp.token='' --NotebookApp.password=''
+
+    ports:
+      - 8888:8888
+    
+    shm_size: 4G
+
+    working_dir: /home/jyoon/work
+
+    volumes:
+      - .:/home/jyoon/work
+
+    user: root
+
+    environment:
+      - NB_UID=1000
+      - NB_GID=1001
+      - CHOWN_HOME=yes
+```
+
+* Dockerfile
+
+```dockerfile
+FROM jupyter/datascience-notebook:6b49f3337709
+
+RUN pip install torch torchvision torchsummary
+```
+
+* create container
+
+```shell
+# # docker-compose up -d : 백그라운드 환경으로 
+docker-compose up --build
+```
+
+* http://localhost:8888 접속
 
 ---
 

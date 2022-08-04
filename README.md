@@ -172,3 +172,8 @@
   * firebase CRUD
 * 22/08/02
   * crawling python-process&thread
+
+* 22/08/03
+  * bigdata with devops
+* 22/08/04
+  * docker dockerfile&docker-compose 연습
