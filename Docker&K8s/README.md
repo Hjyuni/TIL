@@ -8,6 +8,18 @@
 >
 > docker_document : https://docs.docker.com/reference/
 
+* Stable Base Image를 사용하기
+* 가능한 작은 이미지로 시작하기
+* Tag명은 반드시 지정하는 습관을 가지기
+* 안전하게 이미지를 사용하기. public registry의 이미지 믿지 말기
+  * 서명된 이미지 사용하기
+  * app은 root로 실행하지 말자 - host처럼 동작하기 때문에 언제든지 해킹될 수 있음
+  * 컨테이너 내부에서 SSH실행은 금물 :star:
+  * namespace에 따라 사용자를 분리
+* 컨테이너 하나에 app은 1개만 실행
+  * 필요하다면 하위 프로세스로 실행
+* 보존되어야 하는 데이터는 컨테이너 외부에 저장
+
 ## 0. install
 
 ### 0-1. install Docker on Ubuntu
@@ -309,7 +321,7 @@ docker --version
 
   > volume
   >
-  > : 컨테이너에 마운트 가능한 공간
+  > : 컨테이너에 마운트 가능한 공간, 컨테이너가 사용하는 저장 공간(외장 디스크)
 
   * `create` : 볼륨 생성
     * 주요 옵션 : `--name`
@@ -1100,7 +1112,7 @@ docker run --rm -v apa000vol2:/source -v /home/jyoon/Documents/target busybox ta
       ```python
    # app.py
    # pip install streamlit
-   import stramlit as st
+   import streamlit as st
    import socket
    import sys
    
@@ -1133,11 +1145,6 @@ docker run --rm -v apa000vol2:/source -v /home/jyoon/Documents/target busybox ta
    * cmd(관리자)
    
    ```cmd
-   # dockerfile 들어가 있는 경로
-   docker build -t python-streamlit:001
-   ```
-   
-   ```cmd
    # image 만들기
    docker build -t python-streamlit:001 .
    # check image
@@ -1148,7 +1155,7 @@ docker run --rm -v apa000vol2:/source -v /home/jyoon/Documents/target busybox ta
    
    * app.py
    
-   ```py
+   ```python
    # app.py
    # pip install streamlit
    import stramlit as st
@@ -1212,7 +1219,7 @@ docker run --rm -v apa000vol2:/source -v /home/jyoon/Documents/target busybox ta
   * 이미지 업로드
 
     ```shell
-    # docker push docker_hub_id/리포지토리_이름:버전
+    # docker push [docker_hub_id]/[리포지토리_이름:버전]
     docker push hjyuni/my-repo:streamlitv1
     ```
 
@@ -1459,7 +1466,7 @@ docker-compose -f /home/jyoon/TIL/Docker&K8s/com_folder/docker-compose.yml down
 
 ```yaml
 version: "3"
-
+# 컨테이너 정보
 services:
   # JupyterLab
   jupyter:
@@ -1474,11 +1481,11 @@ services:
     
     shm_size: 4G
 
-    working_dir: /home/jyoon/work
+    working_dir: /home/jovyan/work
 
     volumes:
-      - .:/home/jyoon/work
-
+      - .:/home/jovyan/work
+    # root 사용 지양
     user: root
 
     environment:
@@ -1514,12 +1521,36 @@ docker-compose up --build
 * 전체적인 제어를 담당하는 마스터 노드와 실제 동작을 담당하는 워커노드로 구성되어 있음
 * docker compose + 모니터링 기능
 * 사람이 개입해서 컨테이너를 삭제하면 안됨
+* 많은 컨테이너를 효율적으로 관리
+* workload 관리 자동화 : 자동으로 레플리카 줄였다가 늘렸다가..
+* 배포, 관리, 확장, 네트워킹을 자동화
+* 컨테이너 life-cycle을 관리 및 자동화
 
 ## 0. Install 
 
 ### 0-1. kubectl
 
 > https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+
+* k8s 클러스터를 관리하는 cli tool
+* 리소스 생성, 업데이터, 삭제
+* 디버그, 모니터링, 트러블 슈팅
+* 클러스터 관리
+* 기초 사용 command
+
+  * `kubectl [command] [TYPE] [NAME] [flag]`
+    * TYPE : 리소스 타입(pod, service, deployment)
+    * NAME : 리소스 이름
+    * flag : 부가 옵션
+  * `kubectl get pods` : 파드 리스트 조회
+    * `kubectl get po -A`: 모든 파드 조회
+  * `kubectl get services` : 서비스 리스트 조회
+  * `kubectl apply -f a.yml` : 파일에 정의된 내용 적용
+  * `kubectl delete -f a.yml` : 파일에 정의된 내용 삭제
+  * `kubectl describe nodes [node-name]` : 지정 노드에 대한 상세 정보 출력
+  * `kubectl delete pod [pod-name]` : 지정 파드 삭제
+  * `kubectl get po` : 모든 파드 정보
+* install
 
 ```shell
 sudo apt-get update
@@ -1538,6 +1569,8 @@ kubectl version --client
 ### 0-2. minikube
 
 > https://minikube.sigs.k8s.io/docs/start/
+
+* `minikube dashboard` : 쿠버네티스 web ui 확인
 
 ```shell
 sudo apt update
@@ -1568,20 +1601,22 @@ minikube stop
 * 클러스터
   * 마스터 노드와 워커노드로 구성된 쿠버네티스 시스템
   * 마스터 노드에 설정된 내용에 따라 워커 노드가 관리됨
-
 * 마스터 노드
   * 전반적인 감독
   * 컨테이너를 실행하지는 않음 따라서 도커 엔진이 설치되지 않음
   * 워커 노드에서 실행되는 컨테이너를 관리하는 역할
   * 컨트롤 플레인을 통해 워커노드 관리
-    * kube-apiserver : 외부와 통신하는 프로세스, kubectl로 명령 전달받아 실행
-    * kube-controller-manager : 컨트롤러 통합 관리, 실행
-    * kube-scheduler : 파드를 워커 노드에 할당
+    * kube-apiserver : 외부와 통신하는 프로세스, kubectl로 명령 전달받아 실행, 구성요소들의 정보/제어를 제공하는 API서버
+    * kube-controller-manager : 컨트롤러 통합 관리, 실행, 리소스 제어
+    * kube-scheduler : 파드를 워커 노드에 할당, 파드 감시 관리
     * cloud-controller-manager : 클라우드 서비스와 연동해 서비스 생성
     * etcd : 클러스터 관련 정보 전반을 관리하는 db
-
 * 워커 노드
   * 서버에 해당하는 부분, 컨테이너가 실제 동작하는 서버, 엔진이 설치되어 있어야 함
+  * 구성
+    * kubelet : 각 노드를 관리하는 에이전트, 노드 내의 컨테이너 관리
+    * kube-proxy : 각 노드의 네트워크 프록시, 컨테이너의 통신을 제어(내부, 외부)
+    * container-runtime : 컨테이너 시작과 중지 제어
 
 ---
 
@@ -1593,20 +1628,143 @@ minikube stop
    * 기본적으로 파드 하나가 컨테이너 하나이지만 컨테이너가 여러 개인 파드도 있을 수 있음
    * 볼륨은 파드에 포함되는 컨테이너가 정보를 공유하기 위해 사용하는 것이어서 파드에 **볼륨이 없는 경우도 많음**
    * 단독으로 정의 파일에 기재되는 경우 드물고 대부분 디플로이먼트에 포함되어 있음
+   * pod의 lifecycle
+     * `Pending`: 파드가 생성중이거나 이미지 다운로드 중 또는 리소스를 할당하기 위해 대기중인 상태
+     * `Running` : 실행 중에 있는 상태
+     * `Succeed` : 정상적으로 생성되고 실행이 종료된 상태
+     * `Failed` : 파드 내에 정상적으로 실행되지 않은 컨테이너가 존재하는 상태
+   
 2. `서비스(service)`
+   
    * 여러 개의 파드를 모은 것
    * 한 서비스가 관리하는 파드는 모두 동일한 구성을 가짐
    * 각 서비스는 자동적으로 고정된 IP주소를 부여받고 이 주소로 들어오는 통신 처리
    * 내부적으로 여러 개의 파드가 있어서 밖에서는 하나의 IP주소만 볼 수 있고 이 주소로 접근하면 서비스가 통신을 적절히 분배해주는 구조
    * 서비스가 분배하는 통신은 한 워커 노드 안으로 국한됨, 여러 워커 노드 간의 분배는 `로드 밸런서` 또는 `인그레스`가 담당
+   
 3. `레플리카세트(replicaset)`
    * 파드의 수를 관리하는 역할
+   * 지정된 숫자만큼의 파드가 항상 클러스터 내에서 실행되도록 지정(default: 1)
    * 파드가 종료됐을 때 모자라는 파드 보충하거나, 정의 파일의 파드의 수 감소하면 감소시키는 역할
    * 레플리카세트가 관리하는 동일한 구성의 파드를 `레플리카(replica)`라고 부름
+   
 4. `디플로이먼트(deployment)`
+   
    * 레플리카세트와 함께 쓰임
    * 파드의 배포를 관리하는 요소
    * 파드에 대한 정보를 갖고 있음
+   * 파드와 레플리카 세트에 대한 선언적 업데이트 제공, 상태를 유지하려고 유지함 -> 따라서 파드 삭제해도 삭제 후 재생성
+   
+5. `네임스페이스(namespaces)`
+
+   * 동일한 물리 클러스터 내에서 논리적인 분리 단위, 리소스를 구분하는 용도
+     * `default`: 네임 스페이스가 없는 오브젝트를 위한 기본 네임스페이스
+     * `kube-system`: 쿠버네티스 시스템에서 생성한 오브젝트를 위한 네임스페이스
+     * `kube-public`: 모든 사용자가 읽기 권한으로 접근 가능한 네임스페이스. 전체 클러스터에서 접근 가능한 리소스를 위해 사용
+
+   ```shell
+   # 네임스페이스 생성
+   kubectl create namespace[or ns] [namespace_name]
+   # 네임스페이스 삭제
+   kubectl delete namespace[or ns] [namespace_name]
+   # 활성 네임 스페이스 변경
+   kubectl config set-context --current --namespace=[namespace_name]
+   ```
+
+6. `rollingUpdate` : pod의 이미지가 변경된 경우 순차적으로 업데이트를 진행
+
+7. `Ingress` : pod와 service와 완전히 독립된 통신 리소스
+
+   > ingress k8s docs: https://kubernetes.io/ko/docs/concepts/services-networking/ingress/
+
+### 2-1. 연습
+
+1. 간단하게 deployment 생성
+
+```shell
+# create deployment
+> kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.4
+> kubectl expose deployment hello-minikube --type=NodePort --port=8080
+> kubectl get services hello-minikube
+> kubectl port-forward service/hello-minikube 7080:8080
+# localhost:7080 접속
+```
+
+```shell
+> kubectl create deployment balanced --image=k8s.gcr.io/echoserver:1.4
+> kubectl expose deployment balanced --type=LoadBalancer --port=8080
+> kubectl get services
+# localhost:8080 접속
+```
+
+2. docker hub에서 이미지를 pull하여 서비스 구성하기
+
+* my-python-streamlitv1.yml
+
+```shell
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: py-streamlitv1
+  labels:
+    app: py-streamlitv1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: py-streamlitv1
+  template:
+    metadata:
+      labels:
+        app: py-streamlitv1
+    spec:
+      containers:
+        - name: py-streamlitv1
+          image: hjyuni/my-repo:streamlitv1
+          ports:
+            - containerPort: 8501
+              name: py-streamlitv1
+      imagePullSecrets:
+        - name: dockersecret
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: py-streamlit-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 8501
+      targetPort: 8501
+  selector:
+    app: py-streamlitv1
+```
+
+* k8s secret 생성
+
+```shell
+kubectl create secret docker-registry dockersecret --docker-username="[Docker Hub 계정]" --docker-password="[Docker Hub 비밀번호]" --docker-server=https://index.docker.io/v1/
+```
+
+* docker hub 이미지 가져와서 구동
+
+> minikube에서 nodeport랑 loadbalancer 구동하기
+>
+> https://minikube.sigs.k8s.io/docs/handbook/accessing/
+
+```shell
+> kubectl apply -f my-python-streamlitv1.yaml
+# check
+> kubectl get all
+> kubectl expose deployment py-streamlitv1 --type=NodePort
+> kubectl get service
+> kubectl get svc
+# minikube service [servie_name] --url
+> minikube service py-streamlitv1 --url
+```
+
+
 
 ---
 
@@ -1614,11 +1772,14 @@ minikube stop
 
 * 매니페스트 파일(manifest file)
   * 파드나 서비스에 대한 설정이 작성되어 있는 파일, 형식은 **JSON 또는 YAML**
-  * 리소스 단위로 분할 작성해도 되고 한 파일에 합쳐도 됨, 한 파일로 작성할 때에는 각 리소스를 '---'로 구분
+  * 리소스 단위로 분할 작성해도 되고 한 파일에 합쳐도 됨, 한 파일로 작성할 때에는 각 리소스를 `---`로 구분
 * 매니페스트 파일에 작성할 내용
-  * API 그룹(`apiVersion:`)&리소스 유형(`kind:`) : 버전 변경되므로 `kubectl api-resources`로 확인할 것
+  * API 그룹(`apiVersion:`)
+    * 쿠버네티스의 api버전, 각 컴포넌트 별로 api 존재
+    * 버전 변경되므로 `kubectl api-resources`로 확인할 것
+  * 리소스 유형(`kind:`)  : 리소스의 종류 설정(Pod, Deployment, Service)
   * 메타데이터(`metadata:`) : 리소스의 이름(name)이나 뒤에 설명(label) 기재
-  * 리소스 내용(`spec:`) : 리소스의 내용 정의, 어떤 리소스를 만들 것인가에 해당하는 부분
+  * 리소스 내용(`spec:`) : 리소스의 내용 정의, 어떤 리소스를 만들 것인가에 해당하는 부분, 컨테이너 명세, 컨테이너 생성정보
 
 ### 3-1. 파드/디플로이먼트/서비스 파일 작성
 
@@ -1674,9 +1835,9 @@ spec:
     * 서비스의 종류
     * 어떤 유형의 IP주소로 접근할지
     * `ClusterIP`: 클러스터IP를 통해 서비스에 접근
-    * `NodePort`: 워커 노드의 IP를 통해 서비스에 접근
-    * `LocalBalancer`: 로드밸런서의 IP를 통해 서비스에 접근, 실무에서 많이 사용하지만 minikube에는 없음
-    * `ExternalName`: 내부에서 외부로 접근, 파드에서 서비스를 통해 외부로 나가기 위한 설정
+    * `NodePort`: 워커 노드의 IP를 통해 서비스에 접근, 노드의 포트를 파드에 할당
+    * `LoadBalancer`: 로드밸런서의 IP를 통해 서비스에 접근, 외부에 제공되는 부하분산 IP/Port 실무에서 많이 사용하지만 minikube에는 없음
+    * `ExternalName`: 내부에서 외부로 접근시 명칭 지정, 파드에서 서비스를 통해 외부로 나가기 위한 설정
   * port 설정
     * `port`: 서비스의 포트
     * `nodePort`: 워커 노드의 포트

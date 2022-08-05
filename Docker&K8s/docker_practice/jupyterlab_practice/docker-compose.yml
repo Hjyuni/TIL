@@ -1,0 +1,27 @@
+version: "3"
+# 컨테이너 정보
+services:
+  # JupyterLab
+  jupyter:
+    build: . 
+
+    command: >-
+      start.sh jupyter lab
+      --NotebookApp.token='' --NotebookApp.password=''
+
+    ports:
+      - 8888:8888
+    
+    shm_size: 4G
+
+    working_dir: /home/jovyan/work
+
+    volumes:
+      - .:/home/jovyan/work
+    # root 사용 지양
+    user: root
+
+    environment:
+      - NB_UID=1000
+      - NB_GID=1001
+      - CHOWN_HOME=yes
