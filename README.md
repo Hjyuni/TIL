@@ -178,3 +178,5 @@
   * docker dockerfile&docker-compose 연습
 * 22/08/05
   * k8s 연습
+* 22/08/06
+  * k8s replica 바꿔서 구동해보기

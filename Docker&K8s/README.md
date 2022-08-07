@@ -1764,6 +1764,42 @@ kubectl create secret docker-registry dockersecret --docker-username="[Docker Hu
 > minikube service py-streamlitv1 --url
 ```
 
+3. replicas 수 바꿔서 구동해보기
+
+* my-python-streamlitv1.yml
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: py-streamlitv1
+  labels:
+    app: py-streamlitv1
+spec:
+  replicas: 2 ⭐
+  selector:
+    matchLabels:
+      app: py-streamlitv1
+  template:
+    metadata:
+      labels:
+        app: py-streamlitv1
+        ...
+```
+
+* 실행
+
+```shell
+kubectl apply -f my-python-streamlitv1.yml
+```
+
+* 확인하기
+
+```shell
+kubectl get pods
+kubectl get rs
+```
+
 
 
 ---

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginxv1
+  labels:
+    app: my-nginxv1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-nginxv1
+  template:
+    metadata:
+      labels:
+        app: my-nginxv1
+    spec:
+      containers:
+      - name: my-nginxv1
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+          name: my-nginxv1
+        volumeMounts:
+        - name: my-nginx-hostpath-volumes
+          mountPath: /usr/share/nginx/html
+      volumes:
+        - name: my-nginx-hostpath-volumes
+          hostPath:
+            path: /run/desktop/mnt/host/c/k8s_lab2/nginxlab/html
+            
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 31000
+  selector:
+    app: my-nginxv1
