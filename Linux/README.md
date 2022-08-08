@@ -67,8 +67,14 @@ xkb_symbols "meta_alt" {
 ## 4) typora 설치
 
 ```shell
->>> wget https://download.typora.io/linux/typora_0.11.18_amd64.deb
->>> sudo apt install ./typora (tab키)
+# or run:
+# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE
+>>> wget -qO - https://typora.io/linux/public-key.asc | sudo tee /etc/apt/trusted.gpg.d/typora.asc
+# add Typora's repository
+>>> sudo add-apt-repository 'deb https://typora.io/linux ./'
+>>> sudo apt update
+# install typora
+>>> sudo apt install typora
 ```
 
 ---
