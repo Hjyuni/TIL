@@ -548,3 +548,11 @@
 
 * 웹 상에서 발생 가능한 모든 이벤트(마우스 클릭, 키보드 치기,,,)
 * `<input>`의 onclick, onchange, onkeydown 등등..
+
+---
+
+### 3-2. data type
+
+> mdn data type: https://developer.mozilla.org/ko/docs/Web/JavaScript/Data_structures
+>
+> mdn string: https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/String
