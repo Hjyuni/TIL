@@ -337,6 +337,12 @@ exit
 
 ### 2. sonatype/nexus3
 
+> 참고 사이트1: https://www.theteams.kr/teams/6045/post/698017
+>
+> 참고 사이트2: https://dev-youngjun.tistory.com/105
+
+* nexus : 저장 관리자 프로젝트
+
 ```bash
 docker run -it --name nexus -p 8081:8081 -d sonatype/nexus3
 
@@ -354,6 +360,10 @@ cat nexus-data/admin.password
 
 
 ### 3. gitlab (server)
+
+> Git vs GitHub : https://velog.io/@leyuri/Github-%EA%B3%BC-Gitlab-%EC%9D%98-%EC%B0%A8%EC%9D%B4
+
+* gitlab : 비공개된 github
 
 ```bash
 docker run --name gitlab -it -p 8090:80 -d gitlab/gitlab-ee:latest
@@ -374,6 +384,10 @@ cat /etc/gitlab/initial_root_password
 
 
 ### 4. jenkins
+
+> 참고사이트: https://ict-nroo.tistory.com/31
+
+* jenkins: SW개발 시 지속적으로 통합 서비스(CI)를 제공하는 툴
 
 ```bash
 docker run --name jenkins -it -p 8080:8080 -d jenkins/jenkins
