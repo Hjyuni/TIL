@@ -180,3 +180,11 @@
   * k8s 연습
 * 22/08/06
   * k8s replica 바꿔서 구동해보기
+* 22/08/07
+  * k8s로 웹서버 띄우기 연습
+* 22/08/09
+  * js datatype
+* 22/08/10
+  * nexus, gitlab, jenkins란
+* 22/08/11
+  * SQL system
