@@ -16,5 +16,34 @@
         }
       </script>
     </ul>
+
+    <h2>Loop & Array 활용하기</h2>
+    <ul>
+      <li><a href="">1.abc</a></li>
+      <li><a href="">2.def</a></li>
+      <li><a href="">3.ghi</a></li>
+    </ul>
+
+    <input id="pink_btn" type="button" value="orange" onclick="
+    let target = document.querySelector('body')
+    if(this.value==='orange'){
+      target.style.backgroundColor = 'orange';
+      target.style.color = 'white';
+      this.value = 'white';
+
+      let alist = document.querySelectorAll('a')
+      for (let i = 0; i < alist.length; i++){
+        alist[i].style.color = 'yellow';
+      }
+    } else{
+      target.style.backgroundColor = 'white';
+      target.style.color = 'black';
+      this.value = 'orange';
+
+      let alist = document.querySelectorAll('a')
+      for (let i = 0; i < alist.length; i++){
+        alist[i].style.color = '';
+      }
+    }">
 </body>
 </html>

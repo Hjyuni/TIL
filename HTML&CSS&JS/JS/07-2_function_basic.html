@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>함수 기본</title>
+</head>
+<body>
+  <h1>Function</h1>
+    <h2>Basic</h2>
+    <ul>
+      <script>
+        function two(){
+          document.write('<li>2-1</li>');
+          document.write('<li>2-2</li>');
+        }
+        document.write('<li>1</li>');
+        two();
+        document.write('<li>3</li>');
+        two();
+      </script>
+    </ul>
+
+    <h2>Parameter & Argument</h2>
+    <script>
+      function onePlusOne(){
+        document.write((1+1)+'<br>');
+      };
+      onePlusOne();
+
+      function sum(arg1,arg2){
+        // document.write('<br>'+arg1+arg2) => 맨 앞의 타입에 따라 string 타입으로 더해짐 
+        document.write((arg1+arg2)+'<br>') 
+      };
+      sum(100,200);
+      function sumColorRed(arg1,arg2){
+        document.write('<div style="color:red">'+(arg1+arg2)+'</div><br>')
+      }
+      sumColorRed(10,20);
+    </script>
+
+    <h2>return</h2>
+    <script>
+      function sum2(arg1,arg2){
+        return arg1+arg2
+      }
+      document.write('<div style="color:red">'+sum2(1,5)+'</div><br>')
+      document.write('<div style="font-size:100px">'+sum2(1,5)+'</div><br>')
+
+    </script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-# HTML / CSS
+# HTML / CSS / JS
 
 ## 1) HTML
 
@@ -564,3 +564,19 @@
 ⭐`===`은 엄격한 비교
 
 ⭐`==`타입이 달라도 자동으로 변형 후 비교(1=='1' -> true)
+
+---
+
+### 3-3. array
+
+> w3schools array: https://www.w3schools.com/jsref/jsref_push.asp
+
+---
+
+### 3-4. function
+
+> `window`객체란? https://bigtop.tistory.com/48
+>
+> `this` vs `self`: https://velog.io/@woohyun_park/self-vs-this
+>
+> self란? https://geundung.dev/101 
