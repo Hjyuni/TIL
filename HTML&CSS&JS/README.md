@@ -556,3 +556,11 @@
 > mdn data type: https://developer.mozilla.org/ko/docs/Web/JavaScript/Data_structures
 >
 > mdn string: https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/String
+
+* 비교 연산자
+
+> `===`와`==`의 차이: https://velog.io/@filoscoder/-%EC%99%80-%EC%9D%98-%EC%B0%A8%EC%9D%B4-oak1091tes
+
+⭐`===`은 엄격한 비교
+
+⭐`==`타입이 달라도 자동으로 변형 후 비교(1=='1' -> true)

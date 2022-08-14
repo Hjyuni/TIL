@@ -188,3 +188,11 @@
   * nexus, gitlab, jenkins란
 * 22/08/11
   * SQL system
+* 22/08/14
+  * JS
+    * 비교연산자와 boolean
+    * 조건문
+    * refactoring
+    * 배열
+    * 반복문
+    * 반복문&배열

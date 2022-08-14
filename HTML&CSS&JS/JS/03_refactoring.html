@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>refactoring</title>
+</head>
+<body>
+  <div>
+    <h1>REFACTORING</h1>
+    <h2>BEFORE</h2>
+		<input id="pink_btn" type="button" value="pink" onclick="
+			if(document.querySelector('#pink_btn').value==='pink'){
+				document.querySelector('body').style.backgroundColor = 'pink';
+				document.querySelector('body').style.color = 'white';
+				document.querySelector('#pink_btn').value = 'white';
+			} else{
+				document.querySelector('body').style.backgroundColor = 'white';
+				document.querySelector('body').style.color = 'salmon';
+				document.querySelector('#pink_btn').value = 'pink';
+			}">
+
+    <h2>AFTER</h2>
+    <input id="pink_btn" type="button" value="orange" onclick="
+    let target = document.querySelector('body')
+    if(this.value==='orange'){
+      target.style.backgroundColor = 'orange';
+      target.style.color = 'white';
+      this.value = 'white';
+    } else{
+      target.style.backgroundColor = 'white';
+      target.style.color = 'black';
+      this.value = 'orange';
+    }">
+	</div>
+</body>
+</html>
