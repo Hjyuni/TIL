@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object기초</title>
+</head>
+<body>
+    <h1>Object</h1>
+    <h2>Create</h2>
+    <script>
+      // 객체 생성
+      let info = {
+        "name":"hjy",
+        "age":25
+      };
+      document.write("Her name is "+info.name+"<br>");
+      document.write(info.age+"<br>");
+      // 객체 추가
+      info.hobby = "tennis";
+      document.write(info.hobby+"<br>");
+      info["favorite things"] = "?";
+      document.write(info["favorite things"]+"<br>");
+    </script>
+
+    <h2>Iterate</h2>
+    <script>
+      for(let key in info){
+        document.write(key+"<br>")
+        document.write(info[key]+"<br>")
+      }
+    </script>
+
+    <h2>Property & Method</h2>
+    <!-- Method: 객체에 소속된 함수
+        Property: 객체에 소속된 변수 -->
+    <script>
+      info.showAll = function(){
+          for(let key in this){
+          document.write(key+"<br>")
+          document.write(this[key]+"<br>")
+        }
+      }
+      info.showAll();
+    </script>
+</body>
+</html>

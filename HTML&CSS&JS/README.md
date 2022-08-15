@@ -535,7 +535,10 @@
 
 ## 3) JS
 
-> 생활코딩 : https://opentutorials.org/course/3085/18869
+> * 생활코딩 : https://opentutorials.org/course/3085/18869
+>
+> * 코딩앙마 js 초급: https://www.youtube.com/watch?v=KF6t61yuPCY
+> * 코딩앙마 js 중급: https://www.youtube.com/watch?v=4_WLS9Lj6n4
 
 ### 3-0. intro
 
@@ -580,3 +583,13 @@
 > `this` vs `self`: https://velog.io/@woohyun_park/self-vs-this
 >
 > self란? https://geundung.dev/101 
+>
+> scope란? https://medium.com/@su_bak/javascript-%EC%8A%A4%EC%BD%94%ED%94%84-scope-%EB%9E%80-bc761cba1023
+
+---
+
+### 3-5. object
+
+* 객체: **연관된 함수와 연관된 변수들을 그루핑해서 정리정돈하기 위한** 수납 상자로서 존재
+
+* 메소드(method): 객체에 속해있는 함수

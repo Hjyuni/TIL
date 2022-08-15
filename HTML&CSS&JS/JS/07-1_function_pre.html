@@ -6,28 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>함수 미리보기</title>
     <script>
+      function setColor(color){
+        let alist = document.querySelectorAll('a')
+          for (let i = 0; i < alist.length; i++){
+            alist[i].style.color = color;
+      }
+    }
       function nightDayHandler(self){
         let target = document.querySelector('body')
         if(self.value==='orange'){
           target.style.backgroundColor = 'orange';
           target.style.color = 'white';
           self.value = 'white';
-
-          let alist = document.querySelectorAll('a')
-          for (let i = 0; i < alist.length; i++){
-            alist[i].style.color = 'yellow';
-          }
+          setColor('yellow');
         } else{
           target.style.backgroundColor = 'white';
           target.style.color = 'black';
           self.value = 'orange';
-
-          let alist = document.querySelectorAll('a')
-          for (let i = 0; i < alist.length; i++){
-            alist[i].style.color = '';
+          setColor('');
           }
         }
-      }
     </script>
 </head>
 <body>
