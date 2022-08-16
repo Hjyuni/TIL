@@ -593,3 +593,12 @@
 * 객체: **연관된 함수와 연관된 변수들을 그루핑해서 정리정돈하기 위한** 수납 상자로서 존재
 
 * 메소드(method): 객체에 속해있는 함수
+
+---
+
+### 3-6. ajax
+
+> fetch API란? https://fansor.tistory.com/13
+>
+> localhost에서 구동: https://threejs.org/docs/#manual/ko/introduction/How-to-run-things-locally
+

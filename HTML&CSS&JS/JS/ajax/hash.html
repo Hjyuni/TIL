@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  Ajax의 문제점 -> 화면이 바뀔때마다 url이 바뀌지 않고 태그 속성들이 제대로 적용되지 않음<br>
+  <a href="#three">three</a>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione molestias, quia iure aliquid et placeat magnam nobis. Dolor expedita soluta consequatur! Illum assumenda obcaecati possimus veniam quod commodi hic eius quasi, quo maxime consequuntur itaque eveniet, explicabo eaque? Iusto temporibus veritatis nostrum inventore recusandae adipisci aperiam labore quae culpa, enim rem reprehenderit voluptate nesciunt quia doloribus veniam molestias ad deleniti, expedita quis obcaecati voluptatem voluptas. Dignissimos at iusto numquam nobis voluptatibus, doloremque maxime tempora ipsa dolor laborum commodi odit esse eveniet ducimus est laboriosam vel qui officiis possimus repudiandae distinctio incidunt fugiat pariatur dolorem. Quam ullam necessitatibus architecto? Deleniti, accusantium?
+  </p>
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Non enim quo dolores quisquam odio placeat fuga similique at labore aperiam modi ipsa est nostrum nam illum cum vitae, iste omnis, repellendus ducimus amet. Natus laboriosam quaerat, magnam labore porro a, quia, rem deleniti consectetur ratione ipsum. Nobis quas saepe quia obcaecati vitae molestias illo cumque blanditiis quisquam. Maiores, non. Molestias eveniet at deleniti! Autem commodi saepe excepturi magni, nesciunt voluptates voluptatibus minus delectus fugiat cum repudiandae! Eaque labore delectus omnis non at nisi sit perspiciatis facere officiis blanditiis veritatis, nostrum sed incidunt magnam pariatur reiciendis ipsum! Ipsum nemo fugiat est?
+  </p>
+  <!-- localhost:8000/hash.html#three 식으로 url 뒤에 아이디 붙임 이 구간으로 이동 -->
+  <p id="three">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis mollitia beatae, voluptatum sed repellendus ea. Deleniti modi doloribus neque facere nulla tenetur? Quod assumenda molestiae neque sed, inventore adipisci perferendis fugit beatae, ducimus unde consectetur autem earum quasi ipsum similique. Harum quas tenetur rerum architecto illo consectetur earum magnam obcaecati distinctio, reiciendis quos iusto, consequuntur id delectus quaerat voluptatum nobis iure culpa laboriosam quidem omnis perferendis, similique cum laborum! Ipsam vero iste aspernatur architecto deserunt ut, tempora animi distinctio perspiciatis eveniet, facilis commodi in ipsa impedit consequuntur at, iusto nam id provident quisquam possimus fuga? Voluptatum, impedit. Suscipit, labore esse!
+  </p>
+  <script>
+    if(location.hash){
+      // Fragment exist
+      console.log(location.hash);
+      // substr, substring, slice 차이점: https://hianna.tistory.com/340
+      console.log(location.hash.substr(1));
+    } else{
+      // Fragment doesn't exist
+    };
+  </script>
+</body>
+</html>
