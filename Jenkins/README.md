@@ -68,7 +68,7 @@
 * manage jenkins > Global Tool Configuration
 * JDK, Git, Maven 각자 경로에 맞게 추가하기
 
-![image-20220817111755356](C:\Users\hjy07\AppData\Roaming\Typora\typora-user-images\image-20220817111755356.png)
+![image-20220817111755356](https://user-images.githubusercontent.com/106982737/185412989-3fd46221-5133-41a4-91dc-0d0771cd4039.png)
 
 ![image-20220817111817123](C:\Users\hjy07\AppData\Roaming\Typora\typora-user-images\image-20220817111817123.png)
 
