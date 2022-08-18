@@ -1,10 +1,10 @@
 let http = require('http');
 let fs = require('fs');
-let url = require('url');
+// let url = require('url');
 
 let app = http.createServer(function(request,response){
     let _url = request.url;
-    let queryData = url.parse(_url, true).query;
+    // let queryData = url.parse(_url, true).query;
     console.log(queryData);
     if(_url == '/'){
       _url = '/index.html';
