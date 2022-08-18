@@ -70,13 +70,13 @@
 
 ![image-20220817111755356](https://user-images.githubusercontent.com/106982737/185412989-3fd46221-5133-41a4-91dc-0d0771cd4039.png)
 
-![image-20220817111817123](C:\Users\hjy07\AppData\Roaming\Typora\typora-user-images\image-20220817111817123.png)
+![image-20220817111817123](https://user-images.githubusercontent.com/106982737/185413916-593d050d-91d1-4da0-970a-070eec43efe7.png)
 
-![image-20220817111837056](C:\Users\hjy07\AppData\Roaming\Typora\typora-user-images\image-20220817111837056.png)
+![image-20220817111837056](https://user-images.githubusercontent.com/106982737/185414048-3f298c85-3784-4b97-a0ab-a380a30aee15.png)
 
 * Manage jenkins > manage plugins
 
-![image-20220817112246928](C:\Users\hjy07\AppData\Roaming\Typora\typora-user-images\image-20220817112246928.png)
+![image-20220817112246928](https://user-images.githubusercontent.com/106982737/185414061-d104d321-5da1-4b85-8d3c-b007380346eb.png)
 
 * `C:\Program Files\Maven\apache-maven-3.8.6\conf\settings.xml` 들어가서 161 번째 줄 http > https로 바꾸기
 
