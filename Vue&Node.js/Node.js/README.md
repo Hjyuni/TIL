@@ -62,3 +62,33 @@ fs.readFile('/Users/joe/test.txt', 'utf8', (err, data) => {
 });
 ```
 
+---
+
+## 3. NPM(Package Manager)
+
+* Node.js에서 가장 많이 쓰는 패키지 매니저
+
+* PM2: 프로그램이 꺼지거나, 수정 후에 다시 시작해야 하는데 이걸 자동으로 시켜주는 패키지
+
+> document: https://pm2.keymetrics.io/docs/usage/quick-start/
+
+```shell
+# install
+npm install pm2 -g
+# start
+pm2 start [app.js]
+# monitoring
+pm2 monit
+# list
+pm2 list
+# stop
+# pm2 stop [prcess list name]
+pm2 stop main
+# watch
+# 수정할 때마다 껐다키지 않아도 됨
+# pm2 start [app.js] --watch
+pm2 start main.js --watch
+# check error
+pm2 log
+```
+
