@@ -48,6 +48,18 @@ nvm list
 
 ## 2. CRUD
 
+* CREATE: https://nodejs.org/api/fs.html#fswritefilefile-data-options-callback
+
+```js
+writeFile('message.txt', data, (err) => {
+  // err일 때를 제외하고
+  if (err) throw err;
+  console.log('The file has been saved!');
+});
+```
+
+
+
 * READ :https://nodejs.dev/en/learn/reading-files-with-nodejs
 
 ```js

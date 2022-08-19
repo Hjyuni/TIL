@@ -208,3 +208,7 @@
   * jenkins 설치
 * 22/08/18
   * node.js 기초
+* 22/08/19
+  * node.js app구현 기초
+* 22/08/20
+  * node.js CRUD
