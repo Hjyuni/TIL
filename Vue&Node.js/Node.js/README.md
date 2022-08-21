@@ -104,3 +104,12 @@ pm2 start main.js --watch
 pm2 log
 ```
 
+* install sanitize-html
+
+```shell
+# npm init
+npm init
+# install
+npm install -S sanitize-html
+```
+

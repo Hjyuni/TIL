@@ -2,6 +2,10 @@ let http = require('http');
 let fs = require('fs');
 let url = require('url');
 let qs = require('querystring');
+// security
+let path = require('path');
+// 태그 삭제해버리는 모듈
+let sanitizeHtml = require('sanitize-html');
 
 // template object
 let template = require('./module/template.js');
@@ -24,14 +28,18 @@ let app = http.createServer((request,response)=>{
         });
       } else{
           fs.readdir('./data/',(err,filelist)=>{
-            fs.readFile(`data/${queryData.id}`, 'utf8', (err, description)=>{
+            // 외부에서 들어오고 나오는 정보를 보호
+            let filter = path.parse(queryData.id).base;
+            fs.readFile(`data/${filter}`, 'utf8', (err, description)=>{
               let title = queryData.id;
               let list = template.list(filelist);
+              let sanitizeTitle = sanitizeHtml(title);
+              let sanitizeDes = sanitizeHtml(description, {allowedTags:['h1']});
               // delete는 링크로 만들면 그 링크를 다른사람에게 보낼 수 있으므로 링크형식으로 구현하면 안되고 form으로 해야함
-              let html = template.html(title, list, `<h2>${title}</h2>${description}`,`<a href="/create">CREATE</a> 
-                                                                                            <a href="/update?id=${title}">UPDATE</a>
+              let html = template.html(sanitizeTitle, list, `<h2>${sanitizeTitle}</h2>${sanitizeDes}`,`<a href="/create">CREATE</a> 
+                                                                                            <a href="/update?id=${sanitizeTitle}">UPDATE</a>
                                                                                             <form action="/delete_process" method="post">
-                                                                                              <input type="hidden" name="id" value="${title}">
+                                                                                              <input type="hidden" name="id" value="${sanitizeTitle}">
                                                                                               <input type="submit" value="delete">
                                                                                             </form>
                                                                                             `);
@@ -78,7 +86,9 @@ let app = http.createServer((request,response)=>{
         });
     } else if(pathName==='/update') { 
         fs.readdir('./data/',(err,filelist)=>{
-          fs.readFile(`data/${queryData.id}`, 'utf8', (err, description)=>{
+          // 외부에서 들어오고 나오는 정보를 보호
+          let filter = path.parse(queryData.id).base;
+          fs.readFile(`data/${filter}`, 'utf8', (err, description)=>{
             let title = queryData.id;
             let list = template.list(filelist);
             let html = template.html(title, list, 
@@ -112,7 +122,9 @@ let app = http.createServer((request,response)=>{
           let description = post.description;
           // 글 제목 바꾸기
           // fs.rename([old_path],[new_path],callback)
-          fs.rename(`./data/${id}`, `./data/${title}`, (err)=>{
+          // 외부에서 들어오고 나오는 정보를 보호
+          let filter = path.parse(id).base;
+          fs.rename(`./data/${filter}`, `./data/${title}`, (err)=>{
             fs.writeFile(`./data/${title}`, description, 'utf8', (err)=>{
               // err일 때를 제외하고
               if (err) throw err;
