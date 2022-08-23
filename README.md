@@ -215,3 +215,8 @@
   * node.js Module화
 * 22/08/21
   * node.js 보안
+* 22/08/22
+  * node.js-mysql CRUD
+* 22/08/23
+  * node.js-mysql author CRUD
+  * node.js-mysql 보안
