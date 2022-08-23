@@ -10,3 +10,16 @@
 npm install express -S
 ```
 
+# express-generator
+
+* install
+
+```shell
+npm install express-generator -g
+# create app
+express myapp
+cd myapp
+npm install
+npm start
+```
+
