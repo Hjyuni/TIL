@@ -6,10 +6,31 @@ let qs = require('querystring');
 let path = require('path');
 // 태그 삭제해버리는 모듈
 let sanitizeHtml = require('sanitize-html');
+let cookie = require('cookie')
 
 // template object
 let template = require('./module/template.js');
-console.log(template)
+
+function authIsOwner(req,res){
+  let isOwner = false;
+  let cookies = {}
+  if (req.headers.cookie) {
+  cookies = cookie.parse(req.headers.cookie)
+  }
+  if (cookies.email === '1@gmail.com' && cookies.password === '111111'){
+    isOwner = true;
+  }
+  return isOwner;
+}
+
+function authStatusUI(req,res) {
+  let authStatusUI = `<a href="/login">login</a>`
+  if (authIsOwner(req,res)){
+    authStatusUI = `<a href="/logout_process">logout</a>`
+  }
+  return authStatusUI
+}
+
 let app = http.createServer((request,response)=>{
     let _url = request.url;
     let queryData = url.parse(_url, true).query;
@@ -22,7 +43,7 @@ let app = http.createServer((request,response)=>{
           title = "hello"
           description = "node.js"
           let list = template.list(filelist);
-          let html = template.html(title, list, `<h2>${title}</h2>${description}`,`<a href="/create">CREATE</a>`);
+          let html = template.html(title, list, `<h2>${title}</h2>${description}`,`<a href="/create">CREATE</a>`,authStatusUI(request,response));
           response.writeHead(200);
           response.end(html);
         });
@@ -42,13 +63,17 @@ let app = http.createServer((request,response)=>{
                                                                                               <input type="hidden" name="id" value="${sanitizeTitle}">
                                                                                               <input type="submit" value="delete">
                                                                                             </form>
-                                                                                            `);
+                                                                                            `,authStatusUI(request,response));
               response.writeHead(200);
               response.end(html);
               });
             });
           }
     } else if(pathName === '/create'){
+        if(authIsOwner(request, response) === false){
+          response.end('Login required!!');
+          return false;
+        }
         fs.readdir('./data/',(err,filelist)=>{
           title = "create"
           description = "node.js"
@@ -61,11 +86,15 @@ let app = http.createServer((request,response)=>{
           <p>
             <input type="submit">
           </p>
-        </form>`,'');
+        </form>`,'',authStatusUI(request,response));
           response.writeHead(200);
           response.end(html);
         });
     } else if(pathName === '/create_process'){
+        if(authIsOwner(request, response) === false){
+          response.end('Login required!!');
+          return false;
+        }
         let body = '';
         // post로 전송한 데이터가 많은 경우 특정한 양만 데이터를 수신할 때 사용
         request.on('data', (data)=>{
@@ -84,7 +113,11 @@ let app = http.createServer((request,response)=>{
             response.end('success');              
           })
         });
-    } else if(pathName==='/update') { 
+    } else if(pathName==='/update') {
+        if(authIsOwner(request, response) === false){
+          response.end('Login required!!');
+          return false;
+        } 
         fs.readdir('./data/',(err,filelist)=>{
           // 외부에서 들어오고 나오는 정보를 보호
           let filter = path.parse(queryData.id).base;
@@ -103,12 +136,16 @@ let app = http.createServer((request,response)=>{
               <input type="submit">
             </p>
           </form>`,
-          `<a href="/create">CREATE</a> <a href="/update?id=${title}">UPDATE</a>`);
+          `<a href="/create">CREATE</a> <a href="/update?id=${title}">UPDATE</a>`,authStatusUI(request,response));
             response.writeHead(200);
             response.end(html);
           });
         });
     } else if(pathName === "/update_process"){
+        if(authIsOwner(request, response) === false){
+          response.end('Login required!!');
+          return false;
+        }
         let body = '';
         // post로 전송한 데이터가 많은 경우 특정한 양만 데이터를 수신할 때 사용
         request.on('data', (data)=>{
@@ -133,9 +170,12 @@ let app = http.createServer((request,response)=>{
               response.end('success');              
             });
           });
-          console.log(post)
         });
     } else if(pathName === "/delete_process"){
+        if(authIsOwner(request, response) === false){
+          response.end('Login required!!');
+          return false;
+        }
         let body = '';
         // post로 전송한 데이터가 많은 경우 특정한 양만 데이터를 수신할 때 사용
         request.on('data', (data)=>{
@@ -156,9 +196,65 @@ let app = http.createServer((request,response)=>{
             response.writeHead(302, {Location: `/`});
             response.end('success');              
           });
-          console.log(post)
         });
-      } else {
+      } else if (pathName === '/login') {
+          fs.readdir('./data/',(err,filelist)=>{
+            title = "login"
+            description = "node.js"
+            let list = template.list(filelist);
+            let html = template.html(title, list, `<form action="/login_process" method="post">
+                <p><input type="text" name="email" placeholder="email"></p>
+                <p><input type="password" name="password" placeholder="password"></p>
+                <p>
+                  <input type="submit">
+                </p>
+            </form>`,`<a href="/create">create</a>`);
+          response.writeHead(200);
+          response.end(html);
+        });
+      } else if(pathName==='/login_process'){
+        let body = '';
+        request.on('data', (data)=>{
+          body += data;
+        });
+
+        request.on('end', (end)=>{
+          let post = qs.parse(body);
+          if(post.email==='1@gmail.com' && post.password === '111111'){
+            response.writeHead(302, {
+              'Set-Cookie':[
+                `email=${post.email}`,
+                `password=${post.password}`,
+                `nickname=egoing`
+              ],
+              Location: `/`});
+          } else {
+            response.end('Who?')
+          }
+            response.end('success');              
+          });
+      } else if (pathName === '/logout_process') {
+        if(authIsOwner(request, response) === false){
+          response.end('Login required!!');
+          return false;
+        }
+        let body = '';
+        request.on('data', (data) => {
+          body = body + data;
+        });
+        request.on('end', () => {
+          var post = qs.parse(body);
+          response.writeHead(302, {
+            'Set-Cookie': [
+              `email=; Max-Age=0`,
+              `password=; Max-Age=0`,
+              `nickname=; Max-Age=0`
+            ],
+            Location: `/`
+          });
+          response.end();
+        });
+      }else {
           // 404 에러 났을 때 처리하는 법
           response.writeHead(404);
           response.end('Not Found');

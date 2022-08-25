@@ -1,6 +1,6 @@
 // template object
 let template = {
-  html:(title, list, body, control) => {
+  html:(title, list, body, control,authStatusUI=`<a href="/login">login</a>`) => {
     return `
     <!doctype html>
     <html>
@@ -9,6 +9,7 @@ let template = {
       <meta charset="utf-8">
     </head>
     <body>
+      ${authStatusUI}
       <h1><a href="/">WEB</a></h1>
       ${list}
       ${control}
