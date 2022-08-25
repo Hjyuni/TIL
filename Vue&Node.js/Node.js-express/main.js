@@ -11,35 +11,43 @@ let compression = require('compression');
 let helmet = require('helmet')
 let session = require('express-session')
 let FileStore = require('session-file-store')(session)
+// npm install -S connect-flash
+let flash = require('connect-flash');
+
+let authData = {
+  email:'1@gmail.com',
+  password:'1111',
+  nickname:'haha'
+}
 
 app.use(helmet());
+
+// bodyParser.urlencoded({extended:false}): 사용자가 요청할 때마다 실행되는 미들웨어
+// 시용자가 전송한 post데이터를 내부적으로 분석해서 모든 데이터를 가져온 다음에 callback을 호출하도록 약속되어있음
+// 호출하면서 request에 body라는 property를 붙여줌
+app.use(bodyParser.urlencoded({extended:false}));
 
 app.use(session({
   // secret: 실제론 비워놔야함
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
-  store: new FileStore()
+  // store: new FileStore()
 }));
+app.use(flash());
 // npm install -S passport
 // npm install -S passport-local
 // passport는 session을 바탕으로 하기 때문에 session밑에다가 넣어줘야함
-let passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
+let passport = require('./lib/passport')(app);
 
 let indexRouter = require('./routes/index');
 let topicRouter = require('./routes/topic');
-let authRouter = require('./routes/auth');
+let authRouter = require('./routes/auth')(passport);
 
 
 // 정적인 파일 서비스하기 위한 미들웨어
 // public파일 안에서 정적 파일을 찾겠다
 app.use(express.static('public'));
-
-// bodyParser.urlencoded({extended:false}): 사용자가 요청할 때마다 실행되는 미들웨어
-// 시용자가 전송한 post데이터를 내부적으로 분석해서 모든 데이터를 가져온 다음에 callback을 호출하도록 약속되어있음
-// 호출하면서 request에 body라는 property를 붙여줌
-app.use(bodyParser.urlencoded({extended:false}));
 
 // 사용자가 많은 내용의 글을 작성하여 요청했을 때 압축해주는 미들웨어
 app.use(compression());
