@@ -9,10 +9,28 @@ let bodyParser = require('body-parser');
 let compression = require('compression');
 // npm install helmet -S
 let helmet = require('helmet')
+let session = require('express-session')
+let FileStore = require('session-file-store')(session)
+
 app.use(helmet());
 
-let indexRouter = require('./routes/index')
-let topicRouter = require('./routes/topic')
+app.use(session({
+  // secret: 실제론 비워놔야함
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  store: new FileStore()
+}));
+// npm install -S passport
+// npm install -S passport-local
+// passport는 session을 바탕으로 하기 때문에 session밑에다가 넣어줘야함
+let passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+
+let indexRouter = require('./routes/index');
+let topicRouter = require('./routes/topic');
+let authRouter = require('./routes/auth');
+
 
 // 정적인 파일 서비스하기 위한 미들웨어
 // public파일 안에서 정적 파일을 찾겠다
@@ -37,6 +55,8 @@ app.get('*',(req,res,next)=>{
 
 app.use('/',indexRouter);
 app.use('/topic',topicRouter);
+app.use('/auth',authRouter);
+
 
 app.use((req,res,next)=>{
   res.status(404).send('Sorry');
