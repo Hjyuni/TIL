@@ -13,12 +13,7 @@ let session = require('express-session')
 let FileStore = require('session-file-store')(session)
 // npm install -S connect-flash
 let flash = require('connect-flash');
-
-let authData = {
-  email:'1@gmail.com',
-  password:'1111',
-  nickname:'haha'
-}
+let db = require('./lib/db');
 
 app.use(helmet());
 
@@ -55,10 +50,8 @@ app.use(compression());
 // middleware 만들기
 // get방식으로 들어오는 요청에 대해서만 파일 목록만 가져오는 미들웨어
 app.get('*',(req,res,next)=>{
-  fs.readdir('./data',(err,filelist)=>{
-    req.list = filelist;
-    next();
-  });
+  req.list = db.get('topics').value();
+  next();
 });
 
 app.use('/',indexRouter);

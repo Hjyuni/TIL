@@ -5,6 +5,8 @@ let fs = require('fs');
 let sanitizeHtml = require('sanitize-html');
 let template = require('../lib/template.js');
 let auth = require('../lib/auth.js')
+let db = require('../lib/db');
+let shortid = require('shortid');
 
 router.get('/create',(req,res)=>{
   if (!auth.isOwner(req, res)) {
@@ -35,9 +37,14 @@ router.post('/create', (req,res)=>{
   let post = req.body;
   let title = post.title;
   let description = post.description;
-  fs.writeFile(`data/${title}`, description, 'utf8', (err)=>{
-    res.redirect(`/topic/${title}`);
-  });
+  let id = shortid.generate();
+  db.get('topics').push({
+    id: id,
+    title: title,
+    description: description,
+    user_id: req.user.id
+  }).write();
+  res.redirect(`/topic/${id}`);
 });
 
 router.get('/update/:pageId',(req,res)=>{
@@ -45,28 +52,32 @@ router.get('/update/:pageId',(req,res)=>{
     res.redirect('/');
     return false;
   }
-  let filteredId = path.parse(req.params.pageId).base;
-  fs.readFile(`data/${filteredId}`, 'utf8', (err, description)=>{
-    let title = req.params.pageId;
-    let list = template.list(req.list);
-    let html = template.HTML(title, list,
-      `
-      <form action="/topic/update" method="post">
-        <input type="hidden" name="id" value="${title}">
-        <p><input type="text" name="title" placeholder="title" value="${title}"></p>
-        <p>
-          <textarea name="description" placeholder="description">${description}</textarea>
-        </p>
-        <p>
-          <input type="submit">
-        </p>
-      </form>
-      `,
-      `<a href="/topic/create">create</a> <a href="/topic/update/${title}">update</a>`,
-      auth.statusUI(req,res)
-    );
-    res.send(html);
-  });
+  let topic = db.get('topics').find({id:req.params.pageId}).value();
+  req.flash('error', 'Not yours!');
+  if(topic.user_id !== req.user.id){
+    req.flash('error', 'Not yours!');
+    return res.redirect('/');
+  } 
+  let title = topic.title;
+  let description = topic.description;
+  let list = template.list(req.list);
+  let html = template.HTML(title, list,
+    `
+    <form action="/topic/update" method="post">
+      <input type="hidden" name="id" value="${topic.id}">
+      <p><input type="text" name="title" placeholder="title" value="${title}"></p>
+      <p>
+        <textarea name="description" placeholder="description">${description}</textarea>
+      </p>
+      <p>
+        <input type="submit">
+      </p>
+    </form>
+    `,
+    `<a href="/topic/create">create</a> <a href="/topic/update/${topic.id}">update</a>`,
+    auth.statusUI(req,res)
+  );
+  res.send(html);
 });
 
 router.post('/update', (req,res)=>{
@@ -78,11 +89,15 @@ router.post('/update', (req,res)=>{
   let id = post.id;
   let title = post.title;
   let description = post.description;
-  fs.rename(`data/${id}`, `data/${title}`, (error)=>{
-    fs.writeFile(`data/${title}`, description, 'utf8', (err)=>{
-      res.redirect(`/topic/${title}`);
-    });
-  });
+  let topic = db.get('topics').find({id:id}).value();
+  if(topic.user_id !== req.user.id){
+    req.flash('error', 'Not yours!');
+    return res.redirect('/');
+  } 
+  db.get('topics').find({id:id}).assign({
+    title:title, description:description
+  }).write();
+  res.redirect(`/topic/${topic.id}`);
 });
 
 router.post('/delete',(req,res)=>{
@@ -92,39 +107,42 @@ router.post('/delete',(req,res)=>{
   }
   let post = req.body;
   let id = post.id;
-  let filteredId = path.parse(id).base;
-  fs.unlink(`data/${filteredId}`, (error)=>{
-    res.redirect('/');
-  });
+  let topic = db.get('topics').find({id:id}).value();
+  if(topic.user_id !== req.user.id){
+    req.flash('error', 'Not yours!');
+    return res.redirect('/');
+  }
+  db.get('topics').remove({id:id}).write();
+  res.redirect('/');
 });
 
 router.get('/:pageId',(req,res,next)=>{
   // res.send(req.params)
-  fs.readdir('./data', (error, filelist)=>{
-    let filteredId = path.parse(req.params.pageId).base;
-    fs.readFile(`data/${filteredId}`, 'utf8', function(err, description){
-      if (err){
-        next(err);
-      } else{
-        let title = req.params.pageId;
-        let sanitizedTitle = sanitizeHtml(title);
-        let sanitizedDescription = sanitizeHtml(description, {
-          allowedTags:['h1']
-          });
-        let list = template.list(filelist);
-        let html = template.HTML(sanitizedTitle, list,
-          `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`,
-          ` <a href="/topic/create">create</a>
-            <a href="/topic/update/${sanitizedTitle}">update</a>
-            <form action="/topic/delete" method="post">
-              <input type="hidden" name="id" value="${sanitizedTitle}">
-              <input type="submit" value="delete">
-            </form>`,
-            auth.statusUI(req,res)
-          );
-        res.send(html);
-      };
-    });
+  let topic = db.get('topics').find({
+    id: req.params.pageId
+  }).value();
+  let user = db.get('users').find({
+    id:topic.user_id
+  }).value();
+  let sanitizedTitle = sanitizeHtml(topic.title);
+  let sanitizedDescription = sanitizeHtml(topic.description, {
+    allowedTags: ['h1']
   });
+  let list = template.list(req.list);
+  let html = template.HTML(sanitizedTitle, list,
+    `
+    <h2>${sanitizedTitle}</h2>
+    ${sanitizedDescription}
+    <p>by ${user.displayName}</p>
+    `,
+    ` <a href="/topic/create">create</a>
+      <a href="/topic/update/${topic.id}">update</a>
+      <form action="/topic/delete" method="post">
+        <input type="hidden" name="id" value="${sanitizedTitle}">
+        <input type="submit" value="delete">
+      </form>`,
+      auth.statusUI(req,res)
+    );
+  res.send(html);
 });
 module.exports = router;
