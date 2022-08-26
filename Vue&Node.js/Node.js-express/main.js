@@ -27,7 +27,7 @@ app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
-  // store: new FileStore()
+  store: new FileStore()
 }));
 app.use(flash());
 // npm install -S passport
@@ -68,4 +68,4 @@ app.use((err, req, res, next)=>{
   res.status(500).send('Somethong Broke!')
 });
 
-app.listen(3001)
+app.listen(3000);

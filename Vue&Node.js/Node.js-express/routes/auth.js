@@ -70,15 +70,35 @@ module.exports = function(passport){
         req.flash('error','비밀번호가 일치하지 않습니다.');
         res.redirect('/auth/register')
       } else {
-        let user = {
-          id:shortid.generate(),
-          email:email,
-          password:pwd,
-          displayName:displayName
-        };
-        db.get('users').push(user).write();
-        req.login(user, (err)=>{
-          return res.redirect('/');
+        bcrypt.hash(pwd, 10, function (err, hash) {
+          var user = {
+            id: shortid.generate(),
+            email: email,
+            password: hash,
+            displayName: displayName
+          };
+          db.get('users').push(user).write();
+          var user = db.get('users').find({
+            email: email
+          }).value();
+          if (user) {
+            user.password = hash;
+            user.displayName = displayName;
+            db.get('users').find({id:user.id}).assign(user).write();
+          } else {
+            var user = {
+              id: shortid.generate(),
+              email: email,
+              password: hash,
+              displayName: displayName
+            };
+            db.get('users').push(user).write();
+          }
+  
+          request.login(user, function (err) {
+            console.log('redirect');
+            return response.redirect('/');
+          })
         });
       }
     });
