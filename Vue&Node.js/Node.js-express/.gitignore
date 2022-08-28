@@ -121,3 +121,4 @@ dist
 package-lock.json
 config/naver.json
 config/google.json
+config/kakao.json

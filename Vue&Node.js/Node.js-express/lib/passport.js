@@ -10,6 +10,7 @@ module.exports = (app) => {
   let LocalStrategy = require('passport-local').Strategy
   let GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
   let NaverStrategy = require('passport-naver').Strategy;
+  let KakaoStrategy = require('passport-kakao').Strategy;
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -130,6 +131,47 @@ module.exports = (app) => {
 
   app.get('/auth/naver/callback',
   passport.authenticate('naver', {
+      failureRedirect: '/auth/login'
+  }),
+  (req, res) => {
+      res.redirect('/');
+  });
+
+  // kakao social login
+  let kakaoCredentials = require('../config/kakao.json');
+  passport.use(new KakaoStrategy(
+    {
+      clientID: kakaoCredentials.kakao.client_id,
+      clientSecret: kakaoCredentials.kakao.client_secret,
+      callbackURL: kakaoCredentials.kakao.redirect_uris
+    },
+    function(accessToken, refreshToken, profile, done) {
+      let email = profile._json && profile._json.kakao_account_email;
+      let user = db.get('users').find({email:email}).value();
+      // 기존 user가 존재한다면
+        if(user){
+          user.kakaoId = profile.id;
+          db.get('users').find({id:user.id}).assign(user).write();
+      } else {
+          user = {
+              id:shortid.generate(),
+              email:profile._json && profile._json.kakao_account_email,
+              displayName:profile.displayName,
+              kakaoId:profile.id
+          }
+          db.get('users').push(user).write();
+      }
+      done(null, user);
+    }
+  ));
+
+  app.get('/auth/kakao',
+  passport.authenticate('kakao', {
+      scope: ['account_email']
+  }));
+
+  app.get('/auth/kakao/callback',
+  passport.authenticate('kakao', {
       failureRedirect: '/auth/login'
   }),
   (req, res) => {
