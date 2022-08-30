@@ -401,6 +401,8 @@ docker --version
 
 ### 2-4. 컨테이너 생성, 실행, 상태확인, 종료, 삭제
 
+> 컨테이너 & 이미지 모두 삭제: https://www.lainyzine.com/ko/article/how-to-remove-all-docker-contaniers-and-images/
+
 * 컨테이너 이름 : apa000ex1
 * 이미지 이름 : httpd
 
