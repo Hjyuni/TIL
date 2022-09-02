@@ -84,6 +84,8 @@ bin/elasticsearch -E node.name="node-new"
 ### 1-3. cluster 구성
 
 > doc: https://esbook.kimjmin.net/03-cluster/3.1-cluster-settings
+>
+> cluster & node: https://blog.naver.com/indy9052/220942459559
 
 * 노드끼리 합쳐지는걸 바인딩이라고 하는데 **cluster name을 같게** 해야함 
 * 하나의 서버에서 두 노드의 클러스터가 다른 이름이면 다른 클러스터로 취급함
@@ -134,11 +136,77 @@ discovery.seed_hosts: ["ubuntu-15U760-GR30K"]
 cluster.initial_master_nodes: ["node-1"]
 ```
 
+### 1-3-2. cluster 암호화
+
+> * 참고블로그: https://velog.io/@halim_limha/ElasticSearch-Cluster-%EC%95%94%ED%98%B8-%EA%B1%B8%EA%B8%B0
+> * doc: https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup.html#encrypt-internode-communication
+
+* bin/elasticsearch.yml
+
+```yml
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+```
+
+* 공개키/대칭키 만들기
+
+```shell
+./bin/elasticsearch-certutil ca
+# id/password 지정
+# /config
+mkdir certs
+./bin/elasticsearch-certutil cert \
+--ca elastic-stack-ca.p12 \
+--dns localhost \
+--ip 127.0.0.1,::1 \
+--out config/certs/es-cluster.p12
+```
+
+* bin/elasticsearch.yml
+
+```yaml
+xpack.security.transport.ssl.keystore.path: config/certs/es-cluster.p12
+xpack.security.transport.ssl.truststore.path: config/certs/es-cluster.p12
+```
+
+* secure password 지정하기
+
+```shell
+./bin/elasticsearch-keystore create
+./bin/elasticsearch-keystore add xpack.security.transport.ssl.keystore.secure_password
+./bin/elasticsearch-keystore add xpack.security.transport.ssl.truststore.secure_password
+```
+
+* settings elastic ID/PASS
+
+:star: 비번 까먹으면 data파일 전부 지워야 다시 설정 가능하니 주의할 것
+
+```shell
+# auto : pwd 자동생성
+# interactive : pwd 사용자 지정
+bin/elasticsearch-setup-passwords interactive
+curl localhost:9200 -u elastic
+```
+
+* password 추가하기
+  * 노드가 여러개 일 때 **설정한 노드 내에서만 사용 가능**한 계정
+  * File Realm
+
+```shell
+# bin/elasticsearch-users useradd [유저이름] -p [pwd] -r [role]
+bin/elasticsearch-users useradd Hjyuni -p [pwd] -r superuser
+# check
+cat config/users
+cat config/users_roles
+```
+
 
 
 ---
 
+## 2. kibana
 
+### 2-0. install kibana
 
 * kibana (7.17.6)
 
@@ -150,5 +218,13 @@ curl https://artifacts.elastic.co/downloads/kibana/kibana-7.17.6-linux-x86_64.ta
 tar -xzf kibana-7.17.6-linux-x86_64.tar.gz
 cd kibana-7.17.6-linux-x86_64/
 bin/kibana -d
+```
+
+* kibana.yml
+
+```yml
+server.host: "localhost"
+server.name: "my-kibana"
+elasticsearch.hosts: ["http://localhost:9200"]
 ```
 
