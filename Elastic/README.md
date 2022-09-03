@@ -1,5 +1,18 @@
 # elastic & kibana
 
+> * elastic docs: https://www.elastic.co/guide/en/elasticsearch/reference/current/elasticsearch-intro.html
+> * kibana docs: https://www.elastic.co/guide/en/kibana/current/introduction.html
+> * hosts: https://chashtag.tistory.com/23
+
+* 외부 ip에 이름 달기
+
+```shell
+sudo vim /etc/hosts
+# add
+# ip       ipname
+[my_ip]    myip
+```
+
 ## 1. elasticsearch
 
 ### 1-0.install & exec
@@ -29,13 +42,15 @@ kill `cat es.pid`
 
 * start.sh
 
-```markdown
+```sh
+# createFile
 bin/elasticsearch -d -p es.pid
 ```
 
 * stop.sh
 
-```markdown
+```sh
+# createFile
 kill `cat es.pid`
 ```
 
@@ -189,7 +204,7 @@ curl localhost:9200 -u elastic
 ```
 
 * password 추가하기
-  * 노드가 여러개 일 때 **설정한 노드 내에서만 사용 가능**한 계정
+  * 노드가 여cd러개 일 때 **설정한 노드 내에서만 사용 가능**한 계정
   * File Realm
 
 ```shell
@@ -223,8 +238,74 @@ bin/kibana -d
 * kibana.yml
 
 ```yml
+# 외부 서버 넣으려면 설정 바꾸기
 server.host: "localhost"
 server.name: "my-kibana"
 elasticsearch.hosts: ["http://localhost:9200"]
+```
+
+* settings user
+
+```yml
+# kibana.yml
+elasticsearch.username: "kibana_system"
+```
+
+```shell
+# shell
+bin/kibana-keystore create
+bin/kibana-keystore add elasticsearch.password
+# check
+bin/kibana-keystore list
+```
+
+* 실행하기
+
+> * doc: https://www.elastic.co/guide/en/kibana/current/start-stop.html
+
+```shell
+# 1. 그냥 실행
+bin/kibana
+# 2. background 실행
+# 2-1
+bin/kibana &
+# 2-2
+sudo systemctl start kibana.service
+```
+
+* pm2로 실행하기
+
+> nvm install on ubuntu: https://tecadmin.net/how-to-install-nvm-on-ubuntu-22-04/
+
+```shell
+# kibana에 알맞는 node version 찾기
+# /kb-717 : kibana directory
+cat package.json
+# node version check
+# install nvm & 알맞는 node version 
+# nvm install [node version]
+npm install pm2@latest --location=global
+pm2 start kb-717/src/cli/cli.js -name kibana
+pm2 stop kibana
+pm2 list
+pm2 delete kibana
+```
+
+* start.sh
+
+```shell
+pm2 start kb-717/src/cli/cli.js -name kibana
+```
+
+* stop.sh
+
+```shell
+pm2 stop kibana
+```
+
+* settings chmod
+
+```shell
+chmod 755 *.sh
 ```
 
