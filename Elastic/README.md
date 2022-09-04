@@ -1,5 +1,6 @@
 # elastic & kibana
 
+> * 처음부터 시작하는 elastic: https://www.youtube.com/watch?v=1ZQ2n5K4pGg&list=PLhFRZgJc2afp0gaUnQf68kJHPXLG16YCf&index=13
 > * elastic docs: https://www.elastic.co/guide/en/elasticsearch/reference/current/elasticsearch-intro.html
 > * kibana docs: https://www.elastic.co/guide/en/kibana/current/introduction.html
 > * hosts: https://chashtag.tistory.com/23
@@ -70,6 +71,8 @@ ls -la
 ./stop.sh
 ```
 
+
+
 ### 1-1. jvm options
 
 > * doc: https://www.elastic.co/guide/en/elasticsearch/reference/current/advanced-configuration.html#set-jvm-options
@@ -84,6 +87,8 @@ sudo vim config/jvm.options
 -Xsm512gb
 ```
 
+
+
 ### 1-2. elasticsearch.yml
 
 > doc: https://esbook.kimjmin.net/02-install/2.3-elasticsearch/2.3.2-elasticsearch.yml
@@ -96,6 +101,8 @@ sudo vim config/jvm.options
 bin/elasticsearch -E node.name="node-new"
 ```
 
+
+
 ### 1-3. cluster 구성
 
 > doc: https://esbook.kimjmin.net/03-cluster/3.1-cluster-settings
@@ -106,6 +113,8 @@ bin/elasticsearch -E node.name="node-new"
 * 하나의 서버에서 두 노드의 클러스터가 다른 이름이면 다른 클러스터로 취급함
 * 같은 클러스터내에 바인딩 된 노드는 데이터 공유
 * discovery: 노드가 처음 실행될 때 같은 서버, 또는 `discovery.seed_hosts: [ ]` 에 설정된 네트워크 상의 다른 노드들을 찾아 하나의 클러스터로 바인딩 하는 과정
+
+
 
 #### 1-3-1. network_host
 
@@ -151,7 +160,9 @@ discovery.seed_hosts: ["ubuntu-15U760-GR30K"]
 cluster.initial_master_nodes: ["node-1"]
 ```
 
-### 1-3-2. cluster 암호화
+
+
+#### 1-3-2. cluster 암호화
 
 > * 참고블로그: https://velog.io/@halim_limha/ElasticSearch-Cluster-%EC%95%94%ED%98%B8-%EA%B1%B8%EA%B8%B0
 > * doc: https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup.html#encrypt-internode-communication
@@ -214,6 +225,90 @@ bin/elasticsearch-users useradd Hjyuni -p [pwd] -r superuser
 cat config/users
 cat config/users_roles
 ```
+
+
+
+### 1-4. index & shards
+
+> https://esbook.kimjmin.net/03-cluster/3.2-index-and-shards
+
+* document : 단일 데이터 단위
+* indices : 저장 단위인 인덱스
+* index : 도큐먼트를 모아놓은 집합, **인덱스명은 유일해야 함**
+* shards : 인덱스가 분리되는 단위, 각 노드에 분산되어 저장됨
+* reploca : 복제본, 다른 노드에 복제됨
+
+
+
+### 1-5. CRUD
+
+> https://esbook.kimjmin.net/04-data
+
+* document 접근 URL : `http://<호스트>:<포트>/<인덱스>/_doc/<도큐먼트 id> `
+
+#### 1-5-1. CREATE (명령어: PUT,POST)
+
+* PUT
+
+```shell
+# 같은 URL에 다른 내용의 도큐먼트를 다시 입력하게 되면 기존 도큐먼트를 덮어씀
+PUT my_index/_doc/1
+{
+  "name":"Jongmin Kim",
+  "message":"안녕하세요 Elasticsearch"
+}
+# 실수로 덮어지는거 예방 위해 _doc 대신 _create 사용 가능
+PUT my_index/_create/1
+{
+  "name":"Jongmin Kim",
+  "message":"안녕하세요 Elasticsearch"
+}
+
+# POST는 ID 자동생성
+PUT my_index/_doc
+```
+
+#### 1-5-2. READ (명령어: GET)
+
+* GET
+  * 문서 내용이 _source에 나타남
+
+```shell
+GET my_index/_doc/1
+```
+
+#### 1-5-3. UPDATE (명령어: POST)
+
+* PUT으로 해도 가능 하지만 모든 필드를 작성 해야 해서 POST로 원하는 필드만 수정 가능
+
+```shell
+POST my_index/_update/1
+{
+  "doc": {
+    "message":"안녕하세요 Kibana"
+  }
+}
+```
+
+#### 1-5-4. DELETE (명령어: DELETE)
+
+```shell
+# delete document
+DELETE my_index/_doc/1
+# delete index
+DELETE my_index
+```
+
+#### 1-5-5. bulk api
+
+> https://esbook.kimjmin.net/04-data/4.3-_bulk
+
+* 여러 명령을 배치로 수행하기 위해 사용
+* CRUD 한번에 가능, DELETE 제외하고 명령문과 데이터문을 한 줄씩 순서대로 입혀야 함
+
+#### 1-5-6. search api
+
+> https://esbook.kimjmin.net/04-data/4.4-_search
 
 
 
@@ -294,7 +389,7 @@ pm2 delete kibana
 * start.sh
 
 ```shell
-pm2 start kb-717/src/cli/cli.js -name kibana
+pm2 start kb-717/src/cli/cli.js --name kibana
 ```
 
 * stop.sh
