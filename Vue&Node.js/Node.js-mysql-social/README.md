@@ -1,6 +1,7 @@
 # 소셜로그인하기
 
->  https://d2.naver.com/helloworld/7804182
+>  * SSR: https://d2.naver.com/helloworld/7804182
+>  * passport란: https://velog.io/@leehyunho2001/passport
 
 * node version: 16.16.0
 * express version: 4.18.1

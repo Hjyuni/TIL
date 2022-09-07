@@ -3,6 +3,8 @@
 > 예제코드: https://github.com/web-n/Nodejs
 >
 > document: https://expressjs.com/ko/
+>
+> express란? https://velog.io/@madpotato1713/JAVASCRIPT-express%EB%9E%80
 
 * install
 
