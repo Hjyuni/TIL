@@ -59,8 +59,8 @@ kill `cat es.pid`
 
 ```shell
 ls -la
-# execute
 chmod 755 *.sh
+# check
 ls -la
 ```
 
@@ -236,7 +236,7 @@ cat config/users_roles
 * indices : 저장 단위인 인덱스
 * index : 도큐먼트를 모아놓은 집합, **인덱스명은 유일해야 함**
 * shards : 인덱스가 분리되는 단위, 각 노드에 분산되어 저장됨
-* reploca : 복제본, 다른 노드에 복제됨
+* replica : 복제본, 다른 노드에 복제됨
 
 
 
@@ -252,20 +252,20 @@ cat config/users_roles
 
 ```shell
 # 같은 URL에 다른 내용의 도큐먼트를 다시 입력하게 되면 기존 도큐먼트를 덮어씀
-PUT my_index/_doc/1
+PUT index/_doc/1
 {
   "name":"Jongmin Kim",
   "message":"안녕하세요 Elasticsearch"
 }
 # 실수로 덮어지는거 예방 위해 _doc 대신 _create 사용 가능
-PUT my_index/_create/1
+PUT index/_create/1
 {
   "name":"Jongmin Kim",
   "message":"안녕하세요 Elasticsearch"
 }
 
 # POST는 ID 자동생성
-PUT my_index/_doc
+POST index/_doc
 ```
 
 #### 1-5-2. READ (명령어: GET)
@@ -301,7 +301,9 @@ DELETE my_index
 
 #### 1-5-5. bulk api
 
-> https://esbook.kimjmin.net/04-data/4.3-_bulk
+> * guide book: https://esbook.kimjmin.net/04-data/4.3-_bulk
+>
+> * doc: https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
 
 * 여러 명령을 배치로 수행하기 위해 사용
 * CRUD 한번에 가능, DELETE 제외하고 명령문과 데이터문을 한 줄씩 순서대로 입혀야 함
@@ -310,7 +312,108 @@ DELETE my_index
 
 > https://esbook.kimjmin.net/04-data/4.4-_search
 
+### 1-6. Search
 
+#### 1-6-1. FullText
+
+> https://esbook.kimjmin.net/05-search/5.1-query-dsl
+
+* score 점수가 높은 순으로 나옴
+
+* 검색시 쿼리를 넣지 않으면 해당 인덱스의 **모든** 도큐먼트를 검색
+
+```elm
+GET my_index/_search
+# OR
+GET my_index/_search
+{
+  "query":{
+    "match_all":{ }
+  }
+}
+# 
+GET my_index/_search
+{
+  "query": {
+    "match": {
+      "message": "dog"
+    }
+  }
+}
+```
+
+
+
+* 검색어가 여럿일 때 `operator` 옵션 사용하면 됨 : `<필드명>: { "query":<검색어>, "operator": }`
+
+```shell
+GET index/_search
+{
+  "query": {
+    "match": {
+      "message": {
+        "query": "quick dog",
+        "operator": "and"⭐
+      }
+    }
+  }
+}
+```
+
+
+
+* 띄어쓰기까지 정확하게 하려면 `match_phrase` 사용
+
+  * 검색어 제한 가능성 높음
+
+  * `slop`옵션을 줘서 띄어쓰기 사이에 단어 몇 개 들어가도 허용
+
+```shell
+GET index/_search
+{
+  "query": {
+    "match": {
+      "message": {
+        "query": "quick dog",
+        "slop": 1⭐
+      }
+    }
+  }
+}
+```
+
+#### 1-6-2. BoolQuery
+
+> * els 가이드북: https://esbook.kimjmin.net/05-search/5.2-bool
+> * 참고사이트: https://victorydntmd.tistory.com/314
+
+* 사용 문법
+  * must: 쿼리가 참인 도큐먼트들 검색
+  * must_not: 쿼리가 거짓인 도큐먼트들 검색
+  * should: 검색 결과 중 이 쿼리에 해당하는 도큐먼트 점수 높임
+  * filter: 쿼리가 참인 도큐먼트를 검색하지만 스토어 계산 하지 않음
+
+```shell
+GET <인덱스명>/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        { <쿼리> }, …
+      ],
+      "must_not": [
+        { <쿼리> }, …
+      ],
+      "should": [
+        { <쿼리> }, …
+      ],
+      "filter": [
+        { <쿼리> }, …
+      ]
+    }
+  }
+}
+```
 
 ---
 
