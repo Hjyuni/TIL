@@ -415,6 +415,46 @@ GET <인덱스명>/_search
 }
 ```
 
+#### 1-6-3. Exact Value Query
+
+> * els가이드북: https://esbook.kimjmin.net/05-search/5.5-exact-value
+
+* 참/거짓 여부만 판별해서 결과를 가져오는 것
+* term, range,,
+* score를 반영하지 않기 때문에 **filter내부에서 사용**
+* filter 내부에서 bool쿼리를 포함하려면 filter내부에 bool쿼리를 다시 넣어주면 됨
+
+#### 1-6-4. Range Query
+
+> * els가이드북: https://esbook.kimjmin.net/05-search/5.6-range
+
+* 숫자나 날짜 형식 등을 검색하는 쿼리
+* `range : { <필드명>: { <파라메터>:<값> } }`형태로 입력됨
+  
+  * `gte`: 이상
+  * `gt`: 초과
+  * `lte`: 이하
+  * `lt`: 미만
+* 날짜 검색의 기본 값은 `yyyy-mm-ddThh:mm:ss`형식임
+  * 형식을 바꾸고 싶으면 format필드를 써야함
+  ```shell
+  # 2020-12-31~2022값 검색
+  GET <index>/_search
+  {
+  "query": {
+    "range": {
+      "date": {
+        "gt": "31/12/2020",
+        "lt": "2022",
+        "format": "dd/MM/yyyy||yyyy"
+      }
+    }
+  }
+  }
+  ```
+
+
+
 ---
 
 ## 2. kibana
