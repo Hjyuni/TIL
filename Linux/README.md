@@ -162,3 +162,28 @@ xkb_symbols "meta_alt" {
     ```
 
 * 글씨체 옵션: [How to enable stylistic sets · tonsky/FiraCode Wiki · GitHub](https://github.com/tonsky/FiraCode/wiki/How-to-enable-stylistic-sets)
+
+---
+
+## 10) apt 저장소 바꾸기
+
+### 1. 설정 파일 수정하기
+```shell
+$ sudo vim /etc/apt/sources.list
+```
+
+### 2. archive.ubuntu.com 에서 mirror.kakao.com
+* 수정 파일 들어가서 핑크색 부분인 archive.ubuntu.com을 바꿔줘야함
+
+* vim에서 아래와 같이 입력하면 전부 다 바뀌는 것을 볼 수 있음
+```shell
+:%s/archive.ubuntu.com/mirror.kakao.com/
+```
+### 3. sudo apt~해보기
+```shell
+$ sudo apt update && sudo apt upgrade -y
+```
+하면 kakao로 저장되는 것을 알 수 있음
+
+
+> 참고 사이트: https://memostack.tistory.com/217
