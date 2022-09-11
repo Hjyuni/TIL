@@ -601,4 +601,6 @@
 > fetch API란? https://fansor.tistory.com/13
 >
 > localhost에서 구동: https://threejs.org/docs/#manual/ko/introduction/How-to-run-things-locally
+>
+> 동기/비동기: https://sudo-minz.tistory.com/21
 
