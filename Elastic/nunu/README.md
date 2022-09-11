@@ -105,3 +105,7 @@ curl -u elastic -XPOST -H 'Content-Type: application/json' http://localhost:9200
 
 ## 3. connect node
 
+* 참고사이트
+  * https://appdividend.com/2018/07/05/vue-elasticsearch-tutorial-with-node-js/
+  * https://m.blog.naver.com/gmlwo308/222049367290
+  * https://www.skyer9.pe.kr/wordpress/?p=1101
