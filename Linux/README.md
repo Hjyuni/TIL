@@ -12,37 +12,53 @@
 5. update&upgrade 하기
 
 ```shell
->>> sudo apt update && sudo apt upgrade -y
+$ sudo apt update && sudo apt upgrade -y
 ```
 
 ---
 
-## 2) discord 다운로드
+## 2) timezone 설정
+
+```shell
+# 현재 설정돼있는 시간 확인
+$ date
+# or
+$ timedatectl
+# 방법1
+$ timedatectl list-timezones | grep Seoul
+$ sudo timedatectl set-timezone Asia/Seoul
+# 방법2
+$ ls -l /etc/localtime
+$ sudo rm -rf /etc/localtime
+$ sudo ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+```
+
+---
+
+## 3) discord 다운로드
 
 ```shell
 # deb 다운
->>> wget -O ~/discord.deb "https://discordapp.com/api/download?platform=linux&format=deb"
+$ wget -O ~/discord.deb "https://discordapp.com/api/download?platform=linux&format=deb"
 
 # 설치방법1
->>> sudo apt install ./discord.deb -y
+$ sudo apt install ./discord.deb -y
 -----
 # 설치방법2
->>> sudo gdebi ~/discord.deb
+$ sudo gdebi ~/discord.deb
 ```
 
 ---
 
-## 3) 한글 자판 설정
+## 4) 한글 자판 설정
 
 ```shell
-sudo apt-get update
-sudo apt-get install fcitx-hangul
+$ sudo apt-get update
+$ sudo apt-get install fcitx-hangul
 
 우분투 세팅 -> Region & Language -> Manage Installed Languages 맨아래 keyboard input method system -> fcitx 선택
 
-sudo reboot (재부팅)
-
-![image](https://user-images.githubusercontent.com/87686562/161398519-b2bd1a23-906a-4070-8181-75a4ee6ba458.png)
+$ sudo reboot (재부팅)
 
 화면상단에 저 키보드 클릭 -> configure -> 맨 아래 '+' 클릭 -> only show 클릭 해제하고 search에서 hangul 검색 & 추가 -> 위에 global config -> trigger input method 누르고 한영키 -> addon -> quickphrase 더블클릭 trigger 어쩌고 None
 
@@ -50,7 +66,7 @@ sudo reboot (재부팅)
 
 한영키 ralt로 인식될때 cd /usr/share/X11/xkb/symbols
 
-sudo vi altwin
+$ sudo vi altwin
 
 이케 수정
 xkb_symbols "meta_alt" {    
@@ -64,7 +80,7 @@ xkb_symbols "meta_alt" {
 
 ---
 
-## 4) typora 설치
+## 5) typora 설치
 
 ```shell
 # or run:
@@ -79,7 +95,7 @@ xkb_symbols "meta_alt" {
 
 ---
 
-## 5) chrome 설치
+## 6) chrome 설치
 
 ```shell
 >>> wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -89,7 +105,7 @@ xkb_symbols "meta_alt" {
 
 ---
 
-## 6) VS Code 설치
+## 7) VS Code 설치
 
 > 공식사이트(deb파일) : https://code.visualstudio.com/
 >
@@ -103,7 +119,7 @@ xkb_symbols "meta_alt" {
 
 ---
 
-## 7) cascadia 글씨체 다운
+## 8) cascadia 글씨체 다운
 
 > https://github.com/microsoft/cascadia-code/releases
 
@@ -122,7 +138,7 @@ xkb_symbols "meta_alt" {
 
 ---
 
-## 8)vsc에 cascadia-code 글씨체 다운받기
+## 9)vsc에 cascadia-code 글씨체 다운받기
 
 * vsc들어가기
 
