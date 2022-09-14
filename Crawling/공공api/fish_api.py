@@ -70,4 +70,8 @@ def get_fish_db(filename):
   with open(f'./db_data/{filename}.json', 'w', encoding='utf-8') as f:
       f.write(result_json)
 
-# def json_for_es_bulk():
+def json_for_es_bulk(filename):
+  with open(f'./db_data/{filename}.json','r',encoding='utf-8') as f:
+    json_file = json.load(f)
+  ndjson = ndjson.dump(json_file)
+# json_for_es_bulk('fish')
