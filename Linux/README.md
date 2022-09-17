@@ -190,7 +190,20 @@ $ sudo apt update && sudo apt upgrade -y
 
 ---
 
-## 11) ssh 로그인 없이 설정
+## 11) ssh (WARNING: REMOTE~)
+
+```shell
+# ssh-keygen -R [IP or DomainNAME]
+ssh-keygen -R 11.1111.11.1
+# ssh-keygen -R [IP or DomainNAME]:port
+ssh-keygen -R [11.1111.11.1]:port
+```
+
+
+
+---
+
+## 12) ssh 로그인 없이 설정
 
 >  https://myinfrabox.tistory.com/31
 
