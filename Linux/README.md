@@ -187,3 +187,21 @@ $ sudo apt update && sudo apt upgrade -y
 
 
 > 참고 사이트: https://memostack.tistory.com/217
+
+---
+
+## 11) ssh 로그인 없이 설정
+
+>  https://myinfrabox.tistory.com/31
+
+1. key 생성
+
+```shell
+$ ssh-keygen
+$ ssh-copy-id [user]@[ip]
+# 22번 포트가 다른 포트로 열린 경우
+$ ssh-copy-id -p [port] [user]@[ip]
+```
+
+
+
