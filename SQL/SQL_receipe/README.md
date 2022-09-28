@@ -1,6 +1,8 @@
 # SQL
 
 >  Book: 데이터 분석을 위한 SQL 레시피
+>
+>  Data: http://hanbit.co.kr/src/10060
 
 ## 0. System
 
@@ -77,3 +79,47 @@
 * 추출 방법에 따라 데이터의 정밀도가 달라짐
 * 과거의 로그 데이터 변경되지 않음
 * 웹사이트에서의 행동을 기록할 때 활용
+
+---
+
+## 2. 하나의 값 조작하기
+
+* 업무데이터의 경우 db에 코드 값을 저장하고 이러한 코드 값의 의미를 다른 테이블에서 관리하는 경우가 있는데 이러면 리포트의 코드가 무엇을 의미하는지 정확하게 알 수 없음 따라서 데이터 분석에 적합한 형태로 미리 가공해야함
+* 어떤 값과 Null을 연산하면 결과가 Null이 나올 수 있으므로 Null이 나오지 않게 데이터를 가공해야함
+
+### 2-1. CASE ~ WHEN ~ THEN ~ END
+
+> https://www.w3schools.com/sql/sql_case.asp
+
+```sql
+# CASE WHEN 조건1 THEN 결과1 WHEN 조건2 THEN 결과2 ELSE default
+CASE
+    WHEN condition1 THEN result1
+    WHEN condition2 THEN result2
+    WHEN conditionN THEN resultN
+    ELSE result
+END;
+```
+
+### 2-2. substring
+
+1. substring
+
+> https://w3resource.com/PostgreSQL/substring-function.php
+
+```sql
+# substring(abcdef from 2 for 3) : abc 중 1번째 자리부터 3개 보여줘(bcd)
+substring(string [from <str_pos>] [for <ext_char>])
+```
+
+2. regexp_replace
+
+* 주어진 문자역에서 특정 패턴을 찾아서 주어진 다른 모양으로 치환하는 함수
+
+3. regexp_substr
+
+* 정규 표현식
+  * `?`: 앞 문자가 0번 또는 1번 표시되는 패턴(없어도 되고 한 번 있어도 되는 패턴)
+  * `*`: 앞 문자가 0번 또는 그 이상 반복되는 패턴
+  * `+`: 앞 문자가 1번 또는 그 이상 반복되는 패턴
+  * `[]`: []사이의 문자들과 매치
