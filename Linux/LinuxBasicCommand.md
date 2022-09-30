@@ -348,7 +348,11 @@ $ mv hello.txt test/hi.txt
 
 * `find [filename or directoryname]`
 
-* `find . -name [filename]` 
+* `find . -name [filename]`
+
+* `find . -name [filename] -mindepth [n]`
+
+* `find . -maxdepth [n] -name [filename]` 
 
 ```shell
 # test로 시작하는 파일 찾아줘
@@ -357,5 +361,63 @@ $ find . -name 'test*'
 $ find . -name '*es*'
 # 사이에 숫자 들어오는 파일 찾아줘
 $ find . -name '*[0-9]*'
+# 상위/하위 폴더 위치 지정해서 찾을 수도 있음
+$ find . -name '*[0-9]*' -mindepth 1
+$ find . -maxdepth 1 -name '*[0-9]*'
 ```
+
+
+
+## 25. `which`
+
+* `$PATH`에 등록된 경로 중에서 주어진 이름의 실행 파일 위치 찾음
+* 사용하고 있는 명령어가 설치된 위치를 알려줌
+
+```shell
+$ which sudo
+$ which python
+$ which $PATH
+```
+
+
+
+## 26. `grep`
+
+* 대량의 파일에서 주어진 텍스트 또는 정규 표현식 패턴에 일치하는 텍스트를 찾는 명령어
+* 파이프(`|`)와 함께 다양한 명령어와 조합하여 사용
+* `-n` 옵션: 몇 번째 줄인지 표시해줌
+* `-r` 옵션: 디렉토리에서 텍스트를 찾아줌 
+
+```shell
+$ netstat -nlpt | grep 22
+$ grep 'the' test.txt
+# search directory
+# 현재 경로에서 the 검색해줘
+$ grep -r 'the' .
+$ grep -rn '[1-9]0\{4\}' | grep 'the'
+
+```
+
+
+
+## 27. `sed`
+
+* `sed 's/바꿀대상/바꾸고자하는결과/g' 대상파일` : 대상 파일에 대해 바꾸고 싶은 대상에 대해 원하는 결과물로 바꿔줌
+  * `g`(global): 모든 대상을 바꿔줌 g가 없으면 맨 앞에 하나만 바꿔줌
+* vim 에서 `:%s/바꿀대상/바꾸고자하는결과/g`로 바꿀 수 있음
+* `-i` 옵션: 파일에 바로 저장
+* `-e`옵션: 여러개 바꾸기
+
+```shell
+$ sed -i 's/the/a/g' test.txt
+$ sed -e 's/the/a/g' -e 's/THE/A/g' test.txt
+```
+
+
+
+## 28. `xargs`
+
+> 참고사이트: https://jjeongil.tistory.com/1574
+
+* 파이프 앞의 명령어를 뒤의 명령어 맨 뒤 인수로 넣어줘
 
