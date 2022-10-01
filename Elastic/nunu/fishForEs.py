@@ -7,7 +7,7 @@ import xmltodict
 
 def get_fish_db(filename):
   """필요한 어종 정보만 갖고 오기"""
-  service_key = '8tUsV2I69mcbJU0vrzLkwwDjeUInZKMSlL3s64E%2B7rb5uv%2BTp7xSKOse8zFfECPaXSrMucFlmAoIYtDpHDCmNg%3D%3D'
+  service_key = ''
   api_url = 'http://apis.data.go.kr/1520635/OceanBiospeciesInfoService/getOceanBiospeciesResult?'
   res_lst = []
   cnt = 1
