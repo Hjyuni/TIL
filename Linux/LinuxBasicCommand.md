@@ -732,4 +732,46 @@ $ find . -name "test*" 1> /dev/null 2> ~/stderror.log
     * `Ctrl+w+[num]'-'`: 아래로 n칸 확장
     * `Ctrl+w+'_'`: 해당 윈도우가 위아래 모든 칸 차지
 
-⭐`tmux` 
+⭐`tmux`
+
+---
+
+## 3. 환경변수
+
+> 참고사이트:https://jjig810906.tistory.com/62
+
+* 환경변수란
+  * 운영체제 수준에서 선언하는 변수
+  * 운영체제 해당 환경에서 실행되는 프로세스가 모두 참조할 수 있음
+* `export 환경변수=값`: **임시로** 환경변수 선언, 재부팅하거나 로그아웃 하면 사라짐
+* **특정** 유저에게만 영구적으로 적용하고 싶은 경우 `~/.bash_profile`파일 수정
+
+```shell
+$ vi ~/.bash_profile
+export $AGE=28
+$ source ~/.bash_profile
+```
+
+
+
+* **모든** 유저에게 영구적으로 적용하고 싶은 경우 `/etc/profile`파일 수정
+
+```shell
+$ vi /etc/profile
+export $NAME=jyuni
+```
+
+
+
+* `$PATH`: 운영체제가 명령어의 실행파일을 찾는 경로
+
+  * 절대/상대 경로 없이 단독으로 명령어로 수행할 수 있게 함
+  * 내가 만든 .sh와 같은 파일의 위치도 `$PATH`에 등록하면 경로를 매번 입력하거나 찾지 않아도 됨
+  * 나갔다 들어오면 사라지므로 영구적으로 PATH설정해놓고 싶으면  `/etc/profile`파일 수정 해야함
+
+  ```shell
+  $ sudo vi /etc/profile
+  $ export PATH=$PATH:/home/ubuntu/bin
+  ```
+
+  
