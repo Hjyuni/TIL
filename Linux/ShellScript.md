@@ -1,14 +1,55 @@
 # ShellScript
 
+## 0. 환경 변수
+
+> 참고사이트(ubuntu 환경변수 설정):https://jjig810906.tistory.com/62
+>
+> 참고사이트(shell, bashrc)의 개념⭐: https://dohk.tistory.com/191
+
+* 환경변수란
+  * 운영체제 수준에서 선언하는 변수
+  * 운영체제 해당 환경에서 실행되는 프로세스가 모두 참조할 수 있음
+* `export 환경변수=값`: **임시로** 환경변수 선언, 재부팅하거나 로그아웃 하면 사라짐
+* **특정** 유저에게만 영구적으로 적용하고 싶은 경우 `~/.bash_profile`파일 수정
+
+```shell
+$ vi ~/.bash_profile
+export $AGE=28
+$ source ~/.bash_profile
+```
+
+
+
+* **모든** 유저에게 영구적으로 적용하고 싶은 경우 `/etc/profile`파일 수정
+
+```shell
+$ vi /etc/profile
+export $NAME=jyuni
+```
+
+
+
+* `$PATH`: 운영체제가 명령어의 실행파일을 찾는 경로
+
+  * 절대/상대 경로 없이 단독으로 명령어로 수행할 수 있게 함
+  * 내가 만든 .sh와 같은 파일의 위치도 `$PATH`에 등록하면 경로를 매번 입력하거나 찾지 않아도 됨
+  * 나갔다 들어오면 사라지므로 영구적으로 PATH설정해놓고 싶으면  `/etc/profile`파일 수정 해야함
+
+  ```shell
+  $ sudo vi /etc/profile
+  $ export PATH=$PATH:/home/ubuntu/bin
+  ```
+
+
 ## 1. shell script란?
 
 * CLI환경에서 실행할 수 있는 명령어 리스트
 
 * 위에 아래와 같은 표시가 있다면 shell script
 
-  > 참고사이트1: https://storycompiler.tistory.com/101
+  > 참고사이트1(#!/bin/sh): https://storycompiler.tistory.com/101
   >
-  > 참고사이트2: http://choesin.com/zsh-%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EB%A9%B0-%EC%99%9C-bash-%EB%8C%80%EC%8B%A0-%EC%82%AC%EC%9A%A9%ED%95%B4%EC%95%BC%ED%95%A9%EB%8B%88%EA%B9%8C
+  > 참고사이트2(zsh란): http://choesin.com/zsh-%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EB%A9%B0-%EC%99%9C-bash-%EB%8C%80%EC%8B%A0-%EC%82%AC%EC%9A%A9%ED%95%B4%EC%95%BC%ED%95%A9%EB%8B%88%EA%B9%8C
 
   * `#!/bin/bash`: bin/bash를 사용하는 bash shell script
   * ⭐`#!/bin/sh`: 현재 커서 이후 단어 복사, 숫자 yw로 쓰면 숫자만큼의 단어 복사
