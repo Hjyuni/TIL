@@ -39,6 +39,8 @@ ln -s amazon-corretto-11.0.15.9.1-linux-x64/ java
 vim ~/.bashrc
 
 # java
+# 안되면 pwd 확인 후 앞에 붙이기 
+# export JAVA_HOME=/root/java
 export JAVA_HOME=/java
 export PATH=$PATH:$JAVA_HOME/bin
 # 저장
@@ -75,6 +77,7 @@ pip -V
 **hadoop**
 
 ```terminal
+# check version
 wget https://dlcdn.apache.org/hadoop/common/hadoop-3.3.3/hadoop-3.3.3.tar.gz
 tar xvzf hadoop-3.3.3.tar.gz
 ln -s hadoop-3.3.3/ hadoop
@@ -82,6 +85,7 @@ ln -s hadoop-3.3.3/ hadoop
 vim ~/.bashrc
 
 # hadoop
+# export HADOOP_HOME=/root/hadoop
 export HADOOP_HOME=/hadoop
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 export PATH=$PATH:$HADOOP_HOME/bin
@@ -111,6 +115,8 @@ mkdir -p /hadoop/yarn/local
 cd $HADOOP_CONF_DIR
 vim hadoop-env.sh
 
+# export JAVA_HOME=/root/java
+# export HADOOP_HOME=/root/hadoop
 export JAVA_HOME=/java
 export HADOOP_HOME=/hadoop
 export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop
@@ -205,6 +211,7 @@ slave3
 cd /
 
 # hadoop이 설치되어 있으므로, Pre-built with user-provided Apache Hadoop 선택
+# check version
 wget https://dlcdn.apache.org/spark/spark-3.2.1/spark-3.2.1-bin-without-hadoop.tgz
 tar xvzf spark-3.2.1-bin-without-hadoop.tgz
 ln -s spark-3.2.1-bin-without-hadoop/ spark
@@ -213,6 +220,7 @@ ln -s spark-3.2.1-bin-without-hadoop/ spark
 vim ~/.bashrc
 
 # spark
+# export SPARK_HOME=/root/spark 
 export SPARK_HOME=/spark 
 export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
 export SPARK_DIST_CLASSPATH=$(${HADOOP_HOME}/bin/hadoop classpath)
@@ -258,7 +266,7 @@ exit
 
 # 위에서 만든 spark를 image로 저장
 docker commit spark spark
-
+exit
 docker run -it -h master --name master -p 9870:9870 -p 8088:8088 -p 9864:9864 spark
 exit
 docker start master
@@ -287,7 +295,6 @@ docker inspect master | grep IPAddress
 docker inspect slave1 | grep IPAddress
 docker inspect slave2 | grep IPAddress
 docker inspect slave3 | grep IPAddress
-
 
 # master - slave node 연결
 docker exec -it master bash
