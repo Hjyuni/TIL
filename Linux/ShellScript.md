@@ -226,3 +226,107 @@ case ${OPTION} in
         echo "error"
 ```
 
+---
+
+## 6. 기본연산자
+
+* awk/expr 등과 같은 외부 프로그램 사용
+
+```shell
+$ expr 2 + 2
+$ expr 4\* 2
+$ expr 4 % 2
+```
+
+* 산술연산자
+  * `+`: `expr $a + $b`
+  * `-`: `expr $a - $b`
+  * `*`: `expr $a \* $b`
+  * `/`: `expr $a / $b`
+  * `%`: `expr $a % $b`
+  * `=`: `expr a = $b` b의 값이 a에 할당
+  * `[ $a=$b ]`: 값이 같은 경우에 true, 값 비교
+  * `[ $a != $b ]`: 값이 다른 경우에 true
+    * [] 사이 공백 필수
+* 관계연산자
+  * `-eq`: 두 값이 같은 경우 true
+  * `-ne`: 두 값이 다른 경우 true
+  * `-gt`: `a>b`(초과)인 경우 true
+  * `-lt`: `a<b`(미만)인 경우 true
+  * `-ge`: `a<=b`(이상)인 경우 true
+  * `-le`: `a>=b`(이하)인 경우 true
+
+* bool
+  * `!`: 논리적 부정
+  * `-o`: OR
+  * `-a`: AND
+
+---
+
+## 7. while 문
+
+* `while ~ do ~ done`
+
+```shell
+a=0
+while [ $a -lt 10 ]
+do  
+    # -n 개행을 없앰
+    echo -n "$a"
+    a = `expr $a + 1`
+done
+```
+
+---
+
+## 8. single quote
+
+* ?[]"`\`$;()|^<>`: 메타캐릭터로 특수한 목적으로 사용됨
+* `''`을 이용하면 위의 특수 목적 문자를 출력할 수 있음
+* ``을 이용하여 shell명령어 사용 가능
+
+---
+
+## 9. escape sequence
+
+* `echo -e`: backslash escape
+
+  * `\\`: backslash
+
+  * `\a`: alert
+
+  * `\b`: backspace
+
+  * `\c`: 줄바꿈 삭제
+
+  * `\f`: form양식
+
+  * `\n`: 줄바꿈
+
+  * `\r`: 맨 앞으로 이동
+
+  * `\t`: 가로방향 탭
+
+  * `\v`: 새로방향 탭
+
+  ```shell
+  echo -e "hi\nhellos"
+  ```
+
+---
+
+## 10. function
+
+* `function_name() {}`: 함수 선언
+* `function_name`: 함수 사용
+* `function_name param1 param2`: 함수에 파라미터 param1 param2 전달
+
+```shell
+Hi() {
+  echo "Hello World $1"
+  return 10
+}
+Hi jy 
+```
+
+ 
