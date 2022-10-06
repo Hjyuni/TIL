@@ -25,6 +25,7 @@ conda create -n django python=3.7
 conda env list
 # 가상환경 삭제하기
 # conda remove --name 가상환경이름 --all
+# conda env -n 가상환경이름
 conda activate django
 # conda deactivate
 ```
@@ -109,7 +110,7 @@ python manage.py runserver
 10. 테스팅
 11. 국제화 & 지역화
 12. 캐싱
-13. Geographic : DB의 Geo 기능 활용
+13. Geographic : DB의 Geo 기능 활용(PostgreSQL중심)
 14. Sending Emails
 15. Syndication Feeds (RSS/Atom)
 16. Sitemaps
@@ -166,7 +167,7 @@ INSTALLED_APPS = [
 python manage.py runserver
 ```
 
-3. studydjango/studydjango/blog1/models.py
+3. studydjango/blog1/models.py
 
 ```python
 from django.db import models
@@ -192,7 +193,7 @@ python manage.py makemigrations blog1
 python manage.py migrate blog1
 ```
 
-5. studydjango/studydjango/blog1/admin.py
+5. studydjango/blog1/admin.py
 
 ```python
 # admin page에서 포스팅 가능
@@ -221,14 +222,15 @@ from .models import Post
 def post_list(request):
     # DB에서 모든 포스팅을 가져와
     qs = Post.objects.all() # QuerySet
+    # 목록을 리스트로 가져와
     return render(request, 'blog1/post_list.html',{
         'post_list' : qs,
     })
 ```
 
-8. blog1에서 새로운 파일 생성
+8. blog1에서 새로운 폴더 templates 생성
    * templates/**blog1**/post_list.html
-   * blog1이라는 파일 하나 더 만들어야 됨
+   * blog1이라는 폴더 하나 더 만들어야 됨⭐
 
 ```python
 <h1>Post List</h1>
