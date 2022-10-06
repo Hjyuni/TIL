@@ -137,6 +137,10 @@ python manage.py runserver
   * 새롭게 생성한 장고앱이나 외부 라이브러리 형태의 장고앱은 **필히 settings.INSTALLED_APPS에 등록** 시켜줘야만 장고앱으로서 대접 받음
   * 아래 명령으로 기본 앱템플릿으로부터 생성
     * `python manage.py startapp <앱이름>`
+  * 앱 생성 후
+    * 해당 **앱 폴더** 아래 `urls.py`생성
+    * **프로젝트 폴더** 아래 `settings.INSTALLED_APPS`에 앱 이름 추가
+    * **프로젝트 폴더** 아래 `urls.py`에 앱 경로 추가
 
 ---
 
@@ -155,7 +159,7 @@ python manage.py startapp blog1
 urlpatterns = []
 ```
 
-2. studydjango/studydjango/settings.py
+2. ~/studydjango/studydjango/settings.py
 
 ```python
 # 앱을 settings.INSTALLED_APPS에 등록
@@ -167,7 +171,7 @@ INSTALLED_APPS = [
 python manage.py runserver
 ```
 
-3. studydjango/blog1/models.py
+3. ~/studydjango/blog1/models.py
 
 ```python
 from django.db import models
@@ -193,7 +197,7 @@ python manage.py makemigrations blog1
 python manage.py migrate blog1
 ```
 
-5. studydjango/blog1/admin.py
+5. ~/studydjango/blog1/admin.py
 
 ```python
 # admin page에서 포스팅 가능
@@ -202,7 +206,7 @@ from .models import Post
 admin.site.register(Post)
 ```
 
-6. studydjango/studydjango/urls.py
+6. ~/studydjango/studydjango/urls.py
 
 ```python
 from django.contrib import admin
@@ -214,7 +218,7 @@ urlpatterns = [
 ]
 ```
 
-7. studydjango/blog1/views.py
+7. ~/studydjango/blog1/views.py
 
 ```python
 from .models import Post
@@ -229,7 +233,7 @@ def post_list(request):
 ```
 
 8. blog1에서 새로운 폴더 templates 생성
-   * templates/**blog1**/post_list.html
+   * /blog1/templates/**blog1**/post_list.html
    * blog1이라는 폴더 하나 더 만들어야 됨⭐
 
 ```python
@@ -241,7 +245,7 @@ def post_list(request):
 {% endfor %}
 ```
 
-9. studydjango/blog1/urls.py
+9. ~/studydjango/blog1/urls.py
 
 ```python
 from django.urls import path
@@ -253,3 +257,133 @@ urlpatterns = [
 ```
 
 10. http://127.0.0.1:8000/blog1/
+
+---
+
+## 2. Django Model
+
+### 1) orm이란?
+
+> 참고사이트: https://gmlwjd9405.github.io/2019/02/01/orm.html
+
+* Object-relational mapping
+* 객체와 관계형 데이터베이스의 데이터를 자동으로 매핑 해주는 것
+* 장고에서 orm을 쓰더라도 sql이 어떻게 실행되고 있는지 파악해야함(`django-debug-toolbar`활용할 것)
+* 장고orm은 RDB만 지원: mysql, postgresql, oracle
+* 장고 orm 말고 다른 orm도 많음
+
+---
+
+### 2) django models
+
+* db테이블과 python클래스를 **1:1로 매핑**
+* 모델 클래스명은 **단수형**으로(ex. Apple(O), Apples(X))
+* 모델 클래스명의 첫 글자는 **대문자**
+* 서비스에 맞는 db설계 필수
+
+---
+
+### 3) model 활용 순서
+
+* 장고 모델을 통해 db관리할 경우
+
+1. 모델 클래스 작성
+2. 모델 클래스로부터 마이그레이션 파일 생성(`python manage.py makemigrations`)
+3. 마이그레이션 파일을 db에 적용(`python manage.py migrate`)
+4. 모델 활용
+
+* 장고 외부에서 db관리할 경우
+
+1. db로부터 모델 클래스 소스 생성
+2. inspectdb 명령
+3. 모델 활용
+
+---
+
+## 3. model명과 db테이블명
+
+* db테이블명(default): "앱이름_모델명"
+  * app이름: django, 모델명: user, 테이블명: django_user
+* 커스텀 지정: 모델 Meta 클래스의 db_table 속성 변경(makemigrations전에)
+
+---
+
+## 4. 실습
+
+* ~/studydjango/
+
+```shell
+$python manage.py startapp instagram
+```
+
+
+
+* ~/studydjango/studydjango/settings.py
+
+```python
+# 앱을 settings.INSTALLED_APPS에 등록
+INSTALLED_APPS = [
+    ...,
+    'blog1',
+    'instagram',
+]
+```
+
+
+
+* ~/studydjango/instagram/urls.py
+
+```shell
+# urls.py 생성 후
+urlpatterns=[]
+```
+
+
+
+* ~/studydjango/studydjango/urls.py
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('blog1/', include('blog1.urls')),
+    path('instagram/', include('instagram.urls')),
+]
+```
+
+
+
+* ~/studydjango/instagram/models.py
+
+```python
+from django.db import models
+
+# Create your models here.
+class Post(models.Model):
+  message = models.TextField()
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateField(auto_now=True)
+```
+
+
+
+* shell
+
+```shell
+$python manage.py makemigrations instagram
+$python manage.py migrate instagram
+# 쿼리 보기
+# python manage.py sqlmigrate instagram 0001_initial
+```
+
+
+
+* dbshell
+
+```shell
+$python manage.py dbshell
+>>> .tables
+```
+
