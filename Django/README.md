@@ -1,6 +1,6 @@
 # Django
 
-
+> lecture-github: https://github.com/askcompany-kr/django-with-react
 
 ## 1. Overview
 
@@ -300,7 +300,7 @@ urlpatterns = [
 
 ---
 
-## 3. model명과 db테이블명
+### 4) model명과 db테이블명
 
 * db테이블명(default): "앱이름_모델명"
   * app이름: django, 모델명: user, 테이블명: django_user
@@ -308,7 +308,7 @@ urlpatterns = [
 
 ---
 
-## 4. 실습
+### 5) 실습
 
 * ~/studydjango/
 
@@ -387,3 +387,40 @@ $python manage.py dbshell
 >>> .tables
 ```
 
+---
+
+### 6) 기본 지원되는 모델 필드 타입
+
+> doc: https://docs.djangoproject.com/en/3.2/ref/models/fields/#field-types
+>
+> django-model-utils: https://django-model-utils.readthedocs.io/en/latest/
+
+* Primary Key: AutoField, BigAutoField
+* 문자열: CharField, TextField, SlugField
+* 날짜/시간: DateField, TimeField, DateTimeField, DurationField
+* 참/거짓: BooleanField, NullBooleanField
+* 숫자: IntegerField, SmallIntegerField, PositiveIntegerField, PositiveSmallIntegerField, BigIntegerField, DecimalField, FloatField
+* 파일: BinaryField, FileField, ImageField, FilePathField
+* 이메일: EmailField
+* URL: URLField
+* UUID: UUIDField
+* IP: GenericIPAddressField
+* RealtionTypes: ForeignKey, OneToOneField, ManyToManyField
+
+---
+
+### 7)자주 쓰는 필드 공통 옵션 
+
+* `blank` : 장고 단에서 validation시에 empty 허용 여부 (디폴트: False)
+* `null` (DB 옵션) : null 허용 여부 (디폴트: False) 
+* `db_index` (DB 옵션) : 인덱스 필드 여부 (디폴트: False) - migration시 사용
+* `default` : 디폴트 값 지정, 혹은 값을 리턴해줄 함수 지정 사용자에게 디폴트값을 제공코자 할 때 
+* `unique` (DB 옵션) : 현재 테이블 내에서 유일성 여부 (디폴트: False) 
+* `choices` : select 박스 소스로 사용 
+* `validators` : validators를 수행할 함수를 다수 지정 모델 필드에 따라 고유한 validators들이 등록 (ex- 이메일만 받기) 
+* `verbose_name` : 필드 레이블, 미지정시 필드명이 사용 
+* `help_text` : 필드 입력 도움말
+
+⭐⭐설계한 db구조에 따라 최대한 필드 타입 **타이트**하게 지정할 것
+
+⭐⭐blank/null **최소화** 할 것
