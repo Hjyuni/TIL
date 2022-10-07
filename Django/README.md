@@ -424,3 +424,180 @@ $python manage.py dbshell
 ⭐⭐설계한 db구조에 따라 최대한 필드 타입 **타이트**하게 지정할 것
 
 ⭐⭐blank/null **최소화** 할 것
+
+---
+
+## 3. Django admin
+
+* django.contrib.admin앱을 통해 제공
+  * url 바꾸거나 django-admin-honeypot앱을 사용해 가짜 admin페이지 노출할 것
+* 모델 클래스 등록을 통해 CRUD UI제공
+* 앱을 생성할 때마다 해당 앱 admin.py에 등록해야함
+
+```python
+from django.contrib import admin
+from .models import Item
+
+# 1.기본 modeladmin으로 동작
+admin.site.register(Item)
+# 2.지정한 modeladmin으로 동작
+class ItemAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Item, ItemAdmin)
+# 3.⭐
+@admin.register(Item)
+class ItemAdmin(admin.ModelAdmin):
+    pass
+```
+
+* ~/studydjango/instagram/admin.py
+
+```python
+from django.contrib import admin
+from .models import Post
+# Register your models here.
+
+# 1
+# admin.site.register(Post)
+
+# 2
+"""
+class PostAdmin(admin.ModelAdmin):
+  pass
+
+admin.site.register(Post, PostAdmin)
+"""
+
+# 3
+@admin.register(Post) #Wrapping
+class PostAdmin(admin.ModelAdmin):
+    pass
+```
+
+---
+
+### 1) `__str__`
+
+* 어떠한 객체에 대한 문자열 표현이 필요할 때
+
+* ~/studydjango/instagram/models.py
+
+```python
+from django.db import models
+
+# Create your models here.
+class Post(models.Model):
+  message = models.TextField()
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateField(auto_now=True)
+
+  # Java toString
+  # 어떠한 객체에 대한 문자열 표현이 필요 할 때
+  def __str__(self):
+    # Post의 message값을 가져와 줘
+    return f"{self.message}"
+```
+
+---
+
+### 2) display_list
+
+* ~/studydjango/instagram/admin.py
+
+```python
+from django.contrib import admin
+from .models import Post
+
+@admin.register(Post) #Wrapping
+class PostAdmin(admin.ModelAdmin):
+  list_display = ['id','message', 'created_at', 'updated_at']
+```
+
+* 에러: Auto-created primary key used when not defining a primary key type, by default 'django.db.models.AutoField'.
+
+  * ~/studydjango/studydjango/settings.py
+
+  ```python
+  # 추가
+  DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+  ```
+
+  
+
+* models.py 에 객체를 추가하여 admin에 표시할 수도 있음
+* ~/studydjango/studydjango/models.py
+
+```python
+from django.db import models
+
+# Create your models here.
+class Post(models.Model):
+  message = models.TextField()
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateField(auto_now=True)
+
+  # Java toString
+  # 어떠한 객체에 대한 문자열 표현이 필요 할 때
+  def __str__(self):
+    # Post의 message값을 가져와 줘
+    return f"{self.message}"
+
+  def message_length(self):
+    return len(self.message)
+```
+
+* ~/studydjango/studydjango/admin.py
+
+```python
+@admin.register(Post) #Wrapping
+class PostAdmin(admin.ModelAdmin):
+  list_display = ['id','message', 'message_length' ,'created_at', 'updated_at']
+```
+
+---
+
+### 3) display_list
+
+* 원하는 객체에 링크 넣기
+* ~/studydjango/studydjango/admin.py
+
+```python
+@admin.register(Post) #Wrapping
+class PostAdmin(admin.ModelAdmin):
+  list_display = ['id','message', 'message_length' ,'created_at', 'updated_at']
+  # 원하는 객체에 링크넣기
+  list_display_links = ['message']
+```
+
+---
+
+### 4) search_fields
+
+* admin페이지 내 검색 기능 가능
+* ~/studydjango/studydjango/admin.py
+
+```python
+@admin.register(Post) #Wrapping
+class PostAdmin(admin.ModelAdmin):
+  list_display = ['id','message', 'message_length' ,'created_at', 'updated_at']
+  # 원하는 객체에 링크넣기
+  list_display_links = ['message']
+  search_fields = ['message']
+```
+
+---
+
+### 5) list_filter
+
+* 지정 필드값을 필터링 옵션 제공
+* admin-page 오른쪽에 보면 filter있음
+
+```python
+@admin.register(Post) #Wrapping
+class PostAdmin(admin.ModelAdmin):
+  list_display = ['id','message', 'message_length' ,'created_at', 'updated_at']
+  # 원하는 객체에 링크넣기
+  list_display_links = ['message']
+  search_fields = ['message']
+```
+
