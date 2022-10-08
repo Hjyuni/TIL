@@ -601,3 +601,81 @@ class PostAdmin(admin.ModelAdmin):
   search_fields = ['message']
 ```
 
+---
+
+## 4. Static & Media
+
+* static 파일: 개발 리소스로서의 정적인 파일 (js, css, image 등), 앱 / 프로젝트 단위로 저장
+* media 파일: Filefield, Imagefield를 통해 저장한 모든 파일, DB필드에는 저장경로를 저장하고, 파일은 파일 스토리지에 저장
+  * 이미지 필드에서 자동으로 pillow 패키지 사용
+
+```shell
+# 이미지 전용 패키지
+$pip install pillow
+```
+
+* ~/studydjango/instagram/models.py
+
+```python
+class Post(models.Model):
+  message = models.TextField()
+  photo = models.ImageField(blank=True)
+  is_public = models.BooleanField(default=False, verbose_name='공개여부')
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateField(auto_now=True)
+```
+
+```shell
+$python manage.py makemigrations instagram
+$python manage.py migrate instagram
+```
+
+* media 파일 처리 순서
+
+  * HttpRequest.FIELS를 통해 파일 전달
+  * 뷰 로직이나 폼 로직을 통해 유효성 검증 수행
+  * FileField/ImageField 필드에 "경로(문자열)"을 저장
+  * settings.MEDIA_ROOT경로에 파일 저장
+  * ~/studydjango/settings.py
+
+  ``` python
+  MEDIA_URL = '/media/'
+  MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+  ```
+
+* uuid를 통한 파일명 정하기
+
+```python
+import os
+from uuid import uuid4
+from django.utils import timezone
+def uuid_name_upload_to(instance, filename):
+  app_label = instance.__class__._meta.app_label # 앱 별로
+  cls_name = instance.__class__.__name__.lower() # 모델 별로
+  ymd_path = timezone.now().strftime('%Y/%m/%d’) # 업로드하는 년/월/일 별로
+  uuid_name = uuid4().hex
+  extension = os.path.splitext(filename)[-1].lower() # 확장자 추출하고, 소문자로 변환
+  return '/'.join([
+    app_label,
+    cls_name,
+    ymd_path,
+    uuid_name[:2],
+    uuid_name + extension,
+])
+```
+
+* 파일 용량
+  * 파일 크기가 2.5M 이하일 경우 메모리에 담겨 전달
+  * 파일 크기가 2.5M 초과일 경우 디스트에 담겨 전달
+  * 해당 설정: `settings.FILE_UPLOAD_MAX_MEMORY_SIZE`
+
+---
+
+## 5. django shell
+
+* 진입
+
+```shell
+python manage.py shell
+```
+
