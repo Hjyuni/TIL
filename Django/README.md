@@ -679,3 +679,32 @@ def uuid_name_upload_to(instance, filename):
 python manage.py shell
 ```
 
+---
+
+## 6. Model Manager
+
+* 디폴트 매니저로서 `ModelCls.objects`가 제공
+* `ModelCls.objects.all()`
+  * `SELECT * FROM test`
+* `ModelCls.objects.all().order_by('-id')[:10]`
+  * `SELECT * FROM test ORDER BY id DESC LIMIT 10`
+* `ModelCls.objects.all().create(title="Hi")`
+  * `INSERT INTO test (title) VALUES ("hi")`
+* 쿼리셋을 만드는 동안에는 db에 접근 안함. **실제로 데이터가 필요한 시점에 접근**함
+* 특정 모델객체 1개 가져오기
+  * `queryset[index]` : 인덱스 범위에서 넘어가면 예외발생
+  * `queryset.get(조건)`: 조건에 안맞거나 조건에 맞는게 하나 이상이면 예외발생
+  * `queryset.first()`: 모델객체 또는 None
+  * `queryset.last()`: 모델객체 또는 None
+* 숫자/날짜/시간필드
+  * `필드명__lt = 조건값` : 필드명 < 조건값
+  * `필드명__lte = 조건값` : 필드명 <= 조건값 
+  * `필드명__gt = 조건값` : 필드명 > 조건값
+  * `필드명__gte = 조건값` : 필드명 >= 조건값
+* 문자열 필드
+  * `필드명__startswith = 조건값` : 필드명 LIKE “조건값%” 
+  * `필드명__istartswith = 조건값` : 필드명 ILIKE “조건값%”
+  * `필드명__endswith = 조건값` : 필드명 LIKE “%조건값”
+  * `필드명__iendswith = 조건값 `  : `필드명 ILIKE “%조건값” 
+  * `필드명__contains = 조건값` : 필드명 LIKE “%조건값%”
+  * `필드명__icontains = 조건값` : 필드명 ILIKE “%조건값%”
