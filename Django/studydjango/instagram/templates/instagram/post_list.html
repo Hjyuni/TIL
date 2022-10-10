@@ -1,0 +1,39 @@
+<!-- views.py render와 같은 이름 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- getbootstrap.com -->
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <title>instagram</title>
+</head>
+<body>
+  <!-- action = "": 현재 주소(상대경로) -->
+  <form action="" method="get">
+    <input type="text" name="q" value="{{ q }}"/>
+    <input type="submit" value="검색" />
+  </form>
+
+  <table class="table table-bordered table-hover">
+    <tbody>
+      {% for post in post_list %}
+        <tr>  
+          <td>
+            {{ post.message }}
+          </td>
+          <td>
+            {% if post.photo %}
+              <img src="{{ post.photo.url }}" style="width: 100px;" />
+            {% else %}
+              No Photo
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
