@@ -21,3 +21,7 @@ class Post(models.Model):
     return len(self.message)
   # 항목 이름 바꾸기
   message_length.short_description = '메세지 글자수'
+
+  class Meta:
+    # orderby: id 역순
+    ordering = ['-id']

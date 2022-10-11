@@ -708,3 +708,33 @@ python manage.py shell
   * `필드명__iendswith = 조건값 `  : `필드명 ILIKE “%조건값” 
   * `필드명__contains = 조건값` : 필드명 LIKE “%조건값%”
   * `필드명__icontains = 조건값` : 필드명 ILIKE “%조건값%”
+
+---
+
+## 7. django extensions
+
+> docs: https://django-extensions.readthedocs.io/en/latest/
+
+```shell
+pip install django-extensions
+```
+
+* settings.py
+
+```python
+INSTALLED_APPS = [
+    ...
+    'django_extensions',
+    ]
+```
+
+```shell
+>>> python manage.py shell_plus --print-sql --ipython
+>>> from instagram.models import Post
+>>> Post.objects.all()
+# slicing가능
+>>> Post.objects.all()[:2]
+# 음수 슬라이싱은 불가능
+>>> Post.objects.all()[-1:]
+```
+
