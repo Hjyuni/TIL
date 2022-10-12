@@ -738,3 +738,17 @@ INSTALLED_APPS = [
 >>> Post.objects.all()[-1:]
 ```
 
+---
+
+## 8. django-debug-toolbar
+
+* 현재 res/req에 대한 다양한 디버깅 정보를 보여줌
+* 다양한 panel지원
+* ajax내용 지원 불가
+
+> docs: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+
+```python
+pip install django-debug-toolbar
+```
+
