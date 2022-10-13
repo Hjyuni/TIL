@@ -36,6 +36,16 @@
 * os.path.dirname(path) : path의 디렉토리 반환
 * os.path.chdir(path) : 디렉토리의 위치를 path로 옮기기
 
---- 
+---
 
 ## 4. QR코드 생성하는 코드
+
+---
+
+## 5. 컴퓨터의 정보 확인
+
+---
+
+## 6. 압축 비번 풀기
+
+* https://seu11ee.tistory.com/5
