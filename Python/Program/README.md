@@ -48,4 +48,6 @@
 
 ## 6. 압축 비번 풀기
 
-* https://seu11ee.tistory.com/5
+* itertools 라이브러리: https://seu11ee.tistory.com/5
+* .join: https://blockdmask.tistory.com/468
+* zipfile 라이브러리: https://docs.python.org/ko/3/library/zipfile.html
