@@ -51,3 +51,15 @@
 * itertools 라이브러리: https://seu11ee.tistory.com/5
 * .join: https://blockdmask.tistory.com/468
 * zipfile 라이브러리: https://docs.python.org/ko/3/library/zipfile.html
+
+---
+
+## 7. 환율변환
+
+---
+
+## 8. 쓰레드프로그램
+
+* 쓰레드란: http://www.tcpschool.com/java/java_thread_concept
+
+  
