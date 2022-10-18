@@ -62,4 +62,9 @@
 
 * 쓰레드란: http://www.tcpschool.com/java/java_thread_concept
 
-  
+---
+
+## 9. 번역기
+
+---
+
