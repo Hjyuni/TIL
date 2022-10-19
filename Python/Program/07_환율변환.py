@@ -1,3 +1,4 @@
+# pip install currencyconverter
 from currency_converter import CurrencyConverter
 import requests
 from bs4 import BeautifulSoup

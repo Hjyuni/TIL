@@ -1,3 +1,4 @@
+# pip install psutil
 import psutil
 
 cpu = psutil.cpu_freq()
