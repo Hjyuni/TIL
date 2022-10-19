@@ -34,4 +34,6 @@ for region_weather in weather:
   time.sleep(0.5)
   pyautogui.write(["enter"])
   time.sleep(1)
+  
+  # pyautogui.screenshot("사진저장경론", region=(start_x, start_y, 가로사이즈, 세로사이즈))
   pyautogui.screenshot(f"{region_weather}.png", region=(start_x, start_y, end_x-start_x, end_y-start_y))
