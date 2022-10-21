@@ -1,0 +1,22 @@
+# print(변수, sep='문자 또는 문자열')
+print(1,2,3)
+print(1,2,3,sep=', ')
+print(4,5,6,sep=',')
+print('a','b',sep='x')
+print('c','d',sep='')
+print('e','f',sep='\n')
+print('g','h',sep='\t')
+print('i','j',sep='\\')
+
+#print(변수, end='')
+print(1)
+print(2)
+print(3)
+print(1, end='')
+print(2, end='')
+print(3)
+
+# 심사문제: 날짜와 시간 출력하기
+y, m, d, h, m, s = map(int, input().split())
+print(y, m, d, sep='-', end='T')
+print(h, m, s, sep=':')
